@@ -1,4 +1,11 @@
 package edu.nur.dao;
 
-public class QuestionDao {
+import edu.nur.model.Question;
+
+import java.util.List;
+
+public interface QuestionDao {
+
+    List<Question> getQuestions();
+
 }

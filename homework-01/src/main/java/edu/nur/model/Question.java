@@ -1,4 +1,4 @@
-package edu.nur.domain;
+package edu.nur.model;
 
 import lombok.Data;
 
@@ -8,10 +8,12 @@ import java.util.Set;
 public class Question {
 
     private long id;
-    private String title;
-    private Set<Answer> answers;
-    private long correctAnswerId;
 
+    private String title;
+
+    private Set<Answer> answers;
+
+    private long correctAnswerId;
 
     public Question(long id, String title, Set<Answer> answers, long correctAnswerId) {
         this.id = id;
@@ -19,4 +21,5 @@ public class Question {
         this.answers = answers;
         this.correctAnswerId = correctAnswerId;
     }
+
 }

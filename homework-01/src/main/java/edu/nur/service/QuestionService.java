@@ -1,11 +1,11 @@
 package edu.nur.service;
 
-import edu.nur.dao.QuestionDao;
+import edu.nur.model.Question;
 
 import java.util.List;
 
 public interface QuestionService {
 
-    List<QuestionDao> getQuestions();
+    List<Question> getQuestions();
 
 }

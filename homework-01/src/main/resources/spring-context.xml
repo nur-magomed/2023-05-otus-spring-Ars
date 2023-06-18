@@ -3,8 +3,21 @@
        xmlns="http://www.springframework.org/schema/beans"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="csvReader" class="edu.nur.util.CsvReader">
+
+    <bean id="csvReader" class="edu.nur.io.CsvReader">
         <constructor-arg index="0" value="quiz.csv"/>
     </bean>
+
+    <bean id="csvConverter" class="edu.nur.util.QuestionConverterCsvImpl"/>
+
+    <bean id="questionDaoCsv" class="edu.nur.dao.QuestionDaoCsvImpl">
+        <constructor-arg index="0" ref="csvReader"/>
+        <constructor-arg index="1" ref="csvConverter"/>
+    </bean>
+
+    <bean id="questionService" class="edu.nur.service.QuestionServiceImpl">
+        <constructor-arg index="0" ref="questionDaoCsv"/>
+    </bean>
+
 
 </beans>
