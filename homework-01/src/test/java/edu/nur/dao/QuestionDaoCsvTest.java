@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.mockito.Mockito.mock;
 
 @DisplayName("QuestionDaoCsvImpl class")
-class QuestionDaoCsvImplTest {
+class QuestionDaoCsvTest {
 
     static List<Question> questions = new ArrayList<>();
 
@@ -25,18 +25,18 @@ class QuestionDaoCsvImplTest {
     @BeforeAll
     static void setUp() {
 
-        Question question1 = new Question(1, "Two plus two?", new HashSet<>(), 2);
-        Question question2 = new Question(2, "What language uses Spring framework?", new HashSet<>(), 1);
+        Question question1 = new Question(1, "Two plus two?", new HashSet<>());
+        Question question2 = new Question(2, "What language uses Spring framework?", new HashSet<>());
         questions.add(question1);
         questions.add(question2);
 
 
-        String[] line1 = {"1","Two plus two?","2","1","zero"};
-        String[] line2 = {"1","Two plus two?","2","2","four"};
-        String[] line3 = {"1","Two plus two?","2","3","five"};
-        String[] line4 = {"2","What language uses Spring framework?","1","4","Java"};
-        String[] line5 = {"2","What language uses Spring framework?","1","5","JavaScript"};
-        String[] line6 = {"2","What language uses Spring framework?","1","6","Python"};
+        String[] line1 = {"1","Two plus two?","1","zero","false"};
+        String[] line2 = {"1","Two plus two?","2","four","true"};
+        String[] line3 = {"1","Two plus two?","3","five","false"};
+        String[] line4 = {"2","What language uses Spring framework?","4","Java","true"};
+        String[] line5 = {"2","What language uses Spring framework?","5","JavaScript","false"};
+        String[] line6 = {"2","What language uses Spring framework?","6","Python","false"};
         lines.add(line1);
         lines.add(line2);
         lines.add(line3);
@@ -48,14 +48,14 @@ class QuestionDaoCsvImplTest {
 
     @DisplayName("get questions method works correctly")
     @Test
-    void getQuestionsTest() {
+    void getQuestionsTest() throws Exception{
 
         Reader readerMock = mock(Reader.class);
         QuestionConverter converterMock = mock(QuestionConverter.class);
         Mockito.when(readerMock.readAllLines()).thenReturn(lines);
-        Mockito.when(converterMock.convertToQuestion(readerMock.readAllLines())).thenReturn(questions);
+        Mockito.when(converterMock.convertToQuestions(readerMock.readAllLines())).thenReturn(questions);
 
-        QuestionDaoCsvImpl questionConverterCsv = new QuestionDaoCsvImpl(readerMock, converterMock);
+        QuestionDaoCsv questionConverterCsv = new QuestionDaoCsv(readerMock, converterMock);
 
         List<Question> questionsResult = questionConverterCsv.getQuestions();
         assertArrayEquals(questions.toArray(), questionsResult.toArray(), "getQuestions method is incorrect");

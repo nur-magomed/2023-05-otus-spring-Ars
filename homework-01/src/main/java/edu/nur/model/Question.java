@@ -13,13 +13,11 @@ public class Question {
 
     private Set<Answer> answers;
 
-    private long correctAnswerId;
 
-    public Question(long id, String title, Set<Answer> answers, long correctAnswerId) {
+    public Question(long id, String title, Set<Answer> answers) {
         this.id = id;
         this.title = title;
         this.answers = answers;
-        this.correctAnswerId = correctAnswerId;
     }
 
 }

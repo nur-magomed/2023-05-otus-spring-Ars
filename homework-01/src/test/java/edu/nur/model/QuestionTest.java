@@ -15,13 +15,11 @@ class QuestionTest {
     void constructorTest() {
         long questionId = 1L;
         String questionTitle = "Question test title";
-        long correctAnswerId = 1L;
 
-        Question question = new Question(questionId, questionTitle, Collections.emptySet(), correctAnswerId);
+        Question question = new Question(questionId, questionTitle, Collections.emptySet());
 
         assertEquals(questionId, question.getId(), "incorrect question id");
         assertEquals(questionTitle, question.getTitle(), "incorrect question title");
         assertTrue(question.getAnswers().isEmpty(), "incorrect answers set");
-        assertEquals(correctAnswerId, question.getCorrectAnswerId(), "incorrect questions correct answer id");
     }
 }

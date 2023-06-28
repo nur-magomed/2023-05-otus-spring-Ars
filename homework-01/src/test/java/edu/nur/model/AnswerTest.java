@@ -13,11 +13,11 @@ class AnswerTest {
     void constructorTest() {
         long answerId = 1L;
         String answerTitle = "Answer test title";
-
-        Answer answer = new Answer(answerId, answerTitle);
+        Answer answer = new Answer(answerId, answerTitle, true);
 
         assertEquals(answerId, answer.getId(), "incorrect answer id");
         assertEquals(answerTitle, answer.getTitle(), "incorrect answer title");
+        assertTrue(answer.isCorrect());
     }
 
 }

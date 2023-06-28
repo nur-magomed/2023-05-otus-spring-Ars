@@ -9,8 +9,11 @@ public class Answer {
 
     private String title;
 
-    public Answer(long id, String title) {
+    private boolean isCorrect;
+
+    public Answer(long id, String title , boolean isCorrect) {
         this.id = id;
         this.title = title;
+        this.isCorrect = isCorrect;
     }
 }

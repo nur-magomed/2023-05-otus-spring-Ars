@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface QuestionConverter {
 
-    List<Question> convertToQuestion(List<String[]> lines);
+    List<Question> convertToQuestions(List<String[]> lines);
 
 }

@@ -23,13 +23,13 @@ class CsvReaderTest {
 
     @DisplayName("readAllLines method works as expected")
     @Test
-    void readAllLinesTest() {
-        String[] line1 = {"1","Two plus two?","2","1","zero"};
-        String[] line2 = {"1","Two plus two?","2","2","four"};
-        String[] line3 = {"1","Two plus two?","2","3","five"};
-        String[] line4 = {"2","What language uses Spring framework?","1","4","Java"};
-        String[] line5 = {"2","What language uses Spring framework?","1","5","JavaScript"};
-        String[] line6 = {"2","What language uses Spring framework?","1","6","Python"};
+    void readAllLinesTest() throws Exception {
+        String[] line1 = {"1","Two plus two?","1","zero","false"};
+        String[] line2 = {"1","Two plus two?","2","four","true"};
+        String[] line3 = {"1","Two plus two?","3","five","false"};
+        String[] line4 = {"2","What language uses Spring framework?","4","Java","true"};
+        String[] line5 = {"2","What language uses Spring framework?","5","JavaScript","false"};
+        String[] line6 = {"2","What language uses Spring framework?","6","Python","false"};
 
         CsvReader reader = new CsvReader(fileName);
         List<String[]> lines = reader.readAllLines();

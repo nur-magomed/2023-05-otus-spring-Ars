@@ -1,11 +1,11 @@
 package edu.nur.io;
 
 import com.opencsv.CSVReader;
+import edu.nur.exception.CsvReaderException;
 import lombok.Data;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -19,15 +19,13 @@ public class CsvReader implements Reader {
     }
 
     @Override
-    public List<String[]> readAllLines() {
-        try (InputStream inputStream = Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(fileName));
-             CSVReader reader = new CSVReader(new InputStreamReader(inputStream))) {
+    public List<String[]> readAllLines() throws CsvReaderException {
+        try (InputStream is = Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(fileName));
+            CSVReader reader = new CSVReader(new InputStreamReader(is))) {
             return reader.readAll();
         } catch (Exception e) {
-            System.err.println("Failed to read a file: " + e);
+            throw new CsvReaderException("Failed to read the file: " + fileName, e);
         }
-
-        return Collections.emptyList();
     }
 
 }
