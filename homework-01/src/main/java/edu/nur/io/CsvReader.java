@@ -3,10 +3,11 @@ package edu.nur.io;
 import com.opencsv.CSVReader;
 import lombok.Data;
 
-import java.io.FileReader;
-import java.net.URL;
-import java.util.List;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 
 @Data
 public class CsvReader implements Reader {
@@ -19,10 +20,8 @@ public class CsvReader implements Reader {
 
     @Override
     public List<String[]> readAllLines() {
-        ClassLoader cl = CsvReader.class.getClassLoader();
-        URL url = cl.getResource(fileName);
-
-        try (CSVReader reader = new CSVReader(new FileReader(url.getFile()))) {
+        try (InputStream inputStream = Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(fileName));
+             CSVReader reader = new CSVReader(new InputStreamReader(inputStream))) {
             return reader.readAll();
         } catch (Exception e) {
             System.err.println("Failed to read a file: " + e);
@@ -30,4 +29,5 @@ public class CsvReader implements Reader {
 
         return Collections.emptyList();
     }
+
 }
