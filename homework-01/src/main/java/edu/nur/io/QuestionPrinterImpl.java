@@ -17,15 +17,15 @@ public class QuestionPrinterImpl implements QuestionPrinter {
     }
 
 
-    public void print(String str) {
+    private void printStrLn(String str) {
         outputService.outputString(str);
     }
 
 
     public void printQuestion(Question question) {
-        print(question.getTitle());
+        printStrLn(question.getTitle());
         for (Answer a: question.getAnswers()) {
-            print(a.getTitle());
+            printStrLn(a.getTitle());
         }
     }
 

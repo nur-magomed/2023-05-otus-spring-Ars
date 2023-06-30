@@ -2,7 +2,7 @@ package edu.nur.util;
 
 import edu.nur.model.Answer;
 import edu.nur.model.Question;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -13,32 +13,25 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @DisplayName("QuestionConverterCsv class")
 class QuestionConverterCsvTest {
 
-    static List<Question> questions = new ArrayList<>();
-    static List<String[]> lines = new ArrayList<>();
-    static Map<Long, Answer> answersMap = new HashMap<>();
+    private static final List<String[]> lines = new ArrayList<>();
+    private static final Map<Long, Answer> answersMap = new HashMap<>();
 
 
-    static Question question1 = null;
-    static Answer q1answer1 = null;
-    static Answer q1answer2 = null;
-    static Answer q1answer3 = null;
+    private static Question question1 = null;
 
-    static Question question2 = null;
-    static Answer q2answer1 = null;
-    static Answer q2answer2 = null;
-    static Answer q2answer3 = null;
+    private static Question question2 = null;
 
 
-    @BeforeAll
-    static void setUp() {
+    @BeforeEach
+    void setUp() {
 
-        q1answer1 = new Answer(1, "zero", false);
-        q1answer2 = new Answer(2, "four", true);
-        q1answer3 = new Answer(3, "five", false);
+        Answer q1answer1 = new Answer(1, "zero", false);
+        Answer q1answer2 = new Answer(2, "four", true);
+        Answer q1answer3 = new Answer(3, "five", false);
 
-        q2answer1 = new Answer(4, "Java", true);
-        q2answer2 = new Answer(5, "JavaScript", false);
-        q2answer3 = new Answer(6, "Python", false);
+        Answer q2answer1 = new Answer(4, "Java", true);
+        Answer q2answer2 = new Answer(5, "JavaScript", false);
+        Answer q2answer3 = new Answer(6, "Python", false);
 
         answersMap.put(q1answer1.getId(), q1answer1);
         answersMap.put(q1answer2.getId(), q1answer2);
@@ -49,8 +42,6 @@ class QuestionConverterCsvTest {
 
         question1 = new Question(1, "Two plus two?", new HashSet<>(Arrays.asList(q1answer1, q1answer2, q1answer3)));
         question2 = new Question(2, "What language uses Spring framework?", new HashSet<>(Arrays.asList(q2answer1, q2answer2, q2answer3)));
-        questions.add(question1);
-        questions.add(question2);
 
         String[] line1 = {"1","Two plus two?","1","zero","false"};
         String[] line2 = {"1","Two plus two?","2","four","true"};

@@ -11,14 +11,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @DisplayName("CsvReader class")
 class CsvReaderTest {
 
-    private final String fileName = "quiz_test.csv";
+    private static final String FILE_NAME = "quiz_test.csv";
 
     @DisplayName("constructor works as expected")
     @Test
     void constructorTest() {
-        CsvReader reader = new CsvReader(fileName);
+        CsvReader reader = new CsvReader(FILE_NAME);
 
-        assertEquals(fileName, reader.getFileName(), "file name is incorrect");
+        assertEquals(FILE_NAME, reader.getFileName(), "file name is incorrect");
     }
 
     @DisplayName("readAllLines method works as expected")
@@ -31,7 +31,7 @@ class CsvReaderTest {
         String[] line5 = {"2","What language uses Spring framework?","5","JavaScript","false"};
         String[] line6 = {"2","What language uses Spring framework?","6","Python","false"};
 
-        CsvReader reader = new CsvReader(fileName);
+        CsvReader reader = new CsvReader(FILE_NAME);
         List<String[]> lines = reader.readAllLines();
         assertEquals(6, lines.size(), "");
 

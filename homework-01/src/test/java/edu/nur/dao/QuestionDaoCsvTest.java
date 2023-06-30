@@ -3,7 +3,7 @@ package edu.nur.dao;
 import edu.nur.io.Reader;
 import edu.nur.model.Question;
 import edu.nur.util.QuestionConverter;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -18,12 +18,12 @@ import static org.mockito.Mockito.mock;
 @DisplayName("QuestionDaoCsvImpl class")
 class QuestionDaoCsvTest {
 
-    static List<Question> questions = new ArrayList<>();
+    private static final List<Question> questions = new ArrayList<>();
 
-    static List<String[]> lines = new ArrayList<>();
+    private static final List<String[]> lines = new ArrayList<>();
 
-    @BeforeAll
-    static void setUp() {
+    @BeforeEach
+    void setUp() {
 
         Question question1 = new Question(1, "Two plus two?", new HashSet<>());
         Question question2 = new Question(2, "What language uses Spring framework?", new HashSet<>());
