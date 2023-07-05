@@ -18,7 +18,7 @@ class CsvReaderTest {
     void constructorTest() {
         CsvReader reader = new CsvReader(FILE_NAME);
 
-        assertEquals(FILE_NAME, reader.getFileName(), "file name is incorrect");
+        assertEquals(FILE_NAME, reader.fileName(), "file name is incorrect");
     }
 
     @DisplayName("readAllLines method works as expected")

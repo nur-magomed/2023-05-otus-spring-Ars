@@ -1,5 +1,6 @@
 package edu.nur.dao;
 
+import edu.nur.io.OutputService;
 import edu.nur.io.Reader;
 import edu.nur.model.Question;
 import edu.nur.util.QuestionConverter;
@@ -18,12 +19,14 @@ import static org.mockito.Mockito.mock;
 @DisplayName("QuestionDaoCsvImpl class")
 class QuestionDaoCsvTest {
 
-    private static final List<Question> questions = new ArrayList<>();
+    private final List<Question> questions = new ArrayList<>();
 
-    private static final List<String[]> lines = new ArrayList<>();
+    private final List<String[]> lines = new ArrayList<>();
 
     @BeforeEach
     void setUp() {
+        questions.clear();
+        lines.clear();
 
         Question question1 = new Question(1, "Two plus two?", new HashSet<>());
         Question question2 = new Question(2, "What language uses Spring framework?", new HashSet<>());
@@ -50,12 +53,13 @@ class QuestionDaoCsvTest {
     @Test
     void getQuestionsTest() throws Exception{
 
+        OutputService outputService = mock(OutputService.class);
         Reader readerMock = mock(Reader.class);
         QuestionConverter converterMock = mock(QuestionConverter.class);
         Mockito.when(readerMock.readAllLines()).thenReturn(lines);
         Mockito.when(converterMock.convertToQuestions(readerMock.readAllLines())).thenReturn(questions);
 
-        QuestionDaoCsv questionConverterCsv = new QuestionDaoCsv(readerMock, converterMock);
+        QuestionDaoCsv questionConverterCsv = new QuestionDaoCsv(readerMock, converterMock, outputService);
 
         List<Question> questionsResult = questionConverterCsv.getQuestions();
         assertArrayEquals(questions.toArray(), questionsResult.toArray(), "getQuestions method is incorrect");

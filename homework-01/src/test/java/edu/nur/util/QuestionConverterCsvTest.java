@@ -13,17 +13,18 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @DisplayName("QuestionConverterCsv class")
 class QuestionConverterCsvTest {
 
-    private static final List<String[]> lines = new ArrayList<>();
-    private static final Map<Long, Answer> answersMap = new HashMap<>();
+    private final List<String[]> lines = new ArrayList<>();
+    private final Map<Long, Answer> answersMap = new HashMap<>();
 
+    private Question question1;
 
-    private static Question question1 = null;
-
-    private static Question question2 = null;
+    private Question question2;
 
 
     @BeforeEach
     void setUp() {
+        lines.clear();
+        answersMap.clear();
 
         Answer q1answer1 = new Answer(1, "zero", false);
         Answer q1answer2 = new Answer(2, "four", true);

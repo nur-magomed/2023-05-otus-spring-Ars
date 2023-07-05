@@ -16,11 +16,11 @@ public final class QuestionConverterCsv implements QuestionConverter {
         Map<Long, Question> questionMap = new HashMap<>();
         lines.forEach(line -> {
 
-            long questionId      = Long.parseLong(line[0]);
+            long questionId = Long.parseLong(line[0]);
             String questionTitle = line[1];
-            long answerId        = Long.parseLong(line[2]);
-            String answerTitle   = line[3];
-            boolean isCorrect    = Boolean.parseBoolean(line[4]);
+            long answerId = Long.parseLong(line[2]);
+            String answerTitle = line[3];
+            boolean isCorrect = Boolean.parseBoolean(line[4]);
 
             Answer answer = new Answer(answerId, answerTitle, isCorrect);
 

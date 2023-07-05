@@ -1,6 +1,6 @@
 package edu.nur.dao;
 
-import edu.nur.exception.ReaderException;
+import edu.nur.io.OutputService;
 import edu.nur.io.Reader;
 import edu.nur.model.Question;
 import edu.nur.util.QuestionConverter;
@@ -13,15 +13,23 @@ public class QuestionDaoCsv implements QuestionDao {
 
     private final QuestionConverter converter;
 
-    public QuestionDaoCsv(Reader reader, QuestionConverter questionConverter) {
+    private final OutputService outputService;
+
+    public QuestionDaoCsv(Reader reader, QuestionConverter questionConverter, OutputService outputService) {
         this.reader = reader;
         this.converter = questionConverter;
+        this.outputService = outputService;
     }
 
     @Override
-    public List<Question> getQuestions() throws ReaderException {
-        List<String[]> lines = reader.readAllLines();
-        return converter.convertToQuestions(lines);
+    public List<Question> getQuestions() {
+        try {
+            List<String[]> lines = reader.readAllLines();
+            return converter.convertToQuestions(lines);
+        } catch (Exception e) {
+            outputService.outputString(e.getMessage());
+        }
+        return List.of();
     }
 
 }

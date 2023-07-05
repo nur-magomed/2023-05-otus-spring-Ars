@@ -10,17 +10,18 @@
 
     <bean id="csvConverter" class="edu.nur.util.QuestionConverterCsv"/>
 
+    <bean id="outputService" class="edu.nur.io.OutputServiceStream">
+        <constructor-arg index="0" value="#{T(java.lang.System).out}"/>
+    </bean>
+
     <bean id="questionDaoCsv" class="edu.nur.dao.QuestionDaoCsv">
         <constructor-arg index="0" ref="csvReader"/>
         <constructor-arg index="1" ref="csvConverter"/>
+        <constructor-arg index="2" ref="outputService"/>
     </bean>
 
     <bean id="questionService" class="edu.nur.service.QuestionServiceImpl">
         <constructor-arg index="0" ref="questionDaoCsv"/>
-    </bean>
-
-    <bean id="outputService" class="edu.nur.io.OutputServiceStream">
-        <constructor-arg index="0" value="#{T(java.lang.System).out}"/>
     </bean>
 
     <bean id="questionPrinter" class="edu.nur.io.QuestionPrinterImpl">
