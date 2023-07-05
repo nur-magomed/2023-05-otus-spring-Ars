@@ -1,0 +1,15 @@
+1,In which country is Java Island?,1,Malaysia,false
+1,In which country is Java Island?,2,Indonesia,true
+1,In which country is Java Island?,3,India,false
+2,Which language runs under JVM?,4,Java,true
+2,Which language runs under JVM?,5,JavaScript,false
+2,Which language runs under JVM?,6,Python,false
+3,What is the most popular framework of Java?,7,Winter,false
+3,What is the most popular framework of Java?,8,Summer,false
+3,What is the most popular framework of Java?,9,Spring,true
+4,Which is a Java symbol?,10,A cup of tea,false
+4,Which is a Java symbol?,11,A cup of milk,false
+4,Which is a Java symbol?,12,A cup of coffee,true
+5,Which word is not from Java keyword?,13,Final,false
+5,Which word is not from Java keyword?,14,Finish,true
+5,Which word is not from Java keyword?,15,Finally,false
