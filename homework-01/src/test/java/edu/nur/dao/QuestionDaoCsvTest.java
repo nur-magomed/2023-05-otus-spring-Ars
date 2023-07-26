@@ -53,13 +53,12 @@ class QuestionDaoCsvTest {
     @Test
     void getQuestionsTest() throws Exception{
 
-        OutputService outputService = mock(OutputService.class);
         Reader readerMock = mock(Reader.class);
         QuestionConverter converterMock = mock(QuestionConverter.class);
         Mockito.when(readerMock.readAllLines()).thenReturn(lines);
         Mockito.when(converterMock.convertToQuestions(readerMock.readAllLines())).thenReturn(questions);
 
-        QuestionDaoCsv questionConverterCsv = new QuestionDaoCsv(readerMock, converterMock, outputService);
+        QuestionDaoCsv questionConverterCsv = new QuestionDaoCsv(readerMock, converterMock);
 
         List<Question> questionsResult = questionConverterCsv.getQuestions();
         assertArrayEquals(questions.toArray(), questionsResult.toArray(), "getQuestions method is incorrect");
