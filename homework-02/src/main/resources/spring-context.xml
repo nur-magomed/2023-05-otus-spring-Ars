@@ -19,13 +19,15 @@
         <constructor-arg index="0" ref="questionDaoCsv"/>
     </bean>
 
-    <bean id="outputService" class="edu.nur.io.OutputServiceStream">
+
+    <bean id="inputOutputService" class="edu.nur.io.InputOutputServiceImpl">
         <constructor-arg index="0" value="#{T(java.lang.System).out}"/>
+        <constructor-arg index="1" value="#{T(java.lang.System).in}"/>
     </bean>
 
-    <bean id="questionPrinter" class="edu.nur.io.QuestionPrinterImpl">
-        <constructor-arg index="0" ref="outputService"/>
-        <constructor-arg index="1" ref="questionService"/>
+    <bean id="quizRunner" class="edu.nur.service.QuizRunner">
+        <constructor-arg index="0" ref="questionService"/>
+        <constructor-arg index="1" ref="inputOutputService"/>
     </bean>
 
 </beans>

@@ -26,11 +26,13 @@ public class QuestionPrinterImpl implements QuestionPrinter {
         outputService.outputString(str);
     }
 
-    private void printQuestion(Question question) {
+    @Override
+    public void printQuestion(Question question) {
         printStrLn(question.getTitle());
         for (Answer a : question.getAnswers()) {
             printStrLn(a.getTitle());
         }
+
     }
 
 }
