@@ -14,4 +14,6 @@ public interface AuthorDao {
 
     void deleteById(long id);
 
+    int countAll();
+
 }

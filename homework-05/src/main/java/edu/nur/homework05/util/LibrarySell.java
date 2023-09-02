@@ -1,6 +1,5 @@
 package edu.nur.homework05.util;
 
-
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
@@ -17,4 +16,5 @@ public class LibrarySell {
     public String goodbye() {
         return "Goodbye!";
     }
+
 }

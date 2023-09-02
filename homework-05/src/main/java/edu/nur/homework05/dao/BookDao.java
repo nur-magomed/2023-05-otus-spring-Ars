@@ -13,4 +13,6 @@ public interface BookDao {
     List<Book> getAll();
 
     void deleteById(long id);
+
+    int countAll();
 }

@@ -34,7 +34,6 @@ CREATE TABLE t_genre
 
 CREATE TABLE t_book_author
 (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
     book_id BIGINT,
     author_id BIGINT,
     created_date DATE,
@@ -44,7 +43,6 @@ CREATE TABLE t_book_author
 
 CREATE TABLE t_book_genre
 (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
     book_id BIGINT,
     genre_id BIGINT,
     created_date DATE,

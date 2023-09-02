@@ -22,5 +22,4 @@ public class Book {
 
     private Date modifiedDate;
 
-
 }

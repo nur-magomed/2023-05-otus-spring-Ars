@@ -27,20 +27,21 @@ public class AuthorDaoJdbc implements AuthorDao {
 
     @Override
     public void save(Author author) {
-        int nur = namedParamJdbcOps.update(
-                "insert into t_author(first_name, last_name, birth_date, created_date, modified_date) " +
-                        "values (:first_name, :last_name, :birth_date, :created_date, :modified_date)",
-                Map.of( "first_name", author.getFirstName(), "last_name", author.getLastName(),
-                        "birth_date", author.getBirthDate(), "created_date", author.getCreatedDate(), "modified_date", new Date())
+        namedParamJdbcOps.update(
+                "insert into t_author(id, first_name, last_name, birth_date, created_date, modified_date) " +
+                        "values (:id, :first_name, :last_name, :birth_date, :created_date, :modified_date)",
+                Map.of("id", author.getId(),"first_name", author.getFirstName(), "last_name", author.getLastName(),
+                        "birth_date", author.getBirthDate(), "created_date", author.getCreatedDate(),
+                        "modified_date", author.getModifiedDate())
         );
-        System.out.println(nur);
     }
 
     @Override
     public Author getById(long id) {
         Map<String, Object> params = Collections.singletonMap("id", id);
         return namedParamJdbcOps.queryForObject(
-                "select id, first_name, last_name, birth_date, created_date, modified_date from t_author where id = :id",
+                "select id, first_name, last_name, birth_date, created_date, modified_date " +
+                        "from t_author where id = :id",
                 params,
                 new AuthorMapper()
         );
@@ -60,6 +61,12 @@ public class AuthorDaoJdbc implements AuthorDao {
         namedParamJdbcOps.update(
                 "delete from t_author where id = :id", params
         );
+    }
+
+    @Override
+    public int countAll() {
+        Integer count = jdbc.queryForObject("select count(*) from t_author", Integer.class);
+        return count == null ? 0 : count;
     }
 
     private static class AuthorMapper implements RowMapper<Author> {
