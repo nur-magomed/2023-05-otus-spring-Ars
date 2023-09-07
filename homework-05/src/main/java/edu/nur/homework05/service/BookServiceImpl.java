@@ -21,7 +21,7 @@ public class BookServiceImpl implements BookService {
             int maxId = bookDao.getMaxId();
             book.setId(maxId + 1);
         }
-        bookDao.save(book);
+        bookDao.insert(book);
     }
 
     @Override

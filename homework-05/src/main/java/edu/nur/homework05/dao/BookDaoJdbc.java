@@ -34,7 +34,7 @@ public class BookDaoJdbc implements BookDao {
     }
 
     @Override
-    public void save(Book book) {
+    public void insert(Book book) {
         namedParamJdbcOps.update("INSERT INTO t_book(id, title,  created_date, modified_date) " +
                         "VALUES (:id, :title, :created_date, :modified_date)",
                 Map.of("id", book.getId(), "title", book.getTitle(), "created_date", book.getCreatedDate(),
@@ -59,14 +59,24 @@ public class BookDaoJdbc implements BookDao {
     }
 
     @Override
+    public void update(Book book) {
+        namedParamJdbcOps.update(
+                "UPDATE t_book SET title=:title, modified_date=:modified_date WHERE  id=:id ",
+                Map.of("id", book.getId(), "title", book.getTitle(), "modified_date", new Date()));
+
+        updateBookAuthors(book);
+        updateBookGenres(book);
+    }
+
+    @Override
     public Book getById(long id) {
         Map<String, Object> params = Collections.singletonMap("id", id);
         List<Book> books = namedParamJdbcOps.query(
-                "SELECT b.id AS b_id, b.title AS b_title, b.created_date AS b_created_date," +
-                        " b.modified_date AS b_modified_date, a.id AS a_id, a.first_name AS a_first_name, " +
-                        "a.last_name AS a_last_name, a.birth_date as a_birth_date, a.created_date AS a_created_date," +
-                        " a.modified_date AS a_modified_date, g.id AS g_id, g.title AS g_title," +
-                        " g.created_date AS g_created_date, g.modified_date AS g_modified_date " +
+                "SELECT b.id AS b_id, b.title AS b_title, b.created_date AS b_created_date, " +
+                    "b.modified_date AS b_modified_date, a.id AS a_id, a.first_name AS a_first_name, " +
+                    "a.last_name AS a_last_name, a.birth_date as a_birth_date, a.created_date AS a_created_date, " +
+                    "a.modified_date AS a_modified_date, g.id AS g_id, g.title AS g_title, " +
+                    "g.created_date AS g_created_date, g.modified_date AS g_modified_date " +
                     "FROM t_book b " +
                     "LEFT JOIN t_book_author ba ON b.id = ba.BOOK_ID " +
                     "LEFT JOIN t_author a ON ba.author_id = a.id " +
@@ -85,16 +95,16 @@ public class BookDaoJdbc implements BookDao {
     @Override
     public List<Book> getAll() {
         return jdbc.query(
-                "SELECT b.id AS b_id, b.title AS b_title, b.created_date AS b_created_date," +
-                        " b.modified_date AS b_modified_date, a.id AS a_id, a.first_name AS a_first_name," +
-                        " a.last_name AS a_last_name, a.birth_date as a_birth_date, a.created_date AS a_created_date," +
-                        " a.modified_date AS a_modified_date, g.id AS g_id, g.title AS g_title," +
-                        " g.created_date AS g_created_date, g.modified_date AS g_modified_date " +
+                "SELECT b.id AS b_id, b.title AS b_title, b.created_date AS b_created_date, " +
+                    "b.modified_date AS b_modified_date, a.id AS a_id, a.first_name AS a_first_name, " +
+                    "a.last_name AS a_last_name, a.birth_date as a_birth_date, a.created_date AS a_created_date, " +
+                    "a.modified_date AS a_modified_date, g.id AS g_id, g.title AS g_title, " +
+                    "g.created_date AS g_created_date, g.modified_date AS g_modified_date " +
                     "FROM t_book b " +
                     "LEFT JOIN t_book_author ba ON b.id = ba.BOOK_ID " +
                     "LEFT JOIN t_author a ON ba.author_id = a.id " +
                     "LEFT JOIN t_book_genre bg ON b.id = bg.book_id " +
-                    "LEFT JOIN t_genre g ON bg.genre_id = g.id " ,
+                    "LEFT JOIN t_genre g ON bg.genre_id = g.id ",
                 new BookExtractor()
         );
     }
@@ -143,6 +153,56 @@ public class BookDaoJdbc implements BookDao {
                 }
             }
             return bookMap.values().stream().toList();
+        }
+    }
+
+    private void updateBookAuthors(Book updatedBook) {
+        Book existingBook = getById(updatedBook.getId());
+        List<Author> existingAuthors = existingBook.getAuthors();
+
+        for (Author author: updatedBook.getAuthors()) {
+            if (existingAuthors.contains(author)) {
+                existingAuthors.remove(author);
+            } else {
+                namedParamJdbcOps.update(
+                        "INSERT INTO t_book_author(book_id, author_id, created_date, modified_date) " +
+                                "VALUES (:book_id, :author_id,  :created_date, :modified_date)",
+                        Map.of("book_id", updatedBook.getId(), "author_id", author.getId(),
+                                "created_date", new Date(), "modified_date", new Date())
+                );
+            }
+        }
+
+        for (Author author: existingAuthors) {
+            namedParamJdbcOps.update(
+                    "DELETE FROM t_book WHERE book_id=:book_id AND author_id=:author_id",
+                    Map.of("book_id", updatedBook.getId(),"author_id", author.getId())
+            );
+        }
+    }
+
+    private void updateBookGenres(Book updatedBook) {
+        Book existingBook = getById(updatedBook.getId());
+        List<Genre> existingGenres = existingBook.getGenres();
+
+        for (Genre genre: updatedBook.getGenres()) {
+            if (existingGenres.contains(genre)) {
+                existingGenres.remove(genre);
+            } else {
+                namedParamJdbcOps.update(
+                        "INSERT INTO t_book_genre(book_id, genre_id, created_date, modified_date) " +
+                                "VALUES (:book_id, :genre_id, :created_date, :modified_date)",
+                        Map.of("book_id", updatedBook.getId(), "genre_id", genre.getId(),
+                                "created_date", updatedBook.getCreatedDate(), "modified_date", new Date())
+                );
+            }
+        }
+
+        for (Genre genre: existingGenres) {
+            namedParamJdbcOps.update(
+                    "DELETE FROM t_book WHERE book_id=:book_id AND genre_id=:genre_id",
+                    Map.of("book_id", updatedBook.getId(),"genre_id", genre.getId())
+            );
         }
     }
 }

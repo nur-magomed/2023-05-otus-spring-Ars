@@ -6,13 +6,11 @@ import edu.nur.homework05.model.Genre;
 import edu.nur.homework05.service.AuthorService;
 import edu.nur.homework05.service.BookService;
 import edu.nur.homework05.service.GenreService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -21,13 +19,10 @@ import java.util.List;
 @ShellComponent
 public class BookShell {
 
-    @Autowired
     private final BookService bookService;
 
-    @Autowired
     private final AuthorService authorService;
 
-    @Autowired
     private final GenreService genreService;
 
     public BookShell(BookService bookService, AuthorService authorService, GenreService genreService) {
@@ -67,7 +62,8 @@ public class BookShell {
         }
     }
 
-    @ShellMethod(key = "author update", value = "Update author: author update id \"First name\" \"Last name\" \"yyyy-MM-dd\"")
+    @ShellMethod(key = "author update",
+            value = "Update author: author update id \"First name\" \"Last name\" \"yyyy-MM-dd\"")
     public void update(@ShellOption(value = "id", defaultValue = "-1") int id,
                        @ShellOption(value = "firstName", defaultValue = "") String firstName,
                        @ShellOption(value = "lastName", defaultValue = "") String lastName,

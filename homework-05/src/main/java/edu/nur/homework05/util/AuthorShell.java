@@ -2,7 +2,6 @@ package edu.nur.homework05.util;
 
 import edu.nur.homework05.model.Author;
 import edu.nur.homework05.service.AuthorService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
@@ -17,7 +16,6 @@ public class AuthorShell {
 
     private final String format = "yyyy-MM-dd";
 
-    @Autowired
     private final AuthorService authorService;
 
     public AuthorShell(AuthorService authorService) {
@@ -41,7 +39,8 @@ public class AuthorShell {
         }
     }
 
-    @ShellMethod(key = "author update", value = "Update author: author update id \"First name\" \"Last name\" \"yyyy-MM-dd\"")
+    @ShellMethod(key = "author update",
+            value = "Update author: author update id \"First name\" \"Last name\" \"yyyy-MM-dd\"")
     public void update(@ShellOption(value = "id", defaultValue = "-1") int id,
                        @ShellOption(value = "firstName", defaultValue = "") String firstName,
                        @ShellOption(value = "lastName", defaultValue = "") String lastName,

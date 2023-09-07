@@ -54,14 +54,26 @@ class AuthorDaoJdbcTest {
         NOW_DATE = nowCalendar.getTime();
     }
 
+    @DisplayName("save a new author")
     @Test
     void saveTest() {
         Author expectedAuthor = new Author(1001, "Test", "Testerov", NOW_DATE, NOW_DATE, NOW_DATE);
-        authorDaoJdbc.save(expectedAuthor);
+        authorDaoJdbc.insert(expectedAuthor);
         Author actualAuthor = authorDaoJdbc.getById(expectedAuthor.getId());
         assertThat(actualAuthor).usingRecursiveComparison().isEqualTo(expectedAuthor);
     }
 
+    @DisplayName("update existing author")
+    @Test
+    void updateTest() {
+        Author expectedAuthor = authorDaoJdbc.getById(EXISTING_AUTHOR_ID);
+        expectedAuthor.setLastName("Edited last name");
+        authorDaoJdbc.update(expectedAuthor);
+        Author actualAuthor = authorDaoJdbc.getById(EXISTING_AUTHOR_ID);
+        assertThat(actualAuthor).usingRecursiveComparison().isEqualTo(expectedAuthor);
+    }
+
+    @DisplayName("get author by ID")
     @Test
     void getByIdTest() {
         Author expectedAuthor = new Author(EXISTING_AUTHOR_ID, EXISTING_AUTHOR_NAME, EXISTING_AUTHOR_SURNAME,
@@ -72,6 +84,7 @@ class AuthorDaoJdbcTest {
         assertEquals(expectedAuthor.getLastName(), author.getLastName());
     }
 
+    @DisplayName("get list of all authors")
     @Test
     void getAllTest() {
         List<Author> allAuthors = authorDaoJdbc.getAll();
@@ -80,6 +93,7 @@ class AuthorDaoJdbcTest {
         assertThat(allAuthorsIdList).containsAll(EXISTING_AUTHOR_IDS);
     }
 
+    @DisplayName("delete an author by ID")
     @Test
     void deleteByIdTest() {
         assertThatCode(() -> authorDaoJdbc.getById(EXISTING_AUTHOR_ID)).doesNotThrowAnyException();
@@ -87,6 +101,7 @@ class AuthorDaoJdbcTest {
         assertThatThrownBy(() -> authorDaoJdbc.getById(EXISTING_AUTHOR_ID)).isInstanceOf(EmptyResultDataAccessException.class);
     }
 
+    @DisplayName("get count of all authors")
     @Test
     void countAllTest() {
         int countAll = authorDaoJdbc.countAll();

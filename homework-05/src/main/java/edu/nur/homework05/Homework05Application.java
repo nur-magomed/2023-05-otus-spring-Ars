@@ -1,17 +1,11 @@
 package edu.nur.homework05;
 
-import edu.nur.homework05.dao.AuthorDao;
-import edu.nur.homework05.dao.BookDao;
-import edu.nur.homework05.model.Author;
-import edu.nur.homework05.model.Book;
 import org.h2.tools.Console;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 
 import java.sql.SQLException;
-import java.util.Date;
-import java.util.List;
 
 @SpringBootApplication
 public class Homework05Application {

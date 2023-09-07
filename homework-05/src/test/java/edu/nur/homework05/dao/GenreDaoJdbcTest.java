@@ -1,7 +1,5 @@
 package edu.nur.homework05.dao;
 
-import edu.nur.homework05.model.Author;
-import edu.nur.homework05.model.Book;
 import edu.nur.homework05.model.Genre;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -48,14 +46,27 @@ public class GenreDaoJdbcTest {
     }
 
 
+    @DisplayName("save new genre")
     @Test
     void saveTest() {
         Genre expectedGenre = new Genre(EXPECTED_GENRE_ID, "TEST Genre", NOW_DATE, NOW_DATE);
-        genreDaoJdbc.save(expectedGenre);
+        genreDaoJdbc.insert(expectedGenre);
         Genre actualGenre = genreDaoJdbc.getById(expectedGenre.getId());
         assertThat(actualGenre).usingRecursiveComparison().isEqualTo(expectedGenre);
     }
 
+    @DisplayName("update existing genre")
+    @Test
+    void updateTest() {
+        Genre expectedGenre = genreDaoJdbc.getById(EXISTING_GENRE_ID);
+        expectedGenre.setTitle("Edited title");
+        genreDaoJdbc.update(expectedGenre);
+
+        Genre actualGenre = genreDaoJdbc.getById(EXISTING_GENRE_ID);
+        assertThat(actualGenre).usingRecursiveComparison().isEqualTo(expectedGenre);
+    }
+
+    @DisplayName("get genre by ID")
     @Test
     void getByIdTest() {
         Genre expectedGenre = new Genre(EXISTING_GENRE_ID, EXISTING_GENRE_TITLE, NOW_DATE, NOW_DATE);
@@ -64,6 +75,8 @@ public class GenreDaoJdbcTest {
         assertEquals(expectedGenre.getTitle(), genre.getTitle());
     }
 
+
+    @DisplayName("get list of all genres")
     @Test
     void getAllTest() {
         List<Genre> allGenres = genreDaoJdbc.getAll();
@@ -72,6 +85,8 @@ public class GenreDaoJdbcTest {
         assertThat(allAuthorsIdList).containsAll(EXISTING_GENRE_IDS);
     }
 
+
+    @DisplayName("delete genre by ID")
     @Test
     void deleteByIdTest() {
         assertThatCode(() -> genreDaoJdbc.getById(EXISTING_GENRE_ID)).doesNotThrowAnyException();
@@ -79,6 +94,7 @@ public class GenreDaoJdbcTest {
         assertThatThrownBy(() -> genreDaoJdbc.getById(EXISTING_GENRE_ID)).isInstanceOf(EmptyResultDataAccessException.class);
     }
 
+    @DisplayName("get count of genres")
     @Test
     void countAllTest() {
         int countAll = genreDaoJdbc.countAll();

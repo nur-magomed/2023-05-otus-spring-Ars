@@ -2,7 +2,6 @@ package edu.nur.homework05.util;
 
 import edu.nur.homework05.model.Genre;
 import edu.nur.homework05.service.GenreService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
@@ -13,7 +12,6 @@ import java.util.List;
 @ShellComponent
 public class GenreShell {
 
-    @Autowired
     private final GenreService genreService;
 
     public GenreShell(GenreService genreService) {

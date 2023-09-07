@@ -19,11 +19,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DisplayName("Book dao should ")
 @JdbcTest
-@Import(BookDaoJdbc.class)
+@Import({BookDaoJdbc.class, AuthorDaoJdbc.class, GenreDaoJdbc.class})
 public class BookDaoJdbcTest {
 
     @Autowired
     private BookDaoJdbc bookDaoJdbc;
+
+    @Autowired
+    private AuthorDaoJdbc authorDaoJdbc;
+
+    @Autowired
+    private GenreDaoJdbc genreDaoJdbc;
 
     private final int EXISTING_AUTHOR_ID = 100001;
     private final int EXISTING_BOOK_ID = 100001;
@@ -79,15 +85,30 @@ public class BookDaoJdbcTest {
         genres.add(genre);
     }
 
-
+    @DisplayName("save a new book")
     @Test
     void saveTest() {
         Book expectedBook = new Book(1001, "Testing book", authors, genres, NOW_DATE, NOW_DATE);
-        bookDaoJdbc.save(expectedBook);
+        bookDaoJdbc.insert(expectedBook);
         Book actualBook = bookDaoJdbc.getById(expectedBook.getId());
         assertThat(actualBook).usingRecursiveComparison().isEqualTo(expectedBook);
     }
 
+
+    @DisplayName("update existing book")
+    @Test
+    void updateTest() {
+        Book expectedBook = bookDaoJdbc.getById(EXPECTED_BOOK_ID);
+        expectedBook.setTitle("New title");
+        expectedBook.getAuthors().add(authorDaoJdbc.getById(100006));
+        expectedBook.getGenres().add(genreDaoJdbc.getById(100002));
+        bookDaoJdbc.update(expectedBook);
+
+        Book actualBook = bookDaoJdbc.getById(EXPECTED_BOOK_ID);
+        assertThat(actualBook).usingRecursiveComparison().isEqualTo(expectedBook);
+    }
+
+    @DisplayName("get a book by ID")
     @Test
     void getByIdTest() {
         Book expectedBook = new Book(EXPECTED_BOOK_ID, EXPECTED_BOOK_TITLE, authors, genres, NOW_DATE, NOW_DATE);
@@ -96,6 +117,7 @@ public class BookDaoJdbcTest {
         assertEquals(expectedBook.getTitle(), book.getTitle());
     }
 
+    @DisplayName("get list of all books")
     @Test
     void getAllTest() {
         List<Book> allBooks = bookDaoJdbc.getAll();
@@ -104,6 +126,7 @@ public class BookDaoJdbcTest {
         assertThat(allBooksIdList).containsAll(EXISTING_BOOK_IDS);
     }
 
+    @DisplayName("delete a book by ID")
     @Test
     void deleteByIdTest() {
         assertThatCode(() -> bookDaoJdbc.getById(EXISTING_BOOK_ID)).doesNotThrowAnyException();
@@ -111,6 +134,7 @@ public class BookDaoJdbcTest {
         assertThatThrownBy(() -> bookDaoJdbc.getById(EXISTING_BOOK_ID)).isInstanceOf(EmptyResultDataAccessException.class);
     }
 
+    @DisplayName("get count of all books")
     @Test
     void countAllTest() {
         int countAll = bookDaoJdbc.countAll();
