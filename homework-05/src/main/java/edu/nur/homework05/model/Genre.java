@@ -18,6 +18,12 @@ public class Genre {
 
     private Date modifiedDate;
 
+    public Genre(String title, Date createdDate, Date modifiedDate) {
+        this.title = title;
+        this.createdDate = createdDate;
+        this.modifiedDate = modifiedDate;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -33,5 +39,13 @@ public class Genre {
     @Override
     public int hashCode() {
         return Objects.hash(id, title);
+    }
+
+    @Override
+    public String toString() {
+        return "Genre{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                '}';
     }
 }

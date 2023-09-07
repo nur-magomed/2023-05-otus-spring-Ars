@@ -22,10 +22,11 @@ import static org.assertj.core.api.Assertions.*;
 class AuthorDaoJdbcTest {
 
     private static final int EXPECTED_AUTHORS_COUNT = 6;
-    private static final int EXISTING_AUTHOR_ID = 1;
-    private static final List<Long> EXISTING_AUTHOR_IDS = new ArrayList<>(Arrays.asList(1L, 2L, 3L, 4L, 5L, 6L));
-    private static final String EXISTING_AUTHOR_NAME = "Александр";
-    private static final String EXISTING_AUTHOR_SURNAME = "Пушкин";
+    private static final int EXISTING_AUTHOR_ID = 100001;
+    private static final List<Long> EXISTING_AUTHOR_IDS =
+            new ArrayList<>(Arrays.asList(100001L, 100002L, 100003L, 100004L,100005L, 100006L));
+    private static final String EXISTING_AUTHOR_NAME = "Aleksandr";
+    private static final String EXISTING_AUTHOR_SURNAME = "Pushkin";
     private Date EXISTING_BIRTHDATE;
     private Date NOW_DATE;
 
@@ -39,8 +40,8 @@ class AuthorDaoJdbcTest {
         calendar.set(Calendar.MONTH, 4);
         calendar.set(Calendar.DATE, 26);
         calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MINUTE, 26);
+        calendar.set(Calendar.SECOND, 43);
         calendar.set(Calendar.MILLISECOND, 0);
         EXISTING_BIRTHDATE = calendar.getTime();
 
@@ -53,13 +54,13 @@ class AuthorDaoJdbcTest {
         NOW_DATE = nowCalendar.getTime();
     }
 
-//    @Test
-//    void saveTest() {
-//        Author expectedAuthor = new Author(1001, "Test", "Testerov", NOW_DATE, NOW_DATE, NOW_DATE);
-//        authorDaoJdbc.save(expectedAuthor);
-//        Author actualAuthor = authorDaoJdbc.getById(expectedAuthor.getId());
-//        assertThat(actualAuthor).usingRecursiveComparison().isEqualTo(expectedAuthor);
-//    }
+    @Test
+    void saveTest() {
+        Author expectedAuthor = new Author(1001, "Test", "Testerov", NOW_DATE, NOW_DATE, NOW_DATE);
+        authorDaoJdbc.save(expectedAuthor);
+        Author actualAuthor = authorDaoJdbc.getById(expectedAuthor.getId());
+        assertThat(actualAuthor).usingRecursiveComparison().isEqualTo(expectedAuthor);
+    }
 
     @Test
     void getByIdTest() {

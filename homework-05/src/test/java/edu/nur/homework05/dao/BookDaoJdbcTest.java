@@ -25,25 +25,26 @@ public class BookDaoJdbcTest {
     @Autowired
     private BookDaoJdbc bookDaoJdbc;
 
-    private final int EXISTING_AUTHOR_ID = 1;
+    private final int EXISTING_AUTHOR_ID = 100001;
+    private final int EXISTING_BOOK_ID = 100001;
 
-    private final List<Long> EXISTING_BOOK_IDS = new ArrayList<>(Arrays.asList(1L, 2L, 3L, 4L, 5L));
+    private final List<Long> EXISTING_BOOK_IDS = new ArrayList<>(Arrays.asList(100001L, 100002L, 100003L, 100004L, 100005L));
 
-    private final String EXISTING_AUTHOR_NAME = "Александр";
+    private final String EXISTING_AUTHOR_NAME = "Aleksandr";
 
-    private final String EXISTING_AUTHOR_SURNAME = "Пушкин";
+    private final String EXISTING_AUTHOR_SURNAME = "Pushkin";
 
-    private final int EXPECTED_BOOK_ID = 1;
+    private final int EXPECTED_BOOK_ID = 100001;
 
-    private final String EXPECTED_BOOK_TITLE = "Герой нашего времени";
+    private final String EXPECTED_BOOK_TITLE = "A hero of our time";
 
     private Date EXISTING_BIRTHDATE;
 
     private final int EXPECTED_BOOK_COUNT = 5;
 
-    private final int EXPECTED_GENRE_ID = 1;
+    private final int EXPECTED_GENRE_ID = 100001;
 
-    private final String EXPECTED_GENRE_TITLE = "Проза";
+    private final String EXPECTED_GENRE_TITLE = "Prose";
 
     private Date NOW_DATE;
 
@@ -58,8 +59,8 @@ public class BookDaoJdbcTest {
         calendar.set(Calendar.MONTH, 4);
         calendar.set(Calendar.DATE, 26);
         calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MINUTE, 29);
+        calendar.set(Calendar.SECOND, 43);
         calendar.set(Calendar.MILLISECOND, 0);
         EXISTING_BIRTHDATE = calendar.getTime();
 
@@ -105,9 +106,9 @@ public class BookDaoJdbcTest {
 
     @Test
     void deleteByIdTest() {
-        assertThatCode(() -> bookDaoJdbc.getById(EXPECTED_BOOK_ID)).doesNotThrowAnyException();
-        bookDaoJdbc.deleteById(EXPECTED_BOOK_ID);
-        assertThatThrownBy(() -> bookDaoJdbc.getById(EXPECTED_BOOK_ID)).isInstanceOf(EmptyResultDataAccessException.class);
+        assertThatCode(() -> bookDaoJdbc.getById(EXISTING_BOOK_ID)).doesNotThrowAnyException();
+        bookDaoJdbc.deleteById(EXISTING_BOOK_ID);
+        assertThatThrownBy(() -> bookDaoJdbc.getById(EXISTING_BOOK_ID)).isInstanceOf(EmptyResultDataAccessException.class);
     }
 
     @Test

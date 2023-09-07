@@ -1,12 +1,12 @@
-package edu.nur.homework05.dao;
+package edu.nur.homework05.service;
 
 import edu.nur.homework05.model.Genre;
 
 import java.util.List;
 
-public interface GenreDao {
+public interface GenreService {
 
-    void insert(Genre genre);
+    void save(Genre genre);
 
     void update(Genre genre);
 
@@ -17,7 +17,5 @@ public interface GenreDao {
     void deleteById(long id);
 
     int countAll();
-
-    int getMaxId();
 
 }

@@ -27,11 +27,13 @@ public class GenreDaoJdbcTest {
 
     private static final int EXPECTED_GENRE_COUNT = 3;
 
-    private static final List<Long> EXISTING_GENRE_IDS = new ArrayList<>(Arrays.asList(1L, 2L, 3L));
+    private static final List<Long> EXISTING_GENRE_IDS = new ArrayList<>(Arrays.asList(100001L, 100002L, 100003L));
 
-    private final int EXPECTED_GENRE_ID = 1;
+    private final int EXPECTED_GENRE_ID = 1001;
 
-    private final String EXPECTED_GENRE_TITLE = "Проза";
+    private final int EXISTING_GENRE_ID = 100001;
+
+    private final String EXISTING_GENRE_TITLE = "Prose";
 
     private Date NOW_DATE;
 
@@ -48,7 +50,7 @@ public class GenreDaoJdbcTest {
 
     @Test
     void saveTest() {
-        Genre expectedGenre = new Genre(EXPECTED_GENRE_ID, EXPECTED_GENRE_TITLE, NOW_DATE, NOW_DATE);
+        Genre expectedGenre = new Genre(EXPECTED_GENRE_ID, "TEST Genre", NOW_DATE, NOW_DATE);
         genreDaoJdbc.save(expectedGenre);
         Genre actualGenre = genreDaoJdbc.getById(expectedGenre.getId());
         assertThat(actualGenre).usingRecursiveComparison().isEqualTo(expectedGenre);
@@ -56,8 +58,8 @@ public class GenreDaoJdbcTest {
 
     @Test
     void getByIdTest() {
-        Genre expectedGenre = new Genre(EXPECTED_GENRE_ID, EXPECTED_GENRE_TITLE, NOW_DATE, NOW_DATE);
-        Genre genre = genreDaoJdbc.getById(EXPECTED_GENRE_ID);
+        Genre expectedGenre = new Genre(EXISTING_GENRE_ID, EXISTING_GENRE_TITLE, NOW_DATE, NOW_DATE);
+        Genre genre = genreDaoJdbc.getById(EXISTING_GENRE_ID);
         assertEquals(expectedGenre.getId(), genre.getId());
         assertEquals(expectedGenre.getTitle(), genre.getTitle());
     }
@@ -72,9 +74,9 @@ public class GenreDaoJdbcTest {
 
     @Test
     void deleteByIdTest() {
-        assertThatCode(() -> genreDaoJdbc.getById(EXPECTED_GENRE_ID)).doesNotThrowAnyException();
-        genreDaoJdbc.deleteById(EXPECTED_GENRE_ID);
-        assertThatThrownBy(() -> genreDaoJdbc.getById(EXPECTED_GENRE_ID)).isInstanceOf(EmptyResultDataAccessException.class);
+        assertThatCode(() -> genreDaoJdbc.getById(EXISTING_GENRE_ID)).doesNotThrowAnyException();
+        genreDaoJdbc.deleteById(EXISTING_GENRE_ID);
+        assertThatThrownBy(() -> genreDaoJdbc.getById(EXISTING_GENRE_ID)).isInstanceOf(EmptyResultDataAccessException.class);
     }
 
     @Test

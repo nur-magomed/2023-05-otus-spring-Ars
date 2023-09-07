@@ -33,7 +33,7 @@ public class Author {
         }
         Author author = (Author) o;
         return id == author.id && Objects.equals(firstName, author.firstName) && Objects.equals(lastName,
-                author.lastName) && Objects.equals(birthDate, author.birthDate);
+                author.lastName);
     }
 
     @Override
@@ -41,4 +41,12 @@ public class Author {
         return Objects.hash(id, firstName, lastName, birthDate);
     }
 
+    @Override
+    public String toString() {
+        return "Author{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                '}';
+    }
 }

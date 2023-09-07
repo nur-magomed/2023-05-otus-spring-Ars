@@ -4,6 +4,7 @@ import edu.nur.homework05.model.Author;
 import edu.nur.homework05.model.Book;
 import edu.nur.homework05.model.Genre;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -32,23 +35,23 @@ public class BookDaoJdbc implements BookDao {
 
     @Override
     public void save(Book book) {
-        namedParamJdbcOps.update("insert into t_book(id, title,  created_date, modified_date) " +
-                        "values (:id, :title, :created_date, :modified_date)",
+        namedParamJdbcOps.update("INSERT INTO t_book(id, title,  created_date, modified_date) " +
+                        "VALUES (:id, :title, :created_date, :modified_date)",
                 Map.of("id", book.getId(), "title", book.getTitle(), "created_date", book.getCreatedDate(),
                         "modified_date", new Date())
         );
         for (Author author: book.getAuthors()) {
             namedParamJdbcOps.update(
-                    "insert into t_book_author(book_id, author_id,  created_date, modified_date) " +
-                            "values (:book_id, :author_id,  :created_date, :modified_date)",
+                    "INSERT INTO t_book_author(book_id, author_id,  created_date, modified_date) " +
+                            "VALUES (:book_id, :author_id,  :created_date, :modified_date)",
                     Map.of("book_id", book.getId(), "author_id", author.getId(),
                             "created_date", new Date(), "modified_date", new Date())
             );
         }
         for (Genre genre: book.getGenres()) {
             namedParamJdbcOps.update(
-                    "insert into t_book_genre(book_id, genre_id, created_date, modified_date) " +
-                            "values (:book_id, :genre_id, :created_date, :modified_date)",
+                    "INSERT INTO t_book_genre(book_id, genre_id, created_date, modified_date) " +
+                            "VALUES (:book_id, :genre_id, :created_date, :modified_date)",
                     Map.of("book_id", book.getId(),"genre_id", genre.getId(),
                             "created_date", book.getCreatedDate(), "modified_date", new Date())
             );
@@ -73,6 +76,9 @@ public class BookDaoJdbc implements BookDao {
                 params,
                 new BookExtractor()
         );
+        if (books == null || books.isEmpty()) {
+            throw new EmptyResultDataAccessException(1);
+        }
         return books.get(0);
     }
 
@@ -96,15 +102,18 @@ public class BookDaoJdbc implements BookDao {
     @Override
     public void deleteById(long id) {
         Map<String, Object> params = Collections.singletonMap("id", id);
-        namedParamJdbcOps.update(
-                "delete from t_book where id = :id", params
-        );
+        namedParamJdbcOps.update("DELETE FROM t_book WHERE id = :id", params);
     }
 
     @Override
     public int countAll() {
-        Integer count = jdbc.queryForObject("select count(*) from t_book", Integer.class);
+        Integer count = jdbc.queryForObject("SELECT count(*) FROM t_book", Integer.class);
         return count == null ? 0 : count;
+    }
+
+    @Override
+    public int getMaxId() {
+        return jdbc.queryForObject("SELECT max(id) FROM t_book", Integer.class);
     }
 
     private static class BookExtractor implements ResultSetExtractor<List<Book>> {
@@ -121,7 +130,8 @@ public class BookDaoJdbc implements BookDao {
                 }
                 Book book = bookMap.get(bookId);
                 Author author = new Author(rs.getLong("a_id"), rs.getString("a_first_name"),
-                        rs.getString("a_last_name"), rs.getDate("a_birth_date"),
+                        rs.getString("a_last_name"),  Date.from(rs.getObject("a_birth_date",
+                        LocalDate.class).atStartOfDay(ZoneId.systemDefault()).toInstant()),
                         rs.getDate("a_created_date"), rs.getDate("a_modified_date"));
                 if (!book.getAuthors().contains(author)) {
                     book.getAuthors().add(author);

@@ -26,12 +26,20 @@ public class GenreDaoJdbc implements GenreDao {
     }
 
     @Override
-    public void save(Genre genre) {
+    public void insert(Genre genre) {
         namedParamJdbcOps.update(
-                "insert into t_genre (id, title,  created_date, modified_date) " +
-                        "values (:id, :title, :created_date, :modified_date)",
+                "INSERT INTO t_genre (id, title,  created_date, modified_date) " +
+                        "VALUES (:id, :title, :created_date, :modified_date)",
                 Map.of("id", genre.getId(),"title", genre.getTitle(),
                         "created_date", genre.getCreatedDate(), "modified_date", genre.getModifiedDate())
+        );
+    }
+
+    @Override
+    public void update(Genre genre) {
+        namedParamJdbcOps.update(
+                "UPDATE t_genre SET title=:title, modified_date=:modified_date WHERE  id=:id",
+                Map.of("id", genre.getId(),"title", genre.getTitle(),"modified_date", new Date())
         );
     }
 
@@ -39,33 +47,31 @@ public class GenreDaoJdbc implements GenreDao {
     public Genre getById(long id) {
         Map<String, Object> params = Collections.singletonMap("id", id);
         return namedParamJdbcOps.queryForObject(
-                "select id, title created_date, modified_date " +
-                        "from t_genre where id = :id",
-                params,
-                new GenreMapper()
+                "SELECT id, title, created_date, modified_date FROM t_genre WHERE id =:id",
+                params, new GenreMapper()
         );
     }
 
     @Override
     public List<Genre> getAll() {
-        return jdbc.query(
-                "select id, title created_date, modified_date from t_genre",
-                new GenreMapper()
-        );
+        return jdbc.query("SELECT id, title, created_date, modified_date FROM t_genre", new GenreMapper());
     }
 
     @Override
     public void deleteById(long id) {
         Map<String, Object> params = Collections.singletonMap("id", id);
-        namedParamJdbcOps.update(
-                "delete from t_genre where id = :id", params
-        );
+        namedParamJdbcOps.update("DETELE FROM t_genre WHERE id = :id", params);
     }
 
     @Override
     public int countAll() {
-        Integer count = jdbc.queryForObject("select count(*) from t_genre", Integer.class);
+        Integer count = jdbc.queryForObject("SELECT count(*) FROM t_genre", Integer.class);
         return count == null ? 0 : count;
+    }
+
+    @Override
+    public int getMaxId() {
+        return jdbc.queryForObject("SELECT max(id) FROM t_genre", Integer.class);
     }
 
     private static class GenreMapper implements RowMapper<Genre> {

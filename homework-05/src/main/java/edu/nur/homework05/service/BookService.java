@@ -1,10 +1,10 @@
-package edu.nur.homework05.dao;
+package edu.nur.homework05.service;
 
 import edu.nur.homework05.model.Book;
 
 import java.util.List;
 
-public interface BookDao {
+public interface BookService {
 
     void save(Book book);
 
@@ -15,7 +15,5 @@ public interface BookDao {
     void deleteById(long id);
 
     int countAll();
-
-    int getMaxId();
 
 }
