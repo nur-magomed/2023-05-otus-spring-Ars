@@ -31,16 +31,16 @@ public class BookDaoJdbcTest {
     @Autowired
     private GenreDaoJdbc genreDaoJdbc;
 
-    private final int EXISTING_AUTHOR_ID = 100001;
-    private final int EXISTING_BOOK_ID = 100001;
+    private final int EXISTING_AUTHOR_ID = 1;
+    private final int EXISTING_BOOK_ID = 1;
 
-    private final List<Long> EXISTING_BOOK_IDS = new ArrayList<>(Arrays.asList(100001L, 100002L, 100003L, 100004L, 100005L));
+    private final List<Long> EXISTING_BOOK_IDS = new ArrayList<>(Arrays.asList(1L, 2L, 3L, 4L, 5L));
 
     private final String EXISTING_AUTHOR_NAME = "Aleksandr";
 
     private final String EXISTING_AUTHOR_SURNAME = "Pushkin";
 
-    private final int EXPECTED_BOOK_ID = 100001;
+    private final int EXPECTED_BOOK_ID = 1;
 
     private final String EXPECTED_BOOK_TITLE = "A hero of our time";
 
@@ -48,7 +48,7 @@ public class BookDaoJdbcTest {
 
     private final int EXPECTED_BOOK_COUNT = 5;
 
-    private final int EXPECTED_GENRE_ID = 100001;
+    private final int EXPECTED_GENRE_ID = 1;
 
     private final String EXPECTED_GENRE_TITLE = "Prose";
 
@@ -88,7 +88,7 @@ public class BookDaoJdbcTest {
     @DisplayName("save a new book")
     @Test
     void saveTest() {
-        Book expectedBook = new Book(1001, "Testing book", authors, genres, NOW_DATE, NOW_DATE);
+        Book expectedBook = new Book(1, "Testing book", authors, genres, NOW_DATE, NOW_DATE);
         bookDaoJdbc.insert(expectedBook);
         Book actualBook = bookDaoJdbc.getById(expectedBook.getId());
         assertThat(actualBook).usingRecursiveComparison().isEqualTo(expectedBook);
@@ -100,8 +100,8 @@ public class BookDaoJdbcTest {
     void updateTest() {
         Book expectedBook = bookDaoJdbc.getById(EXPECTED_BOOK_ID);
         expectedBook.setTitle("New title");
-        expectedBook.getAuthors().add(authorDaoJdbc.getById(100006));
-        expectedBook.getGenres().add(genreDaoJdbc.getById(100002));
+        expectedBook.getAuthors().add(authorDaoJdbc.getById(6));
+        expectedBook.getGenres().add(genreDaoJdbc.getById(2));
         bookDaoJdbc.update(expectedBook);
 
         Book actualBook = bookDaoJdbc.getById(EXPECTED_BOOK_ID);

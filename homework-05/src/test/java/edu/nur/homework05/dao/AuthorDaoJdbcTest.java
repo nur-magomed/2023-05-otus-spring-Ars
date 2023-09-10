@@ -22,9 +22,9 @@ import static org.assertj.core.api.Assertions.*;
 class AuthorDaoJdbcTest {
 
     private static final int EXPECTED_AUTHORS_COUNT = 6;
-    private static final int EXISTING_AUTHOR_ID = 100001;
+    private static final int EXISTING_AUTHOR_ID = 1;
     private static final List<Long> EXISTING_AUTHOR_IDS =
-            new ArrayList<>(Arrays.asList(100001L, 100002L, 100003L, 100004L,100005L, 100006L));
+            new ArrayList<>(Arrays.asList(1L, 2L, 3L, 4L, 5L, 6L));
     private static final String EXISTING_AUTHOR_NAME = "Aleksandr";
     private static final String EXISTING_AUTHOR_SURNAME = "Pushkin";
     private Date EXISTING_BIRTHDATE;
@@ -57,8 +57,12 @@ class AuthorDaoJdbcTest {
     @DisplayName("save a new author")
     @Test
     void saveTest() {
-        Author expectedAuthor = new Author(1001, "Test", "Testerov", NOW_DATE, NOW_DATE, NOW_DATE);
+        Author expectedAuthor = new Author( "Test", "Testerov", NOW_DATE, NOW_DATE, NOW_DATE);
+        Author expectedAuthor2 = new Author( "Test2", "Testerov2", NOW_DATE, NOW_DATE, NOW_DATE);
+        Author expectedAuthor3 = new Author( "Test3", "Testerov3", NOW_DATE, NOW_DATE, NOW_DATE);
         authorDaoJdbc.insert(expectedAuthor);
+        authorDaoJdbc.insert(expectedAuthor2);
+        authorDaoJdbc.insert(expectedAuthor3);
         Author actualAuthor = authorDaoJdbc.getById(expectedAuthor.getId());
         assertThat(actualAuthor).usingRecursiveComparison().isEqualTo(expectedAuthor);
     }

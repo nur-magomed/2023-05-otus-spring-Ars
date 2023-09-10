@@ -23,6 +23,14 @@ public class Author {
 
     private Date modifiedDate;
 
+    public Author(String firstName, String lastName, Date birthDate, Date createdDate, Date modifiedDate) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.birthDate = birthDate;
+        this.createdDate = createdDate;
+        this.modifiedDate = modifiedDate;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

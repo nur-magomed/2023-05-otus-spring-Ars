@@ -25,11 +25,11 @@ public class GenreDaoJdbcTest {
 
     private static final int EXPECTED_GENRE_COUNT = 3;
 
-    private static final List<Long> EXISTING_GENRE_IDS = new ArrayList<>(Arrays.asList(100001L, 100002L, 100003L));
+    private static final List<Long> EXISTING_GENRE_IDS = new ArrayList<>(Arrays.asList(1L, 2L, 3L));
 
-    private final int EXPECTED_GENRE_ID = 1001;
+    private final int EXPECTED_GENRE_ID = 1;
 
-    private final int EXISTING_GENRE_ID = 100001;
+    private final int EXISTING_GENRE_ID = 1;
 
     private final String EXISTING_GENRE_TITLE = "Prose";
 

@@ -8,8 +8,11 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -28,33 +31,33 @@ public class BookDaoJdbc implements BookDao {
 
     private final NamedParameterJdbcOperations namedParamJdbcOps;
 
-    public BookDaoJdbc(JdbcOperations jdbc, NamedParameterJdbcOperations namedParamJdbcOps) {
+    private final InsertBook insertBook;
+
+    public BookDaoJdbc(JdbcOperations jdbc, NamedParameterJdbcOperations namedParamJdbcOps, DataSource dataSource) {
         this.jdbc = jdbc;
         this.namedParamJdbcOps = namedParamJdbcOps;
+        this.insertBook = new InsertBook(dataSource);
     }
 
     @Override
     public void insert(Book book) {
-        namedParamJdbcOps.update("INSERT INTO t_book(id, title,  created_date, modified_date) " +
-                        "VALUES (:id, :title, :created_date, :modified_date)",
-                Map.of("id", book.getId(), "title", book.getTitle(), "created_date", book.getCreatedDate(),
-                        "modified_date", new Date())
-        );
+        Map<String, Object> paramMap = Map.of("title", book.getTitle(), "created_date", book.getCreatedDate(),
+                "modified_date", new Date());
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        insertBook.updateByNamedParam(paramMap, keyHolder);
+        book.setId(keyHolder.getKey().longValue());
+        System.out.println("book: " + book.getId());
         for (Author author: book.getAuthors()) {
-            namedParamJdbcOps.update(
-                    "INSERT INTO t_book_author(book_id, author_id,  created_date, modified_date) " +
+            namedParamJdbcOps.update("INSERT INTO t_book_author(book_id, author_id, created_date, modified_date) " +
                             "VALUES (:book_id, :author_id,  :created_date, :modified_date)",
                     Map.of("book_id", book.getId(), "author_id", author.getId(),
-                            "created_date", new Date(), "modified_date", new Date())
-            );
+                            "created_date", new Date(), "modified_date", new Date()));
         }
         for (Genre genre: book.getGenres()) {
-            namedParamJdbcOps.update(
-                    "INSERT INTO t_book_genre(book_id, genre_id, created_date, modified_date) " +
+            namedParamJdbcOps.update("INSERT INTO t_book_genre(book_id, genre_id, created_date, modified_date) " +
                             "VALUES (:book_id, :genre_id, :created_date, :modified_date)",
                     Map.of("book_id", book.getId(),"genre_id", genre.getId(),
-                            "created_date", book.getCreatedDate(), "modified_date", new Date())
-            );
+                            "created_date", book.getCreatedDate(), "modified_date", new Date()));
         }
     }
 

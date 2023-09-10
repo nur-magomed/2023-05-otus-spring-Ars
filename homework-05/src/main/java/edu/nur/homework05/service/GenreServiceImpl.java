@@ -17,10 +17,6 @@ public class GenreServiceImpl implements GenreService {
 
     @Override
     public void save(Genre genre) {
-        if (genre.getId() == 0) {
-            int maxId = genreDao.getMaxId();
-            genre.setId(maxId + 1);
-        }
         genreDao.insert(genre);
     }
 

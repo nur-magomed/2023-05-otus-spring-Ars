@@ -17,19 +17,11 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public void insert(Author author) {
-        if (author.getId() == 0) {
-            int maxId = authorDao.getMaxId();
-            author.setId(maxId + 1);
-        }
         authorDao.insert(author);
     }
 
     @Override
     public void update(Author author) {
-        if (author.getId() == 0) {
-            int maxId = authorDao.getMaxId();
-            author.setId(maxId + 1);
-        }
         authorDao.update(author);
     }
 

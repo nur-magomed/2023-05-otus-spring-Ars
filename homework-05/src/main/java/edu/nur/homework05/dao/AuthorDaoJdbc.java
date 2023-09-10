@@ -4,8 +4,11 @@ import edu.nur.homework05.model.Author;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -22,20 +25,24 @@ public class AuthorDaoJdbc implements AuthorDao {
 
     private final NamedParameterJdbcOperations namedParamJdbcOps;
 
-    public AuthorDaoJdbc(JdbcOperations jdbc, NamedParameterJdbcOperations namedParamJdbcOps) {
+    private final InsertAuthor insertAuthor;
+
+    public AuthorDaoJdbc(JdbcOperations jdbc, NamedParameterJdbcOperations namedParamJdbcOps, DataSource dataSource) {
         this.jdbc = jdbc;
         this.namedParamJdbcOps = namedParamJdbcOps;
+        this.insertAuthor = new InsertAuthor(dataSource);
     }
 
     @Override
     public void insert(Author author) {
-        namedParamJdbcOps.update(
-                "INSERT INTO t_author(id, first_name, last_name, birth_date, created_date, modified_date) " +
-                        "VALUES (:id, :first_name, :last_name, :birth_date, :created_date, :modified_date)",
-                Map.of("id", author.getId(),"first_name", author.getFirstName(), "last_name", author.getLastName(),
-                        "birth_date", author.getBirthDate(), "created_date", author.getCreatedDate(),
-                        "modified_date", author.getModifiedDate())
-        );
+        Map<String, Object> paramMap = Map.of("first_name", author.getFirstName(),
+                "last_name", author.getLastName(),"birth_date", author.getBirthDate(),
+                "created_date", author.getCreatedDate(), "modified_date", author.getModifiedDate());
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        insertAuthor.updateByNamedParam(paramMap, keyHolder);
+        author.setId(keyHolder.getKey().longValue());
+        System.out.println(author.getId());
     }
 
     @Override
