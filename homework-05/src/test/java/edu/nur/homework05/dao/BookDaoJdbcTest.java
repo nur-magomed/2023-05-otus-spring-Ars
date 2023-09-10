@@ -36,21 +36,9 @@ public class BookDaoJdbcTest {
 
     private final List<Long> EXISTING_BOOK_IDS = new ArrayList<>(Arrays.asList(1L, 2L, 3L, 4L, 5L));
 
-    private final String EXISTING_AUTHOR_NAME = "Aleksandr";
-
-    private final String EXISTING_AUTHOR_SURNAME = "Pushkin";
-
     private final int EXPECTED_BOOK_ID = 1;
 
-    private final String EXPECTED_BOOK_TITLE = "A hero of our time";
-
-    private Date EXISTING_BIRTHDATE;
-
     private final int EXPECTED_BOOK_COUNT = 5;
-
-    private final int EXPECTED_GENRE_ID = 1;
-
-    private final String EXPECTED_GENRE_TITLE = "Prose";
 
     private Date NOW_DATE;
 
@@ -68,7 +56,7 @@ public class BookDaoJdbcTest {
         calendar.set(Calendar.MINUTE, 29);
         calendar.set(Calendar.SECOND, 43);
         calendar.set(Calendar.MILLISECOND, 0);
-        EXISTING_BIRTHDATE = calendar.getTime();
+        Date EXISTING_BIRTHDATE = calendar.getTime();
 
         Calendar nowCalendar = Calendar.getInstance();
         nowCalendar.set(Calendar.HOUR_OF_DAY, 0);
@@ -77,10 +65,14 @@ public class BookDaoJdbcTest {
         nowCalendar.set(Calendar.MILLISECOND, 0);
         NOW_DATE = nowCalendar.getTime();
 
+        String EXISTING_AUTHOR_NAME = "Aleksandr";
+        String EXISTING_AUTHOR_SURNAME = "Pushkin";
         Author expectingAuthor = new Author(EXISTING_AUTHOR_ID, EXISTING_AUTHOR_NAME, EXISTING_AUTHOR_SURNAME,
                 EXISTING_BIRTHDATE, NOW_DATE, NOW_DATE);
         authors.add(expectingAuthor);
 
+        int EXPECTED_GENRE_ID = 1;
+        String EXPECTED_GENRE_TITLE = "Prose";
         Genre genre = new Genre(EXPECTED_GENRE_ID, EXPECTED_GENRE_TITLE, NOW_DATE, NOW_DATE);
         genres.add(genre);
     }
@@ -93,7 +85,6 @@ public class BookDaoJdbcTest {
         Book actualBook = bookDaoJdbc.getById(expectedBook.getId());
         assertThat(actualBook).usingRecursiveComparison().isEqualTo(expectedBook);
     }
-
 
     @DisplayName("update existing book")
     @Test
@@ -111,6 +102,7 @@ public class BookDaoJdbcTest {
     @DisplayName("get a book by ID")
     @Test
     void getByIdTest() {
+        String EXPECTED_BOOK_TITLE = "A hero of our time";
         Book expectedBook = new Book(EXPECTED_BOOK_ID, EXPECTED_BOOK_TITLE, authors, genres, NOW_DATE, NOW_DATE);
         Book book = bookDaoJdbc.getById(EXISTING_AUTHOR_ID);
         assertEquals(expectedBook.getId(), book.getId());

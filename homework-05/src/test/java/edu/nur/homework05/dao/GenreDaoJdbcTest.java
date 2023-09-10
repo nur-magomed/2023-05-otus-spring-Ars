@@ -27,11 +27,7 @@ public class GenreDaoJdbcTest {
 
     private static final List<Long> EXISTING_GENRE_IDS = new ArrayList<>(Arrays.asList(1L, 2L, 3L));
 
-    private final int EXPECTED_GENRE_ID = 1;
-
     private final int EXISTING_GENRE_ID = 1;
-
-    private final String EXISTING_GENRE_TITLE = "Prose";
 
     private Date NOW_DATE;
 
@@ -45,10 +41,10 @@ public class GenreDaoJdbcTest {
         NOW_DATE = nowCalendar.getTime();
     }
 
-
     @DisplayName("save new genre")
     @Test
     void saveTest() {
+        int EXPECTED_GENRE_ID = 1;
         Genre expectedGenre = new Genre(EXPECTED_GENRE_ID, "TEST Genre", NOW_DATE, NOW_DATE);
         genreDaoJdbc.insert(expectedGenre);
         Genre actualGenre = genreDaoJdbc.getById(expectedGenre.getId());
@@ -69,12 +65,12 @@ public class GenreDaoJdbcTest {
     @DisplayName("get genre by ID")
     @Test
     void getByIdTest() {
+        String EXISTING_GENRE_TITLE = "Prose";
         Genre expectedGenre = new Genre(EXISTING_GENRE_ID, EXISTING_GENRE_TITLE, NOW_DATE, NOW_DATE);
         Genre genre = genreDaoJdbc.getById(EXISTING_GENRE_ID);
         assertEquals(expectedGenre.getId(), genre.getId());
         assertEquals(expectedGenre.getTitle(), genre.getTitle());
     }
-
 
     @DisplayName("get list of all genres")
     @Test
@@ -84,7 +80,6 @@ public class GenreDaoJdbcTest {
         List<Long> allAuthorsIdList = allGenres.stream().map(Genre::getId).collect(Collectors.toList());
         assertThat(allAuthorsIdList).containsAll(EXISTING_GENRE_IDS);
     }
-
 
     @DisplayName("delete genre by ID")
     @Test
