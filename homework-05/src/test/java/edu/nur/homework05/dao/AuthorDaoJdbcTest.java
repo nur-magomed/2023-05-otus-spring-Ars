@@ -23,8 +23,7 @@ class AuthorDaoJdbcTest {
 
     private static final int EXPECTED_AUTHORS_COUNT = 6;
     private static final int EXISTING_AUTHOR_ID = 1;
-    private static final List<Long> EXISTING_AUTHOR_IDS =
-            new ArrayList<>(Arrays.asList(1L, 2L, 3L, 4L, 5L, 6L));
+    private static final List<Long> EXISTING_AUTHOR_IDS = new ArrayList<>(Arrays.asList(1L, 2L, 3L, 4L, 5L, 6L));
     private static final String EXISTING_AUTHOR_NAME = "Aleksandr";
     private static final String EXISTING_AUTHOR_SURNAME = "Pushkin";
     private Date EXISTING_BIRTHDATE;
