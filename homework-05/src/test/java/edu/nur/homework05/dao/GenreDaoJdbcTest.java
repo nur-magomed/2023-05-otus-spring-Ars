@@ -24,11 +24,8 @@ public class GenreDaoJdbcTest {
     private GenreDaoJdbc genreDaoJdbc;
 
     private static final int EXPECTED_GENRE_COUNT = 3;
-
     private static final List<Long> EXISTING_GENRE_IDS = new ArrayList<>(Arrays.asList(1L, 2L, 3L));
-
     private final int EXISTING_GENRE_ID = 1;
-
     private Date NOW_DATE;
 
     @BeforeEach

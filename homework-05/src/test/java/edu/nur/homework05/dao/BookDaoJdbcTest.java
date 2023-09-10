@@ -24,26 +24,18 @@ public class BookDaoJdbcTest {
 
     @Autowired
     private BookDaoJdbc bookDaoJdbc;
-
     @Autowired
     private AuthorDaoJdbc authorDaoJdbc;
-
     @Autowired
     private GenreDaoJdbc genreDaoJdbc;
 
     private final int EXISTING_AUTHOR_ID = 1;
     private final int EXISTING_BOOK_ID = 1;
-
     private final List<Long> EXISTING_BOOK_IDS = new ArrayList<>(Arrays.asList(1L, 2L, 3L, 4L, 5L));
-
     private final int EXPECTED_BOOK_ID = 1;
-
     private final int EXPECTED_BOOK_COUNT = 5;
-
     private Date NOW_DATE;
-
     private final List<Author> authors = new ArrayList<>();
-
     private final List<Genre> genres = new ArrayList<>();
 
     @BeforeEach
