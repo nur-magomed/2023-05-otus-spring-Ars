@@ -35,7 +35,7 @@ public class AuthorShell {
         if (!firstName.isEmpty() && !lastName.isEmpty() && !birthDate.isEmpty()) {
             Date bDate = new SimpleDateFormat(format).parse(birthDate);
             Author genre = new Author(0, firstName, lastName, bDate, new Date(), new Date());
-            authorService.insert(genre);
+            authorService.save(genre);
         }
     }
 
