@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Date;
 import java.util.ArrayList;
+import java.util.Objects;
 
 @Repository
 public class BookDaoJdbc implements BookDao {
@@ -45,8 +46,8 @@ public class BookDaoJdbc implements BookDao {
                 "modified_date", new Date());
         KeyHolder keyHolder = new GeneratedKeyHolder();
         insertBook.updateByNamedParam(paramMap, keyHolder);
-        book.setId(keyHolder.getKey().longValue());
-        System.out.println("book: " + book.getId());
+        book.setId(Objects.requireNonNull(keyHolder.getKey()).longValue());
+
         for (Author author: book.getAuthors()) {
             namedParamJdbcOps.update("INSERT INTO t_book_author(book_id, author_id, created_date, modified_date) " +
                             "VALUES (:book_id, :author_id,  :created_date, :modified_date)",

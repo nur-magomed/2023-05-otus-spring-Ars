@@ -17,6 +17,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Repository
 public class AuthorDaoJdbc implements AuthorDao {
@@ -41,8 +42,8 @@ public class AuthorDaoJdbc implements AuthorDao {
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
         insertAuthor.updateByNamedParam(paramMap, keyHolder);
-        author.setId(keyHolder.getKey().longValue());
-        System.out.println(author.getId());
+        author.setId(Objects.requireNonNull(keyHolder.getKey()).longValue());
+
     }
 
     @Override

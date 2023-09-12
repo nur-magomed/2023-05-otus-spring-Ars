@@ -15,6 +15,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Repository
 public class GenreDaoJdbc implements GenreDao {
@@ -38,8 +39,7 @@ public class GenreDaoJdbc implements GenreDao {
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
         insertGenre.updateByNamedParam(paramMap, keyHolder);
-        genre.setId(keyHolder.getKey().longValue());
-        System.out.println(genre.getId());
+        genre.setId(Objects.requireNonNull(keyHolder.getKey()).longValue());
     }
 
     @Override

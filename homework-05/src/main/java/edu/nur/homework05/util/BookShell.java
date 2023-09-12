@@ -37,51 +37,35 @@ public class BookShell {
         books.forEach(System.out::println);
     }
 
-    @ShellMethod(key = "book new", value = "Add book: book new \"title\" \"authorIds\" \"genreIds\"")
+    @ShellMethod(key = "book new",
+            value = "Add book: book new \"title\" \"authorIds separated by comma\" \"genreIds separated by comma\"")
     public void save(@ShellOption(value = "title", defaultValue = "") String title,
                      @ShellOption(value = "authorIds", defaultValue = "") String authorIds,
                      @ShellOption(value = "genreIds", defaultValue = "") String genreIds) throws ParseException {
         if (!title.isEmpty() && !authorIds.isEmpty() && !genreIds.isEmpty()) {
-            String[] authorIdsArray = authorIds.split(",");
-            List<Integer> authorIdsList = Arrays.stream(authorIdsArray).map(Integer::valueOf).toList();
-            List<Author> authorList = new ArrayList<>();
-            for (Integer authorId: authorIdsList) {
-                Author author = authorService.getById(authorId);
-                authorList.add(author);
-            }
-            String[] genreIdsArray = genreIds.split(",");
-            List<Integer> genreIdsList = Arrays.stream(genreIdsArray).map(Integer::valueOf).toList();
-            List<Genre> genreList = new ArrayList<>();
-            for (Integer genreId: genreIdsList) {
-                Genre genre = genreService.getById(genreId);
-                genreList.add(genre);
-            }
-
-            Book book = new Book(0, title, authorList, genreList, new Date(), new Date());
+            Book book = new Book(0, title, retrieveAuthors(authorIds), retrieveGenres(genreIds),
+                    new Date(), new Date());
             bookService.save(book);
         }
     }
 
-    @ShellMethod(key = "author update",
-            value = "Update author: author update id \"First name\" \"Last name\" \"yyyy-MM-dd\"")
+    @ShellMethod(key = "book update", value = "Update book: book update id \"title\" " +
+            "\"authorIds separated by comma\" \"genreIds separated by comma\"")
     public void update(@ShellOption(value = "id", defaultValue = "-1") int id,
-                       @ShellOption(value = "firstName", defaultValue = "") String firstName,
-                       @ShellOption(value = "lastName", defaultValue = "") String lastName,
-                       @ShellOption(value = "birthDate", defaultValue = "") String birthDate) throws ParseException {
-        Author author = authorService.getById(id);
-        if (!firstName.isEmpty()) {
-            author.setFirstName(firstName);
+                       @ShellOption(value = "title", defaultValue = "") String title,
+                       @ShellOption(value = "authorIds", defaultValue = "") String authorIds,
+                       @ShellOption(value = "genreIds", defaultValue = "") String genreIds) throws ParseException  {
+        Book book = bookService.getById(id);
+        if (!title.isEmpty()) {
+            book.setTitle(title);
         }
-
-        if (!lastName.isEmpty()) {
-            author.setLastName(lastName);
+        if (!authorIds.isEmpty()) {
+            book.setAuthors(retrieveAuthors(authorIds));
         }
-
-        if (!birthDate.isEmpty()) {
-
+        if (!genreIds.isEmpty()) {
+            book.setGenres(retrieveGenres(genreIds));
         }
-
-        authorService.update(author);
+        bookService.update(book);
     }
 
     @ShellMethod(key = "book print", value = "Print book by Id: book print id")
@@ -97,5 +81,27 @@ public class BookShell {
     @ShellMethod(key = "book count", value = "Count all books")
     public int countAll() {
         return bookService.countAll();
+    }
+
+    private List<Author> retrieveAuthors(String ids) {
+        List<Author> authorList = new ArrayList<>();
+        String[] authorIdsArray = ids.split(",");
+        List<Integer> authorIdsList = Arrays.stream(authorIdsArray).map(Integer::valueOf).toList();
+        for (Integer authorId: authorIdsList) {
+            Author author = authorService.getById(authorId);
+            authorList.add(author);
+        }
+        return authorList;
+    }
+
+    private List<Genre> retrieveGenres(String ids) {
+        List<Genre> genreList = new ArrayList<>();
+        String[] genreIdsArray = ids.split(",");
+        List<Integer> genreIdsList = Arrays.stream(genreIdsArray).map(Integer::valueOf).toList();
+        for (Integer genreId: genreIdsList) {
+            Genre genre = genreService.getById(genreId);
+            genreList.add(genre);
+        }
+        return genreList;
     }
 }
