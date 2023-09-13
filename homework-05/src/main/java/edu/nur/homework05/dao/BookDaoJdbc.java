@@ -41,7 +41,7 @@ public class BookDaoJdbc implements BookDao {
     }
 
     @Override
-    public void insert(Book book) {
+    public Book save(Book book) {
         Map<String, Object> paramMap = Map.of("title", book.getTitle(), "created_date", book.getCreatedDate(),
                 "modified_date", new Date());
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -60,16 +60,21 @@ public class BookDaoJdbc implements BookDao {
                     Map.of("book_id", book.getId(),"genre_id", genre.getId(),
                             "created_date", book.getCreatedDate(), "modified_date", new Date()));
         }
+
+        return book;
     }
 
     @Override
-    public void update(Book book) {
+    public Book update(Book book) {
+        Date now = new Date();
         namedParamJdbcOps.update(
                 "UPDATE t_book SET title=:title, modified_date=:modified_date WHERE  id=:id ",
-                Map.of("id", book.getId(), "title", book.getTitle(), "modified_date", new Date()));
+                Map.of("id", book.getId(), "title", book.getTitle(), "modified_date", now));
 
         updateBookAuthors(book);
         updateBookGenres(book);
+        book.setModifiedDate(now);
+        return book;
     }
 
     @Override
@@ -123,11 +128,6 @@ public class BookDaoJdbc implements BookDao {
     public int countAll() {
         Integer count = jdbc.queryForObject("SELECT count(*) FROM t_book", Integer.class);
         return count == null ? 0 : count;
-    }
-
-    @Override
-    public int getMaxId() {
-        return jdbc.queryForObject("SELECT max(id) FROM t_book", Integer.class);
     }
 
     private static class BookExtractor implements ResultSetExtractor<List<Book>> {

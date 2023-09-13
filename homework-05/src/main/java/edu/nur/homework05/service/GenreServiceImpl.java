@@ -16,13 +16,13 @@ public class GenreServiceImpl implements GenreService {
     }
 
     @Override
-    public void save(Genre genre) {
-        genreDao.insert(genre);
+    public Genre save(Genre genre) {
+        return genreDao.save(genre);
     }
 
     @Override
-    public void update(Genre genre) {
-        genreDao.update(genre);
+    public Genre update(Genre genre) {
+        return genreDao.update(genre);
     }
 
     @Override

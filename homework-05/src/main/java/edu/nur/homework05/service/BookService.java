@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface BookService {
 
-    void save(Book book);
+    Book save(Book book);
 
-    void update(Book book);
+    Book update(Book book);
 
     Book getById(long id);
 

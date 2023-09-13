@@ -62,7 +62,7 @@ class BookServiceImplTest {
     @Test
     void save() {
         bookService.save(EXPECTED_BOOK);
-        verify(bookDao, times(1)).insert(EXPECTED_BOOK);
+        verify(bookDao, times(1)).save(EXPECTED_BOOK);
     }
 
     @DisplayName("update a book")

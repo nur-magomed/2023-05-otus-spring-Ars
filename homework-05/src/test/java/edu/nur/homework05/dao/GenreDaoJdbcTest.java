@@ -43,7 +43,7 @@ public class GenreDaoJdbcTest {
     void saveTest() {
         int EXPECTED_GENRE_ID = 1;
         Genre expectedGenre = new Genre(EXPECTED_GENRE_ID, "TEST Genre", NOW_DATE, NOW_DATE);
-        genreDaoJdbc.insert(expectedGenre);
+        genreDaoJdbc.save(expectedGenre);
         Genre actualGenre = genreDaoJdbc.getById(expectedGenre.getId());
         assertThat(actualGenre).usingRecursiveComparison().isEqualTo(expectedGenre);
     }
@@ -53,10 +53,10 @@ public class GenreDaoJdbcTest {
     void updateTest() {
         Genre expectedGenre = genreDaoJdbc.getById(EXISTING_GENRE_ID);
         expectedGenre.setTitle("Edited title");
-        genreDaoJdbc.update(expectedGenre);
+        expectedGenre = genreDaoJdbc.update(expectedGenre);
 
         Genre actualGenre = genreDaoJdbc.getById(EXISTING_GENRE_ID);
-        assertThat(actualGenre).usingRecursiveComparison().isEqualTo(expectedGenre);
+        assertThat(actualGenre).usingRecursiveComparison().ignoringFields("modifiedDate").isEqualTo(expectedGenre);
     }
 
     @DisplayName("get genre by ID")

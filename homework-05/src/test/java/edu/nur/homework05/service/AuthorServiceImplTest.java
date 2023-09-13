@@ -48,9 +48,9 @@ class AuthorServiceImplTest {
 
     @DisplayName("save a new author")
     @Test
-    void insert() {
+    void save() {
         authorService.save(EXPECTED_AUTHOR);
-        verify(authorDao, times(1)).insert(EXPECTED_AUTHOR);
+        verify(authorDao, times(1)).save(EXPECTED_AUTHOR);
     }
 
     @DisplayName("update an author")

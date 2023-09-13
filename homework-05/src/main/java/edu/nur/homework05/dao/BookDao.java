@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface BookDao {
 
-    void insert(Book book);
+    Book save(Book book);
 
-    void update(Book book);
+    Book update(Book book);
 
     Book getById(long id);
 
@@ -17,7 +17,5 @@ public interface BookDao {
     void deleteById(long id);
 
     int countAll();
-
-    int getMaxId();
 
 }

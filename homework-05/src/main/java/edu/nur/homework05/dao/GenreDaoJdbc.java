@@ -33,21 +33,25 @@ public class GenreDaoJdbc implements GenreDao {
     }
 
     @Override
-    public void insert(Genre genre) {
+    public Genre save(Genre genre) {
         Map<String, Object> paramMap = Map.of("title", genre.getTitle(),
                 "created_date", genre.getCreatedDate(), "modified_date", genre.getModifiedDate());
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
         insertGenre.updateByNamedParam(paramMap, keyHolder);
         genre.setId(Objects.requireNonNull(keyHolder.getKey()).longValue());
+        return genre;
     }
 
     @Override
-    public void update(Genre genre) {
+    public Genre update(Genre genre) {
+        Date now = new Date();
         namedParamJdbcOps.update(
                 "UPDATE t_genre SET title=:title, modified_date=:modified_date WHERE  id=:id",
-                Map.of("id", genre.getId(),"title", genre.getTitle(),"modified_date", new Date())
+                Map.of("id", genre.getId(),"title", genre.getTitle(),"modified_date", now)
         );
+        genre.setModifiedDate(now);
+        return genre;
     }
 
     @Override
@@ -74,11 +78,6 @@ public class GenreDaoJdbc implements GenreDao {
     public int countAll() {
         Integer count = jdbc.queryForObject("SELECT count(*) FROM t_genre", Integer.class);
         return count == null ? 0 : count;
-    }
-
-    @Override
-    public int getMaxId() {
-        return jdbc.queryForObject("SELECT max(id) FROM t_genre", Integer.class);
     }
 
     private static class GenreMapper implements RowMapper<Genre> {

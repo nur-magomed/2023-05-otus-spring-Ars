@@ -16,13 +16,13 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public void save(Author author) {
-        authorDao.insert(author);
+    public Author save(Author author) {
+        return authorDao.save(author);
     }
 
     @Override
-    public void update(Author author) {
-        authorDao.update(author);
+    public Author update(Author author) {
+        return authorDao.update(author);
     }
 
     @Override

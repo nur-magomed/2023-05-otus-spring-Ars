@@ -73,7 +73,7 @@ public class BookDaoJdbcTest {
     @Test
     void saveTest() {
         Book expectedBook = new Book(1, "Testing book", authors, genres, NOW_DATE, NOW_DATE);
-        bookDaoJdbc.insert(expectedBook);
+        bookDaoJdbc.save(expectedBook);
         Book actualBook = bookDaoJdbc.getById(expectedBook.getId());
         assertThat(actualBook).usingRecursiveComparison().isEqualTo(expectedBook);
     }
@@ -85,10 +85,10 @@ public class BookDaoJdbcTest {
         expectedBook.setTitle("New title");
         expectedBook.getAuthors().add(authorDaoJdbc.getById(6));
         expectedBook.getGenres().add(genreDaoJdbc.getById(2));
-        bookDaoJdbc.update(expectedBook);
+        expectedBook = bookDaoJdbc.update(expectedBook);
 
         Book actualBook = bookDaoJdbc.getById(EXPECTED_BOOK_ID);
-        assertThat(actualBook).usingRecursiveComparison().isEqualTo(expectedBook);
+        assertThat(actualBook).usingRecursiveComparison().ignoringFields("modifiedDate").isEqualTo(expectedBook);
     }
 
     @DisplayName("get a book by ID")

@@ -35,7 +35,7 @@ public class AuthorDaoJdbc implements AuthorDao {
     }
 
     @Override
-    public void insert(Author author) {
+    public Author save(Author author) {
         Map<String, Object> paramMap = Map.of("first_name", author.getFirstName(),
                 "last_name", author.getLastName(),"birth_date", author.getBirthDate(),
                 "created_date", author.getCreatedDate(), "modified_date", author.getModifiedDate());
@@ -43,17 +43,20 @@ public class AuthorDaoJdbc implements AuthorDao {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         insertAuthor.updateByNamedParam(paramMap, keyHolder);
         author.setId(Objects.requireNonNull(keyHolder.getKey()).longValue());
-
+        return author;
     }
 
     @Override
-    public void update(Author author) {
+    public Author update(Author author) {
+        Date now = new Date();
         namedParamJdbcOps.update(
                 "UPDATE t_author SET first_name=:first_name, last_name=:last_name, modified_date=:modified_date " +
                         "WHERE id=:id",
-                Map.of("id", author.getId(),"first_name", author.getFirstName(), "last_name", author.getLastName(),
-                        "modified_date", new Date())
+                Map.of("id", author.getId(),"first_name", author.getFirstName(),
+                        "last_name", author.getLastName(), "modified_date", now)
         );
+        author.setModifiedDate(now);
+        return author;
     }
 
     @Override
@@ -85,11 +88,6 @@ public class AuthorDaoJdbc implements AuthorDao {
     public int countAll() {
         Integer count = jdbc.queryForObject("SELECT count(*) FROM t_author", Integer.class);
         return count == null ? 0 : count;
-    }
-
-    @Override
-    public int getMaxId() {
-        return jdbc.queryForObject("SELECT max(id) FROM t_author", Integer.class);
     }
 
     private static class AuthorMapper implements RowMapper<Author> {

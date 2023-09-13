@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface AuthorDao {
 
-    void insert(Author author);
+    Author save(Author author);
 
-    void update(Author author);
+    Author update(Author author);
 
     Author getById(long id);
 
@@ -17,7 +17,5 @@ public interface AuthorDao {
     void deleteById(long id);
 
     int countAll();
-
-    int getMaxId();
 
 }

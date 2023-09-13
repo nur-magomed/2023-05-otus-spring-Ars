@@ -45,7 +45,7 @@ class GenreServiceImplTest {
     @Test
     void save() {
         genreService.save(EXPECTED_GENRE);
-        verify(genreDao, times(1)).insert(EXPECTED_GENRE);
+        verify(genreDao, times(1)).save(EXPECTED_GENRE);
     }
 
     @DisplayName("update a genre")

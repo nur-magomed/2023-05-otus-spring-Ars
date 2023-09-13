@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface GenreService {
 
-    void save(Genre genre);
+    Genre save(Genre genre);
 
-    void update(Genre genre);
+    Genre update(Genre genre);
 
     Genre getById(long id);
 
