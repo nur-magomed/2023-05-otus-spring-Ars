@@ -50,4 +50,9 @@ public class QuizRunner {
 
     }
 
+    private void askUserDetails() {
+
+    }
+
+
 }

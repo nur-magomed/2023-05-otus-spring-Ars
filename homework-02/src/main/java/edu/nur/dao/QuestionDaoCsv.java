@@ -19,8 +19,8 @@ public class QuestionDaoCsv implements QuestionDao {
 
     @Override
     public List<Question> getQuestions() {
-            List<String[]> lines = reader.readAllLines();
-            return converter.convertToQuestions(lines);
+        List<String[]> lines = reader.readAllLines();
+        return converter.convertToQuestions(lines);
     }
 
 }
