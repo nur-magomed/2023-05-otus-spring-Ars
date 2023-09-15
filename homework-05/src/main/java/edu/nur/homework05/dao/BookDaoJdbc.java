@@ -7,12 +7,12 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -32,20 +32,20 @@ public class BookDaoJdbc implements BookDao {
 
     private final NamedParameterJdbcOperations namedParamJdbcOps;
 
-    private final InsertBook insertBook;
-
-    public BookDaoJdbc(JdbcOperations jdbc, NamedParameterJdbcOperations namedParamJdbcOps, DataSource dataSource) {
+    public BookDaoJdbc(JdbcOperations jdbc, NamedParameterJdbcOperations namedParamJdbcOps) {
         this.jdbc = jdbc;
         this.namedParamJdbcOps = namedParamJdbcOps;
-        this.insertBook = new InsertBook(dataSource);
     }
 
     @Override
     public Book save(Book book) {
-        Map<String, Object> paramMap = Map.of("title", book.getTitle(), "created_date", book.getCreatedDate(),
-                "modified_date", new Date());
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("title", book.getTitle());
+        params.addValue("created_date", book.getCreatedDate());
+        params.addValue("modified_date", new Date());
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        insertBook.updateByNamedParam(paramMap, keyHolder);
+        namedParamJdbcOps.update("INSERT INTO t_book(title,  created_date, modified_date) " +
+                        "VALUES (:title, :created_date, :modified_date)", params, keyHolder);
         book.setId(Objects.requireNonNull(keyHolder.getKey()).longValue());
 
         for (Author author: book.getAuthors()) {
@@ -60,7 +60,6 @@ public class BookDaoJdbc implements BookDao {
                     Map.of("book_id", book.getId(),"genre_id", genre.getId(),
                             "created_date", book.getCreatedDate(), "modified_date", new Date()));
         }
-
         return book;
     }
 

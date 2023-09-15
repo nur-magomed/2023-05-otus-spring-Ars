@@ -3,12 +3,12 @@ package edu.nur.homework05.dao;
 import edu.nur.homework05.model.Author;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -26,22 +26,25 @@ public class AuthorDaoJdbc implements AuthorDao {
 
     private final NamedParameterJdbcOperations namedParamJdbcOps;
 
-    private final InsertAuthor insertAuthor;
-
-    public AuthorDaoJdbc(JdbcOperations jdbc, NamedParameterJdbcOperations namedParamJdbcOps, DataSource dataSource) {
+    public AuthorDaoJdbc(JdbcOperations jdbc, NamedParameterJdbcOperations namedParamJdbcOps) {
         this.jdbc = jdbc;
         this.namedParamJdbcOps = namedParamJdbcOps;
-        this.insertAuthor = new InsertAuthor(dataSource);
     }
 
     @Override
     public Author save(Author author) {
-        Map<String, Object> paramMap = Map.of("first_name", author.getFirstName(),
-                "last_name", author.getLastName(),"birth_date", author.getBirthDate(),
-                "created_date", author.getCreatedDate(), "modified_date", author.getModifiedDate());
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("first_name", author.getFirstName());
+        params.addValue("last_name", author.getLastName());
+        params.addValue("birth_date", author.getBirthDate());
+        params.addValue("created_date", author.getCreatedDate());
+        params.addValue("modified_date", author.getModifiedDate());
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        insertAuthor.updateByNamedParam(paramMap, keyHolder);
+        namedParamJdbcOps.update(
+                "INSERT INTO t_author(first_name, last_name, birth_date, created_date, modified_date) " +
+                        "VALUES (:first_name, :last_name, :birth_date, :created_date, :modified_date)",
+                params, keyHolder);
         author.setId(Objects.requireNonNull(keyHolder.getKey()).longValue());
         return author;
     }

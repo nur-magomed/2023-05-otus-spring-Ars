@@ -3,12 +3,12 @@ package edu.nur.homework05.dao;
 import edu.nur.homework05.model.Genre;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collections;
@@ -24,21 +24,22 @@ public class GenreDaoJdbc implements GenreDao {
 
     private final NamedParameterJdbcOperations namedParamJdbcOps;
 
-    private final InsertGenre insertGenre;
-
-    public GenreDaoJdbc(JdbcOperations jdbc, NamedParameterJdbcOperations namedParamJdbcOps, DataSource dataSource) {
+    public GenreDaoJdbc(JdbcOperations jdbc, NamedParameterJdbcOperations namedParamJdbcOps) {
         this.jdbc = jdbc;
         this.namedParamJdbcOps = namedParamJdbcOps;
-        this.insertGenre = new InsertGenre(dataSource);
     }
 
     @Override
     public Genre save(Genre genre) {
-        Map<String, Object> paramMap = Map.of("title", genre.getTitle(),
-                "created_date", genre.getCreatedDate(), "modified_date", genre.getModifiedDate());
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("title", genre.getTitle());
+        params.addValue("created_date", genre.getCreatedDate());
+        params.addValue("modified_date", genre.getModifiedDate());
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        insertGenre.updateByNamedParam(paramMap, keyHolder);
+        namedParamJdbcOps.update("INSERT INTO t_genre(title,  created_date, modified_date) " +
+                "VALUES(:title, :created_date, :modified_date)", params, keyHolder);
+
         genre.setId(Objects.requireNonNull(keyHolder.getKey()).longValue());
         return genre;
     }
