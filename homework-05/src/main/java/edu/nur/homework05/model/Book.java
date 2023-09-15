@@ -16,19 +16,10 @@ public class Book {
 
     private List<Author> authors;
 
-    private List<Genre> genres;
+    private Genre genre;
 
     private Date createdDate;
 
     private Date modifiedDate;
 
-    @Override
-    public String toString() {
-        return "Book{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", authors=" + authors +
-                ", genres=" + genres +
-                '}';
-    }
 }

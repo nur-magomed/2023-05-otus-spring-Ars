@@ -27,66 +27,39 @@ insert into t_genre (title,  created_date, modified_date)
 values ('Russian classic', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
 
 
-insert into t_book (title,  created_date, modified_date)
-values ('A hero of our time', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
+insert into t_book (title,  created_date, modified_date, genre_id)
+values ('A hero of our time', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), 1);
 
 insert into t_book_author (book_id, author_id,  created_date, modified_date)
 values (1, 3, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
 
-insert into t_book_genre (book_id, genre_id,  created_date, modified_date)
-values (1, 1, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
 
-insert into t_book_genre (book_id, genre_id,  created_date, modified_date)
-values (1, 3, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
-
-
-insert into t_book (title,  created_date, modified_date)
-values ('War and peace', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
+insert into t_book (title,  created_date, modified_date, genre_id)
+values ('War and peace', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), 3);
 
 insert into t_book_author (book_id, author_id,  created_date, modified_date)
 values (2, 2, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
 
-insert into t_book_genre (book_id, genre_id,  created_date, modified_date)
-values (2, 1, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
 
-insert into t_book_genre (book_id, genre_id,  created_date, modified_date)
-values (2, 3, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
-
-
-insert into t_book (title,  created_date, modified_date)
-values ('Evgeniy Onegin', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
+insert into t_book (title,  created_date, modified_date, genre_id)
+values ('Evgeniy Onegin', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), 1);
 
 insert into t_book_author (book_id, author_id,  created_date, modified_date)
 values (3, 1, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
 
-insert into t_book_genre (book_id, genre_id,  created_date, modified_date)
-values (3, 1, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
 
-insert into t_book_genre (book_id, genre_id,  created_date, modified_date)
-values (3, 3, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
-
-
-insert into t_book (title,  created_date, modified_date)
-values ('Java 8. The complete reference', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
+insert into t_book (title,  created_date, modified_date, genre_id)
+values ('Java 8. The complete reference', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), 2);
 
 insert into t_book_author (book_id, author_id,  created_date, modified_date)
 values (4, 4, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
 
-insert into t_book_genre (book_id, genre_id,  created_date, modified_date)
-values (4, 2, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
 
-
-insert into t_book (title,  created_date, modified_date)
-values ('Twelve chairs', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
+insert into t_book (title,  created_date, modified_date, genre_id)
+values ('Twelve chairs', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), 3);
 
 insert into t_book_author (book_id, author_id,  created_date, modified_date)
 values (5, 5, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
 
 insert into t_book_author (book_id, author_id,  created_date, modified_date)
 values (5, 6, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
-
-insert into t_book_genre (book_id, genre_id,  created_date, modified_date)
-values (5, 1, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
-
-insert into t_book_genre (book_id, genre_id,  created_date, modified_date)
-values (5, 3, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());

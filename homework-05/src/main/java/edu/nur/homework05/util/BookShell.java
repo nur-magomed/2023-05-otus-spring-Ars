@@ -38,23 +38,23 @@ public class BookShell {
     }
 
     @ShellMethod(key = "book new",
-            value = "Add book: book new \"title\" \"authorIds separated by comma\" \"genreIds separated by comma\"")
+            value = "Add book: book new \"title\" \"authorIds separated by comma\" \"genreId\"")
     public void save(@ShellOption(value = "title", defaultValue = "") String title,
                      @ShellOption(value = "authorIds", defaultValue = "") String authorIds,
-                     @ShellOption(value = "genreIds", defaultValue = "") String genreIds) throws ParseException {
+                     @ShellOption(value = "genreId", defaultValue = "") String genreIds) throws ParseException {
         if (!title.isEmpty() && !authorIds.isEmpty() && !genreIds.isEmpty()) {
-            Book book = new Book(0, title, retrieveAuthors(authorIds), retrieveGenres(genreIds),
+            Book book = new Book(0, title, retrieveAuthors(authorIds), null,
                     new Date(), new Date());
             bookService.save(book);
         }
     }
 
     @ShellMethod(key = "book update", value = "Update book: book update id \"title\" " +
-            "\"authorIds separated by comma\" \"genreIds separated by comma\"")
+            "\"authorIds separated by comma\" \"genreId\"")
     public void update(@ShellOption(value = "id", defaultValue = "-1") int id,
                        @ShellOption(value = "title", defaultValue = "") String title,
                        @ShellOption(value = "authorIds", defaultValue = "") String authorIds,
-                       @ShellOption(value = "genreIds", defaultValue = "") String genreIds) throws ParseException  {
+                       @ShellOption(value = "genreId", defaultValue = "") String genreId) throws ParseException  {
         Book book = bookService.getById(id);
         if (!title.isEmpty()) {
             book.setTitle(title);
@@ -62,9 +62,7 @@ public class BookShell {
         if (!authorIds.isEmpty()) {
             book.setAuthors(retrieveAuthors(authorIds));
         }
-        if (!genreIds.isEmpty()) {
-            book.setGenres(retrieveGenres(genreIds));
-        }
+
         bookService.update(book);
     }
 

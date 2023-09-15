@@ -43,9 +43,11 @@ public class BookDaoJdbc implements BookDao {
         params.addValue("title", book.getTitle());
         params.addValue("created_date", book.getCreatedDate());
         params.addValue("modified_date", new Date());
+        params.addValue("genre_id", book.getGenre().getId());
+
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        namedParamJdbcOps.update("INSERT INTO t_book(title,  created_date, modified_date) " +
-                        "VALUES (:title, :created_date, :modified_date)", params, keyHolder);
+        namedParamJdbcOps.update("INSERT INTO t_book(title,  created_date, modified_date, genre_id) " +
+                        "VALUES (:title, :created_date, :modified_date, :genre_id)", params, keyHolder);
         book.setId(Objects.requireNonNull(keyHolder.getKey()).longValue());
 
         for (Author author: book.getAuthors()) {
@@ -54,12 +56,7 @@ public class BookDaoJdbc implements BookDao {
                     Map.of("book_id", book.getId(), "author_id", author.getId(),
                             "created_date", new Date(), "modified_date", new Date()));
         }
-        for (Genre genre: book.getGenres()) {
-            namedParamJdbcOps.update("INSERT INTO t_book_genre(book_id, genre_id, created_date, modified_date) " +
-                            "VALUES (:book_id, :genre_id, :created_date, :modified_date)",
-                    Map.of("book_id", book.getId(),"genre_id", genre.getId(),
-                            "created_date", book.getCreatedDate(), "modified_date", new Date()));
-        }
+
         return book;
     }
 
@@ -67,11 +64,11 @@ public class BookDaoJdbc implements BookDao {
     public Book update(Book book) {
         Date now = new Date();
         namedParamJdbcOps.update(
-                "UPDATE t_book SET title=:title, modified_date=:modified_date WHERE  id=:id ",
-                Map.of("id", book.getId(), "title", book.getTitle(), "modified_date", now));
+                "UPDATE t_book SET title=:title, modified_date=:modified_date, genre_id=:genre_id WHERE  id=:id ",
+                Map.of("id", book.getId(), "title", book.getTitle(), "modified_date", now,
+                        "genre_id", book.getGenre().getId() ));
 
         updateBookAuthors(book);
-        updateBookGenres(book);
         book.setModifiedDate(now);
         return book;
     }
@@ -88,8 +85,7 @@ public class BookDaoJdbc implements BookDao {
                     "FROM t_book b " +
                     "LEFT JOIN t_book_author ba ON b.id = ba.BOOK_ID " +
                     "LEFT JOIN t_author a ON ba.author_id = a.id " +
-                    "LEFT JOIN t_book_genre bg ON b.id = bg.book_id " +
-                    "LEFT JOIN t_genre g ON bg.genre_id = g.id " +
+                    "LEFT JOIN t_genre g ON b.genre_id = g.id " +
                     "WHERE b.id = :id ",
                 params,
                 new BookExtractor()
@@ -111,8 +107,7 @@ public class BookDaoJdbc implements BookDao {
                     "FROM t_book b " +
                     "LEFT JOIN t_book_author ba ON b.id = ba.BOOK_ID " +
                     "LEFT JOIN t_author a ON ba.author_id = a.id " +
-                    "LEFT JOIN t_book_genre bg ON b.id = bg.book_id " +
-                    "LEFT JOIN t_genre g ON bg.genre_id = g.id ",
+                    "LEFT JOIN t_genre g ON b.genre_id = g.id ",
                 new BookExtractor()
         );
     }
@@ -136,9 +131,13 @@ public class BookDaoJdbc implements BookDao {
             Map<Long, Book> bookMap = new HashMap<>();
             while (rs.next()) {
                 long bookId = rs.getLong("b_id");
+
                 if (!bookMap.containsKey(bookId)) {
+                    Genre genre = new Genre(rs.getLong("g_id"), rs.getString("g_title"),
+                            rs.getDate("g_created_date"), rs.getDate("g_modified_date"));
+
                     bookMap.put(bookId, new Book(bookId, rs.getString("b_title"), new ArrayList<>(),
-                            new ArrayList<>(), rs.getDate("b_created_date"),
+                            genre, rs.getDate("b_created_date"),
                             rs.getDate("b_modified_date")));
                 }
                 Book book = bookMap.get(bookId);
@@ -148,11 +147,6 @@ public class BookDaoJdbc implements BookDao {
                         rs.getDate("a_created_date"), rs.getDate("a_modified_date"));
                 if (!book.getAuthors().contains(author)) {
                     book.getAuthors().add(author);
-                }
-                Genre genre = new Genre(rs.getLong("g_id"), rs.getString("g_title"),
-                        rs.getDate("g_created_date"), rs.getDate("g_modified_date"));
-                if (!book.getGenres().contains(genre)) {
-                    book.getGenres().add(genre);
                 }
             }
             return bookMap.values().stream().toList();
@@ -184,28 +178,4 @@ public class BookDaoJdbc implements BookDao {
         }
     }
 
-    private void updateBookGenres(Book updatedBook) {
-        Book existingBook = getById(updatedBook.getId());
-        List<Genre> existingGenres = existingBook.getGenres();
-
-        for (Genre genre: updatedBook.getGenres()) {
-            if (existingGenres.contains(genre)) {
-                existingGenres.remove(genre);
-            } else {
-                namedParamJdbcOps.update(
-                        "INSERT INTO t_book_genre(book_id, genre_id, created_date, modified_date) " +
-                                "VALUES (:book_id, :genre_id, :created_date, :modified_date)",
-                        Map.of("book_id", updatedBook.getId(), "genre_id", genre.getId(),
-                                "created_date", updatedBook.getCreatedDate(), "modified_date", new Date())
-                );
-            }
-        }
-
-        for (Genre genre: existingGenres) {
-            namedParamJdbcOps.update(
-                    "DELETE FROM t_book WHERE book_id=:book_id AND genre_id=:genre_id",
-                    Map.of("book_id", updatedBook.getId(),"genre_id", genre.getId())
-            );
-        }
-    }
 }

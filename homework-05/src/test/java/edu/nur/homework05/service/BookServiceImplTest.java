@@ -34,7 +34,7 @@ class BookServiceImplTest {
     private final List<Genre> EXPECTED_GENRE_LIST = new ArrayList<>();
 
     private final Book EXPECTED_BOOK = new Book(1L, "Test genre", EXPECTED_AUTHOR_LIST,
-            EXPECTED_GENRE_LIST, new Date(), new Date());
+            null, new Date(), new Date());
 
     private final List<Book> EXPECTED_BOOK_LIST = new ArrayList<>();
 
@@ -47,11 +47,11 @@ class BookServiceImplTest {
         EXPECTED_AUTHOR_LIST.add(author);
 
         Book book2 = new Book(2L, "Test book2", EXPECTED_AUTHOR_LIST,
-                EXPECTED_GENRE_LIST, new Date(), new Date());
+                genre, new Date(), new Date());
         Book book3 = new Book(3L, "Test book3", EXPECTED_AUTHOR_LIST,
-                EXPECTED_GENRE_LIST, new Date(), new Date());
+                genre, new Date(), new Date());
         Book book4 = new Book(4L, "Test book4", EXPECTED_AUTHOR_LIST,
-                EXPECTED_GENRE_LIST, new Date(), new Date());
+                genre, new Date(), new Date());
 
         EXPECTED_BOOK_LIST.add(book2);
         EXPECTED_BOOK_LIST.add(book3);
