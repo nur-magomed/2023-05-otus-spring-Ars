@@ -73,7 +73,7 @@ public class BookDaoJdbc implements BookDao {
         namedParamJdbcOps.update(
                 "UPDATE t_book SET title=:title, modified_date=:modified_date, genre_id=:genre_id WHERE  id=:id ",
                 Map.of("id", book.getId(), "title", book.getTitle(), "modified_date", now,
-                        "genre_id", book.getGenre().getId() ));
+                        "genre_id", book.getGenre().getId()));
 
         updateBookAuthors(book);
         book.setModifiedDate(now);
