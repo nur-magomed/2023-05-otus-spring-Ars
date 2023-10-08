@@ -33,6 +33,14 @@ public class AuthorDaoJdbc implements AuthorDao {
 
     @Override
     public Author save(Author author) {
+        if (author.getId() == 0) {
+            return insert(author);
+        } else {
+            return update(author);
+        }
+    }
+
+    private Author insert(Author author) {
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("first_name", author.getFirstName());
         params.addValue("last_name", author.getLastName());
@@ -49,8 +57,7 @@ public class AuthorDaoJdbc implements AuthorDao {
         return author;
     }
 
-    @Override
-    public Author update(Author author) {
+    private Author update(Author author) {
         Date now = new Date();
         namedParamJdbcOps.update(
                 "UPDATE t_author SET first_name=:first_name, last_name=:last_name, modified_date=:modified_date " +

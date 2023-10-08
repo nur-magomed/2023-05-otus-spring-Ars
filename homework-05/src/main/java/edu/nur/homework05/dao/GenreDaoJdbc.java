@@ -31,6 +31,14 @@ public class GenreDaoJdbc implements GenreDao {
 
     @Override
     public Genre save(Genre genre) {
+        if (genre.getId() == 0) {
+            return insert(genre);
+        } else {
+            return update(genre);
+        }
+    }
+
+    private Genre insert(Genre genre) {
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("title", genre.getTitle());
         params.addValue("created_date", genre.getCreatedDate());
@@ -44,8 +52,7 @@ public class GenreDaoJdbc implements GenreDao {
         return genre;
     }
 
-    @Override
-    public Genre update(Genre genre) {
+    private Genre update(Genre genre) {
         Date now = new Date();
         namedParamJdbcOps.update(
                 "UPDATE t_genre SET title=:title, modified_date=:modified_date WHERE  id=:id",

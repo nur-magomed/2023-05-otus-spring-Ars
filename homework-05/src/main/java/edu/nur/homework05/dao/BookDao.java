@@ -8,8 +8,6 @@ public interface BookDao {
 
     Book save(Book book);
 
-    Book update(Book book);
-
     Book getById(long id);
 
     List<Book> getAll();

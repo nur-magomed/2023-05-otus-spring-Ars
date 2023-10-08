@@ -61,15 +61,15 @@ class BookServiceImplTest {
     @DisplayName("save a new book")
     @Test
     void save() {
-        bookService.save(EXPECTED_BOOK);
+        bookService.save(EXPECTED_BOOK.getTitle(), "1", "1");
         verify(bookDao, times(1)).save(EXPECTED_BOOK);
     }
 
     @DisplayName("update a book")
     @Test
     void update() {
-        bookService.update(EXPECTED_BOOK);
-        verify(bookDao, times(1)).update(EXPECTED_BOOK);
+        bookService.update(EXPECTED_BOOK.getId(), EXPECTED_BOOK.getTitle(), "1", "1");
+        verify(bookDao, times(1)).save(EXPECTED_BOOK);
     }
 
     @DisplayName("get a book by ID")

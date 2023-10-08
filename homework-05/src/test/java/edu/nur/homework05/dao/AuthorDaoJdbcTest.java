@@ -66,7 +66,7 @@ class AuthorDaoJdbcTest {
     void updateTest() {
         Author expectedAuthor = authorDaoJdbc.getById(EXISTING_AUTHOR_ID);
         expectedAuthor.setLastName("Edited last name");
-        expectedAuthor = authorDaoJdbc.update(expectedAuthor);
+        expectedAuthor = authorDaoJdbc.save(expectedAuthor);
         Author actualAuthor = authorDaoJdbc.getById(EXISTING_AUTHOR_ID);
         assertThat(actualAuthor).usingRecursiveComparison().ignoringFields("modifiedDate").isEqualTo(expectedAuthor);
     }

@@ -1,20 +1,14 @@
 package edu.nur.homework05.util;
 
-import edu.nur.homework05.model.Author;
 import edu.nur.homework05.service.AuthorService;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
 
 @ShellComponent
 public class AuthorShell {
-
-    private final String format = "yyyy-MM-dd";
 
     private final AuthorService authorService;
 
@@ -24,51 +18,32 @@ public class AuthorShell {
 
     @ShellMethod(key = "authors", value = "List all authors")
     public void authors() {
-        List<Author> authors = authorService.getAll();
-        authors.forEach(System.out::println);
+        authorService.printAll();
     }
 
     @ShellMethod(key = "author new", value = "Add author: author new \"First name\" \"Last name\" \"yyyy-MM-dd\"")
     public void save(@ShellOption(value = "firstName", defaultValue = "") String firstName,
                      @ShellOption(value = "lastName", defaultValue = "") String lastName,
-                     @ShellOption(value = "birthDate", defaultValue = "") String birthDate) throws ParseException {
-        if (!firstName.isEmpty() && !lastName.isEmpty() && !birthDate.isEmpty()) {
-            Date bDate = new SimpleDateFormat(format).parse(birthDate);
-            Author genre = new Author(0, firstName, lastName, bDate, new Date(), new Date());
-            authorService.save(genre);
-        }
+                     @ShellOption(value = "birthDate", defaultValue = "") String birthDate) {
+        authorService.save(firstName, lastName, birthDate);
     }
 
     @ShellMethod(key = "author update",
             value = "Update author: author update id \"First name\" \"Last name\" \"yyyy-MM-dd\"")
-    public void update(@ShellOption(value = "id", defaultValue = "-1") int id,
+    public void update(@ShellOption(value = "id", defaultValue = "-1") long id,
                        @ShellOption(value = "firstName", defaultValue = "") String firstName,
                        @ShellOption(value = "lastName", defaultValue = "") String lastName,
                        @ShellOption(value = "birthDate", defaultValue = "") String birthDate) throws ParseException {
-        Author author = authorService.getById(id);
-        if (!firstName.isEmpty()) {
-            author.setFirstName(firstName);
-        }
-
-        if (!lastName.isEmpty()) {
-            author.setLastName(lastName);
-        }
-
-        if (!birthDate.isEmpty()) {
-            Date bDate = new SimpleDateFormat(format).parse(birthDate);
-            author.setBirthDate(bDate);
-        }
-
-        authorService.update(author);
+        authorService.update(id, firstName, lastName, birthDate);
     }
 
     @ShellMethod(key = "author print", value = "Print author by Id: author print id")
-    public void printById(@ShellOption(value = "id", defaultValue = "-1") int id) {
-        System.out.println(authorService.getById(id));
+    public void printById(@ShellOption(value = "id", defaultValue = "-1") long id) {
+        authorService.printById(id);
     }
 
     @ShellMethod(key = "author delete", value = "Delete author: author delete id")
-    public void delete(@ShellOption(value = "id", defaultValue = "-1") int id) {
+    public void delete(@ShellOption(value = "id", defaultValue = "-1") long id) {
         authorService.deleteById(id);
     }
 

@@ -39,6 +39,14 @@ public class BookDaoJdbc implements BookDao {
 
     @Override
     public Book save(Book book) {
+        if (book.getId() == 0) {
+            return insert(book);
+        } else {
+            return update(book);
+        }
+    }
+
+    private Book insert(Book book) {
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("title", book.getTitle());
         params.addValue("created_date", book.getCreatedDate());
@@ -60,8 +68,7 @@ public class BookDaoJdbc implements BookDao {
         return book;
     }
 
-    @Override
-    public Book update(Book book) {
+    private Book update(Book book) {
         Date now = new Date();
         namedParamJdbcOps.update(
                 "UPDATE t_book SET title=:title, modified_date=:modified_date, genre_id=:genre_id WHERE  id=:id ",

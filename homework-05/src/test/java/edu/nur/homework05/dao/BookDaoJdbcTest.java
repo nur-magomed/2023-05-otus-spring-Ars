@@ -84,7 +84,7 @@ public class BookDaoJdbcTest {
         Book expectedBook = bookDaoJdbc.getById(EXPECTED_BOOK_ID);
         expectedBook.setTitle("New title");
         expectedBook.getAuthors().add(authorDaoJdbc.getById(6));
-        expectedBook = bookDaoJdbc.update(expectedBook);
+        expectedBook = bookDaoJdbc.save(expectedBook);
 
         Book actualBook = bookDaoJdbc.getById(EXPECTED_BOOK_ID);
         assertThat(actualBook).usingRecursiveComparison().ignoringFields("modifiedDate").isEqualTo(expectedBook);

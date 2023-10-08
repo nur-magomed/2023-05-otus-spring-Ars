@@ -53,7 +53,7 @@ public class GenreDaoJdbcTest {
     void updateTest() {
         Genre expectedGenre = genreDaoJdbc.getById(EXISTING_GENRE_ID);
         expectedGenre.setTitle("Edited title");
-        expectedGenre = genreDaoJdbc.update(expectedGenre);
+        expectedGenre = genreDaoJdbc.save(expectedGenre);
 
         Genre actualGenre = genreDaoJdbc.getById(EXISTING_GENRE_ID);
         assertThat(actualGenre).usingRecursiveComparison().ignoringFields("modifiedDate").isEqualTo(expectedGenre);

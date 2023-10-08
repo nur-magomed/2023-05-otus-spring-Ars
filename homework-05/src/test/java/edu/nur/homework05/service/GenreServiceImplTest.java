@@ -44,15 +44,15 @@ class GenreServiceImplTest {
     @DisplayName("save new genre")
     @Test
     void save() {
-        genreService.save(EXPECTED_GENRE);
+        genreService.save(EXPECTED_GENRE.getTitle());
         verify(genreDao, times(1)).save(EXPECTED_GENRE);
     }
 
     @DisplayName("update a genre")
     @Test
     void update() {
-        genreService.update(EXPECTED_GENRE);
-        verify(genreDao, times(1)).update(EXPECTED_GENRE);
+        genreService.update(EXPECTED_GENRE.getId(), EXPECTED_GENRE.getTitle());
+        verify(genreDao, times(1)).save(EXPECTED_GENRE);
     }
 
     @DisplayName("get a genre by ID")
