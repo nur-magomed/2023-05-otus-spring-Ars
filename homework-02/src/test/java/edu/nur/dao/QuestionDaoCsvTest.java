@@ -1,6 +1,5 @@
 package edu.nur.dao;
 
-import edu.nur.io.OutputService;
 import edu.nur.io.Reader;
 import edu.nur.model.Question;
 import edu.nur.util.QuestionConverter;
@@ -51,7 +50,7 @@ class QuestionDaoCsvTest {
 
     @DisplayName("get questions method works correctly")
     @Test
-    void getQuestionsTest() throws Exception{
+    void getQuestionsTest() {
 
         Reader readerMock = mock(Reader.class);
         QuestionConverter converterMock = mock(QuestionConverter.class);
