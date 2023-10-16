@@ -19,9 +19,13 @@ public class QuizRunner {
 
     private final InputOutputService inputOutputService;
 
-    public QuizRunner(QuestionService questionService, InputOutputService inputOutputService) {
+    private final QuizResultsService quizResultsService;
+
+    public QuizRunner(QuestionService questionService, InputOutputService inputOutputService,
+                      QuizResultsService quizResultsService) {
         this.questionService = questionService;
         this.inputOutputService = inputOutputService;
+        this.quizResultsService = quizResultsService;
     }
 
     public void runQuiz() {
@@ -50,7 +54,8 @@ public class QuizRunner {
 //            inputOutputService.outputString(String.valueOf(answerIds.get(choiceId).isCorrect()));
         }
         QuizResults quizResults = new QuizResults(student, userAnswers);
-
+        inputOutputService.outputString("passed: " + quizResultsService.isPassed(quizResults));
+        inputOutputService.outputString("score: " + quizResultsService.correctAnswersCount(quizResults));
     }
 
     private String askStudentDetails(String outputMessage) {

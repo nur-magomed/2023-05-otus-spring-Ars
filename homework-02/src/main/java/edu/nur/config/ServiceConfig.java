@@ -24,6 +24,6 @@ public class ServiceConfig {
 
     @Bean
     public QuizRunner quizRunner(QuestionService questionService) {
-        return new QuizRunner(questionService, inputOutputService());
+        return new QuizRunner(questionService, inputOutputService(), quizResultsService);
     }
 }
