@@ -50,8 +50,12 @@ public class QuizRunner {
             userAnswers.put(q.getId(), answerIds.get(choiceId));
         }
         QuizResults quizResults = new QuizResults(student, userAnswers);
-        inputOutputService.outputString("passed: " + quizResultsService.isPassed(quizResults));
-        inputOutputService.outputString("score: " + quizResultsService.correctAnswersCount(quizResults));
+        printResult(quizResults);
+    }
+
+    private void printResult(QuizResults quizResults) {
+        inputOutputService.outputString(quizResultsService.isPassed(quizResults) ? "You passed" : "You failed");
+        inputOutputService.outputString("Your score: " + quizResultsService.correctAnswersCount(quizResults));
     }
 
     private String askStudentDetails(String outputMessage) {

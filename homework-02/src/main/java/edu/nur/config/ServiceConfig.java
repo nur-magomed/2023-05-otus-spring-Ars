@@ -3,7 +3,11 @@ package edu.nur.config;
 import edu.nur.dao.QuestionDao;
 import edu.nur.io.InputOutputService;
 import edu.nur.io.InputOutputServiceImpl;
-import edu.nur.service.*;
+import edu.nur.service.QuestionService;
+import edu.nur.service.QuestionServiceImpl;
+import edu.nur.service.QuizResultsService;
+import edu.nur.service.QuizResultsServiceImpl;
+import edu.nur.service.QuizRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

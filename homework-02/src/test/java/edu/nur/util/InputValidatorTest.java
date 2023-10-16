@@ -13,10 +13,10 @@ class InputValidatorTest {
     @Test
     void validateNotEmpty() {
         Exception nullInputExc = assertThrows(InputException.class, () -> InputValidator.validateNotEmpty(null));
-        Exception empltyInputExc = assertThrows(InputException.class, () -> InputValidator.validateNotEmpty(""));
+        Exception emptyInputExc = assertThrows(InputException.class, () -> InputValidator.validateNotEmpty(""));
 
         String actualNullInputMessage = nullInputExc.getMessage();
-        String actualEmptyInputMessage = empltyInputExc.getMessage();
+        String actualEmptyInputMessage = emptyInputExc.getMessage();
         String expectedMessage = "Your input is empty";
 
         assertTrue(actualNullInputMessage.contains(expectedMessage));
