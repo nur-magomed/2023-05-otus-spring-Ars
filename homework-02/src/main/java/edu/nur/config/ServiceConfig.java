@@ -3,9 +3,7 @@ package edu.nur.config;
 import edu.nur.dao.QuestionDao;
 import edu.nur.io.InputOutputService;
 import edu.nur.io.InputOutputServiceImpl;
-import edu.nur.service.QuestionService;
-import edu.nur.service.QuestionServiceImpl;
-import edu.nur.service.QuizRunner;
+import edu.nur.service.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -23,7 +21,14 @@ public class ServiceConfig {
     }
 
     @Bean
-    public QuizRunner quizRunner(QuestionService questionService) {
-        return new QuizRunner(questionService, inputOutputService(), quizResultsService);
+    public QuizResultsService quizResultsService() {
+        return new QuizResultsServiceImpl();
+    }
+
+    @Bean
+    public QuizRunner quizRunner(QuestionService questionService,
+                                 InputOutputService inputOutputService,
+                                 QuizResultsService quizResultsService) {
+        return new QuizRunner(questionService, inputOutputService, quizResultsService);
     }
 }
