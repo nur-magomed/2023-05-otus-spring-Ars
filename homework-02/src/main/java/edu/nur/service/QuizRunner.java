@@ -33,15 +33,12 @@ public class QuizRunner {
         String lastName = askStudentDetails("Please enter your last name: ");
         String firstName = askStudentDetails("Please enter your first name: ");
         Student student = new Student(firstName, lastName);
-        inputOutputService.outputString("Welcome " + lastName + " " + firstName);
         List<Question> questions = questionService.getQuestions();
-
         Map<Long, Answer> userAnswers = new HashMap<>();
         for (Question q: questions) {
             Set<Answer> answers = q.getAnswers();
             Map<Integer, Answer> answerIds = new HashMap<>();
             int counter = 1;
-
             inputOutputService.outputString(q.getTitle());
             for (Answer a: answers) {
                 inputOutputService.outputString(counter + ". " + a.getTitle());
@@ -51,7 +48,6 @@ public class QuizRunner {
             int choiceId = askAnswerNumber("Input choice number between 1 and "
                     + answers.size() + ": ", 1, answers.size());
             userAnswers.put(q.getId(), answerIds.get(choiceId));
-//            inputOutputService.outputString(String.valueOf(answerIds.get(choiceId).isCorrect()));
         }
         QuizResults quizResults = new QuizResults(student, userAnswers);
         inputOutputService.outputString("passed: " + quizResultsService.isPassed(quizResults));

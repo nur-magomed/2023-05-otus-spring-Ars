@@ -2,7 +2,6 @@ package edu.nur.util;
 
 import edu.nur.model.Answer;
 import edu.nur.model.Question;
-import org.springframework.context.annotation.Bean;
 
 import java.util.HashMap;
 import java.util.HashSet;
