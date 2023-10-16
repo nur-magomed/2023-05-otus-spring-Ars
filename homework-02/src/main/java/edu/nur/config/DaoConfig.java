@@ -16,11 +16,11 @@ import org.springframework.context.annotation.PropertySource;
 public class DaoConfig {
 
     @Value("${csv.file.path}")
-    private String FILE_NAME;
+    private String fileName;
 
     @Bean
     public QuestionDao questionDao() {
-        Reader csvReader = new CsvReader(FILE_NAME);
+        Reader csvReader = new CsvReader(fileName);
         QuestionConverter questionConverter = new QuestionConverterCsv();
         return new QuestionDaoCsv(csvReader, questionConverter);
     }
