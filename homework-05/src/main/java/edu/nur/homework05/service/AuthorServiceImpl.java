@@ -53,8 +53,7 @@ public class AuthorServiceImpl implements AuthorService {
     public void printById(long id) {
         Author author = authorDao.getById(id);
         // TODO  print service
-        System.out.println("First name: " + author.getFirstName());
-        System.out.println("Last name: " + author.getFirstName());
+        System.out.format("Author: %s %s", author.getFirstName(), author.getLastName());
     }
 
     @Override
@@ -67,8 +66,7 @@ public class AuthorServiceImpl implements AuthorService {
         List<Author> authors = authorDao.getAll();
         for (Author a: authors) {
             // TODO  print service
-            System.out.println("First name: " + a.getFirstName());
-            System.out.println("Last name: " + a.getFirstName());
+            System.out.format("Author: %s %s", a.getFirstName(), a.getLastName());
         }
     }
 

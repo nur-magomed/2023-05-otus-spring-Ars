@@ -7,7 +7,8 @@ import edu.nur.homework05.model.Genre;
 import edu.nur.homework05.service.validator.BookInputValidator;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.util.Set;
+import java.util.HashSet;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -83,8 +84,8 @@ public class BookServiceImpl implements BookService {
         return bookDao.countAll();
     }
 
-    private List<Author> retrieveAuthors(String ids) {
-        List<Author> authorList = new ArrayList<>();
+    private Set<Author> retrieveAuthors(String ids) {
+        Set<Author> authorList = new HashSet<>();
         String[] authorIdsArray = ids.split(",");
         List<Long> authorIdsList = Arrays.stream(authorIdsArray).map(Long::parseLong).toList();
         for (Long authorId: authorIdsList) {

@@ -35,8 +35,11 @@ public class BookDaoJdbcTest {
     private final int EXPECTED_BOOK_ID = 1;
     private final int EXPECTED_BOOK_COUNT = 5;
     private Date NOW_DATE;
-    private final List<Author> authors = new ArrayList<>();
-    private final List<Genre> genres = new ArrayList<>();
+    private final Set<Author> authors = new HashSet<>();
+
+    private final int EXPECTED_GENRE_ID = 1;
+    private final String EXPECTED_GENRE_TITLE = "Prose";
+    private final Genre GENRE = new Genre(EXPECTED_GENRE_ID, EXPECTED_GENRE_TITLE, NOW_DATE, NOW_DATE);
 
     @BeforeEach
     void setUp() {
@@ -63,16 +66,12 @@ public class BookDaoJdbcTest {
                 EXISTING_BIRTHDATE, NOW_DATE, NOW_DATE);
         authors.add(expectingAuthor);
 
-        int EXPECTED_GENRE_ID = 1;
-        String EXPECTED_GENRE_TITLE = "Prose";
-        Genre genre = new Genre(EXPECTED_GENRE_ID, EXPECTED_GENRE_TITLE, NOW_DATE, NOW_DATE);
-        genres.add(genre);
     }
 
     @DisplayName("save a new book")
     @Test
     void saveTest() {
-        Book expectedBook = new Book(1, "Testing book", authors, genres.get(0), NOW_DATE, NOW_DATE);
+        Book expectedBook = new Book(1, "Testing book", authors, GENRE, NOW_DATE, NOW_DATE);
         bookDaoJdbc.save(expectedBook);
         Book actualBook = bookDaoJdbc.getById(expectedBook.getId());
         assertThat(actualBook).usingRecursiveComparison().isEqualTo(expectedBook);
@@ -94,7 +93,7 @@ public class BookDaoJdbcTest {
     @Test
     void getByIdTest() {
         String EXPECTED_BOOK_TITLE = "A hero of our time";
-        Book expectedBook = new Book(EXPECTED_BOOK_ID, EXPECTED_BOOK_TITLE, authors, genres.get(0), NOW_DATE, NOW_DATE);
+        Book expectedBook = new Book(EXPECTED_BOOK_ID, EXPECTED_BOOK_TITLE, authors, GENRE, NOW_DATE, NOW_DATE);
         Book book = bookDaoJdbc.getById(EXISTING_AUTHOR_ID);
         assertEquals(expectedBook.getId(), book.getId());
         assertEquals(expectedBook.getTitle(), book.getTitle());

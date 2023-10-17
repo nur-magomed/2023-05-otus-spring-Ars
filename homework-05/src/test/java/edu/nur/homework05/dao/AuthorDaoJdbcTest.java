@@ -6,6 +6,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.dao.EmptyResultDataAccessException;
 
@@ -17,8 +18,7 @@ import java.util.stream.Collectors;
 import static org.assertj.core.api.Assertions.*;
 
 @DisplayName("Authors dao should ")
-@JdbcTest
-@Import(AuthorDaoJdbc.class)
+@SpringBootTest
 class AuthorDaoJdbcTest {
 
     private static final int EXPECTED_AUTHORS_COUNT = 6;

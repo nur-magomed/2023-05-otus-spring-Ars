@@ -22,7 +22,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Date;
-import java.util.ArrayList;
+import java.util.Set;
+import java.util.HashSet;
 import java.util.Objects;
 
 @Repository
@@ -143,7 +144,7 @@ public class BookDaoJdbc implements BookDao {
                     Genre genre = new Genre(rs.getLong("g_id"), rs.getString("g_title"),
                             rs.getDate("g_created_date"), rs.getDate("g_modified_date"));
 
-                    bookMap.put(bookId, new Book(bookId, rs.getString("b_title"), new ArrayList<>(),
+                    bookMap.put(bookId, new Book(bookId, rs.getString("b_title"), new HashSet<>(),
                             genre, rs.getDate("b_created_date"),
                             rs.getDate("b_modified_date")));
                 }
@@ -152,9 +153,7 @@ public class BookDaoJdbc implements BookDao {
                         rs.getString("a_last_name"),  Date.from(rs.getObject("a_birth_date",
                         LocalDate.class).atStartOfDay(ZoneId.systemDefault()).toInstant()),
                         rs.getDate("a_created_date"), rs.getDate("a_modified_date"));
-                if (!book.getAuthors().contains(author)) {
-                    book.getAuthors().add(author);
-                }
+                book.getAuthors().add(author);
             }
             return bookMap.values().stream().toList();
         }
@@ -162,7 +161,7 @@ public class BookDaoJdbc implements BookDao {
 
     private void updateBookAuthors(Book updatedBook) {
         Book existingBook = getById(updatedBook.getId());
-        List<Author> existingAuthors = existingBook.getAuthors();
+        Set<Author> existingAuthors = existingBook.getAuthors();
 
         for (Author author: updatedBook.getAuthors()) {
             if (existingAuthors.contains(author)) {

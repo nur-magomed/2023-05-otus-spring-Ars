@@ -12,9 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -29,9 +27,9 @@ class BookServiceImplTest {
     @InjectMocks
     private BookServiceImpl bookService;
 
-    private final List<Author> EXPECTED_AUTHOR_LIST = new ArrayList<>();
+    private final Set<Author> EXPECTED_AUTHOR_LIST = new HashSet<>();
 
-    private final List<Genre> EXPECTED_GENRE_LIST = new ArrayList<>();
+    private final Genre GENRE = new Genre(1L, "Test genre", new Date(), new Date());
 
     private final Book EXPECTED_BOOK = new Book(1L, "Test genre", EXPECTED_AUTHOR_LIST,
             null, new Date(), new Date());
@@ -40,18 +38,16 @@ class BookServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        Genre genre = new Genre(1L, "Test genre", new Date(), new Date());
-        EXPECTED_GENRE_LIST.add(genre);
         Author author = new Author(1L, "Test", "Testerov",
                 new Date(), new Date(), new Date());
         EXPECTED_AUTHOR_LIST.add(author);
 
         Book book2 = new Book(2L, "Test book2", EXPECTED_AUTHOR_LIST,
-                genre, new Date(), new Date());
+                GENRE, new Date(), new Date());
         Book book3 = new Book(3L, "Test book3", EXPECTED_AUTHOR_LIST,
-                genre, new Date(), new Date());
+                GENRE, new Date(), new Date());
         Book book4 = new Book(4L, "Test book4", EXPECTED_AUTHOR_LIST,
-                genre, new Date(), new Date());
+                GENRE, new Date(), new Date());
 
         EXPECTED_BOOK_LIST.add(book2);
         EXPECTED_BOOK_LIST.add(book3);

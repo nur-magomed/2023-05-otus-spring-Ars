@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 @AllArgsConstructor
 @Data
@@ -14,7 +14,7 @@ public class Book {
 
     private String title;
 
-    private List<Author> authors;
+    private Set<Author> authors;
 
     private Genre genre;
 
