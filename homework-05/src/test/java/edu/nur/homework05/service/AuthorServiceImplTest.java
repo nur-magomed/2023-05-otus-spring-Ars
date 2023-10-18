@@ -5,10 +5,9 @@ import edu.nur.homework05.model.Author;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -19,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @DisplayName("Author service should ")
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest(properties = "spring.shell.interactive.enabled=false")
 class AuthorServiceImplTest {
 
     @Mock
@@ -30,6 +29,8 @@ class AuthorServiceImplTest {
     private final Author EXP_AUTHOR = new Author(1L, "Test", "Testerov",
             new Date(), new Date(), new Date());
 
+    private final Author AUTHOR = new Author(0L, "Test", "Testerov",
+            new Date(), new Date(), new Date());
     private final String EXPECTED_BDATE = "1980-10-30";
     private final List<Author> EXPECTED_AUTHOR_LIST = new ArrayList<>();
 
@@ -50,15 +51,18 @@ class AuthorServiceImplTest {
     @DisplayName("save a new author")
     @Test
     void save() {
-        authorService.save(EXP_AUTHOR.getFirstName(), EXP_AUTHOR.getLastName(), EXPECTED_BDATE);
-        verify(authorDao, times(1)).save(EXP_AUTHOR);
+        when(authorDao.save(AUTHOR)).thenReturn(EXP_AUTHOR);
+        Author saved = authorService.save(EXP_AUTHOR.getFirstName(), EXP_AUTHOR.getLastName(), EXPECTED_BDATE);
+        assertThat(EXP_AUTHOR).usingRecursiveComparison().isEqualTo(saved);
     }
 
     @DisplayName("update an author")
     @Test
     void update() {
-        authorService.update(EXP_AUTHOR.getId(), EXP_AUTHOR.getFirstName(), EXP_AUTHOR.getLastName(), EXPECTED_BDATE);
-        verify(authorDao, times(1)).save(EXP_AUTHOR);
+        when(authorDao.save(EXP_AUTHOR)).thenReturn(EXP_AUTHOR);
+        when(authorDao.getById(EXP_AUTHOR.getId())).thenReturn(EXP_AUTHOR);
+        Author updated = authorService.update(EXP_AUTHOR.getId(), EXP_AUTHOR.getFirstName(), EXP_AUTHOR.getLastName(), EXPECTED_BDATE);
+        assertThat(EXP_AUTHOR).usingRecursiveComparison().isEqualTo(updated);
     }
 
     @DisplayName("get an author by ID")

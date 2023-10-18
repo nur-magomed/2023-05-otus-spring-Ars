@@ -7,10 +7,9 @@ import edu.nur.homework05.model.Genre;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.*;
 
@@ -19,11 +18,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @DisplayName("Book service should ")
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest(properties = "spring.shell.interactive.enabled=false")
 class BookServiceImplTest {
 
     @Mock
     private BookDao bookDao;
+    @Mock
+    private AuthorService authorService;
+    @Mock
+    private GenreService genreService;
+
     @InjectMocks
     private BookServiceImpl bookService;
 
@@ -31,16 +35,18 @@ class BookServiceImplTest {
 
     private final Genre GENRE = new Genre(1L, "Test genre", new Date(), new Date());
 
+    private final Author AUTHOR = new Author(1L, "Test", "Testerov",
+            new Date(), new Date(), new Date());
+
     private final Book EXPECTED_BOOK = new Book(1L, "Test genre", EXPECTED_AUTHOR_LIST,
-            null, new Date(), new Date());
+            GENRE, new Date(), new Date());
 
     private final List<Book> EXPECTED_BOOK_LIST = new ArrayList<>();
 
     @BeforeEach
     void setUp() {
-        Author author = new Author(1L, "Test", "Testerov",
-                new Date(), new Date(), new Date());
-        EXPECTED_AUTHOR_LIST.add(author);
+
+        EXPECTED_AUTHOR_LIST.add(AUTHOR);
 
         Book book2 = new Book(2L, "Test book2", EXPECTED_AUTHOR_LIST,
                 GENRE, new Date(), new Date());
@@ -57,15 +63,18 @@ class BookServiceImplTest {
     @DisplayName("save a new book")
     @Test
     void save() {
-        bookService.save(EXPECTED_BOOK.getTitle(), "1", "1");
-        verify(bookDao, times(1)).save(EXPECTED_BOOK);
+        when(bookDao.save(any(Book.class))).thenReturn(EXPECTED_BOOK);
+        Book saved = bookService.save(EXPECTED_BOOK.getTitle(), "1", "1");
+        assertThat(EXPECTED_BOOK).usingRecursiveComparison().isEqualTo(saved);
     }
 
     @DisplayName("update a book")
     @Test
     void update() {
-        bookService.update(EXPECTED_BOOK.getId(), EXPECTED_BOOK.getTitle(), "1", "1");
-        verify(bookDao, times(1)).save(EXPECTED_BOOK);
+        when(bookDao.save(any(Book.class))).thenReturn(EXPECTED_BOOK);
+        when(bookDao.getById(EXPECTED_BOOK.getId())).thenReturn(EXPECTED_BOOK);
+        Book saved = bookService.update(EXPECTED_BOOK.getId(), EXPECTED_BOOK.getTitle(), "1", "1");
+        assertThat(EXPECTED_BOOK).usingRecursiveComparison().isEqualTo(saved);
     }
 
     @DisplayName("get a book by ID")

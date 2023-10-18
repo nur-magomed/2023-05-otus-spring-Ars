@@ -5,10 +5,9 @@ import edu.nur.homework05.model.Genre;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -19,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @DisplayName("Genre service should ")
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest(properties = "spring.shell.interactive.enabled=false")
 class GenreServiceImplTest {
 
     @Mock
@@ -27,6 +26,7 @@ class GenreServiceImplTest {
     @InjectMocks
     private GenreServiceImpl genreService;
 
+    private final Genre GENRE = new Genre(0L, "Test genre", new Date(), new Date());
     private final Genre EXPECTED_GENRE = new Genre(1L, "Test genre", new Date(), new Date());
 
     private final List<Genre> EXPECTED_GENRE_LIST = new ArrayList<>();
@@ -44,15 +44,18 @@ class GenreServiceImplTest {
     @DisplayName("save new genre")
     @Test
     void save() {
-        genreService.save(EXPECTED_GENRE.getTitle());
-        verify(genreDao, times(1)).save(EXPECTED_GENRE);
+        when(genreDao.save(GENRE)).thenReturn(EXPECTED_GENRE);
+        Genre saved = genreService.save(EXPECTED_GENRE.getTitle());
+        assertThat(EXPECTED_GENRE).usingRecursiveComparison().isEqualTo(saved);
     }
 
     @DisplayName("update a genre")
     @Test
     void update() {
-        genreService.update(EXPECTED_GENRE.getId(), EXPECTED_GENRE.getTitle());
-        verify(genreDao, times(1)).save(EXPECTED_GENRE);
+        when(genreDao.save(EXPECTED_GENRE)).thenReturn(EXPECTED_GENRE);
+        when(genreDao.getById(EXPECTED_GENRE.getId())).thenReturn(EXPECTED_GENRE);
+        Genre updated = genreService.update(EXPECTED_GENRE.getId(), EXPECTED_GENRE.getTitle());
+        assertThat(EXPECTED_GENRE).usingRecursiveComparison().isEqualTo(updated);
     }
 
     @DisplayName("get a genre by ID")

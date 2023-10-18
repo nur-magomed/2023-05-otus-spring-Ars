@@ -5,9 +5,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
-import org.springframework.context.annotation.Import;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.test.annotation.DirtiesContext;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -16,8 +17,9 @@ import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DisplayName("Genre dao should ")
-@JdbcTest
-@Import(GenreDaoJdbc.class)
+@SpringBootTest(properties = "spring.shell.interactive.enabled=false")
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
 public class GenreDaoJdbcTest {
 
     @Autowired
@@ -41,11 +43,9 @@ public class GenreDaoJdbcTest {
     @DisplayName("save new genre")
     @Test
     void saveTest() {
-        int EXPECTED_GENRE_ID = 1;
-        Genre expectedGenre = new Genre(EXPECTED_GENRE_ID, "TEST Genre", NOW_DATE, NOW_DATE);
-        genreDaoJdbc.save(expectedGenre);
-        Genre actualGenre = genreDaoJdbc.getById(expectedGenre.getId());
-        assertThat(actualGenre).usingRecursiveComparison().isEqualTo(expectedGenre);
+        Genre saved = genreDaoJdbc.save(new Genre(0, "TEST Genre", NOW_DATE, NOW_DATE));
+        Genre actualGenre = genreDaoJdbc.getById(saved.getId());
+        assertThat(actualGenre).usingRecursiveComparison().isEqualTo(saved);
     }
 
     @DisplayName("update existing genre")
