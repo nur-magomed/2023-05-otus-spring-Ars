@@ -3,7 +3,6 @@ package edu.nur.homework03.service;
 import edu.nur.homework03.config.AppProps;
 import edu.nur.homework03.model.Answer;
 import edu.nur.homework03.model.QuizResults;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Service;
 
@@ -11,8 +10,11 @@ import org.springframework.stereotype.Service;
 @EnableConfigurationProperties(AppProps.class)
 public class QuizResultsServiceImpl implements QuizResultsService {
 
-    @Autowired
-    private AppProps appProps;
+    private final AppProps appProps;
+
+    public QuizResultsServiceImpl(AppProps appProps) {
+        this.appProps = appProps;
+    }
 
     @Override
     public int correctAnswersCount(QuizResults quizResults) {

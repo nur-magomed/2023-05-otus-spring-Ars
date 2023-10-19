@@ -9,16 +9,21 @@ import edu.nur.homework03.model.Student;
 import edu.nur.homework03.util.InputValidator;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+@ConditionalOnProperty(
+        prefix = "quiz.runner",
+        value = "enabled",
+        havingValue = "true",
+        matchIfMissing = true)
 @Component
-public class QuizRunner implements ApplicationRunner{
+public class QuizRunner implements ApplicationRunner {
 
     private final QuestionService questionService;
 
@@ -35,9 +40,19 @@ public class QuizRunner implements ApplicationRunner{
 
     public void runQuiz() {
         inputOutputService.outputString("Quiz started");
+        Student student = createStudentFromInput();
+        Map<Long, Answer> userAnswers = getUserAnswers();
+        QuizResults quizResults = new QuizResults(student, userAnswers);
+        printResult(quizResults);
+    }
+
+    private Student createStudentFromInput() {
         String lastName = askStudentDetails("Please enter your last name: ");
         String firstName = askStudentDetails("Please enter your first name: ");
-        Student student = new Student(firstName, lastName);
+        return new Student(firstName, lastName);
+    }
+
+    private Map<Long, Answer> getUserAnswers() {
         List<Question> questions = questionService.getQuestions();
         Map<Long, Answer> userAnswers = new HashMap<>();
         for (Question q: questions) {
@@ -54,8 +69,7 @@ public class QuizRunner implements ApplicationRunner{
                     + answers.size() + ": ", 1, answers.size());
             userAnswers.put(q.getId(), answerIds.get(choiceId));
         }
-        QuizResults quizResults = new QuizResults(student, userAnswers);
-        printResult(quizResults);
+        return userAnswers;
     }
 
     private void printResult(QuizResults quizResults) {

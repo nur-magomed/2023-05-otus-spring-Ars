@@ -9,6 +9,7 @@ import org.springframework.boot.context.properties.bind.ConstructorBinding;
 public class AppProps {
 
     private final String fileCsvPath;
+
     private final int minPassScore;
 
     @ConstructorBinding
