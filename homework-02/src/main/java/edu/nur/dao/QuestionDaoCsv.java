@@ -3,9 +3,11 @@ package edu.nur.dao;
 import edu.nur.io.Reader;
 import edu.nur.model.Question;
 import edu.nur.util.QuestionConverter;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public class QuestionDaoCsv implements QuestionDao {
 
     private final Reader reader;

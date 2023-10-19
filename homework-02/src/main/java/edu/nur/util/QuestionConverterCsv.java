@@ -2,12 +2,14 @@ package edu.nur.util;
 
 import edu.nur.model.Answer;
 import edu.nur.model.Question;
+import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+@Service
 public final class QuestionConverterCsv implements QuestionConverter {
 
     @Override
