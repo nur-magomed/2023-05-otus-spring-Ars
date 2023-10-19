@@ -14,33 +14,33 @@ public class GenreShell {
         this.genreService = genreService;
     }
 
-    @ShellMethod(key = "genres", value = "List all genres: genres")
+    @ShellMethod(value = "List all genres: genres", key = "genres")
     public void genres() {
         genreService.printAll();
     }
 
-    @ShellMethod(key = "genre new", value = "Add genre: genre new \"title of a genre\"")
+    @ShellMethod(value = "Add genre: genre new \"title of a genre\"", key = "genre new")
     public void save(@ShellOption(value = "title", defaultValue = "") String title) {
         genreService.save(title);
     }
 
-    @ShellMethod(key = "genre update", value = "Update genre: genre update id \"Edited title\"")
+    @ShellMethod(value = "Update genre: genre update id \"Edited title\"", key = "genre update")
     public void update(@ShellOption(value = "id", defaultValue = "-1") long id,
                        @ShellOption(value = "title", defaultValue = "") String title) {
         genreService.update(id, title);
     }
 
-    @ShellMethod(key = "genre print", value = "Print genre by Id: genre print id")
+    @ShellMethod(value = "Print genre by Id: genre print id", key = "genre print")
     public void printById(@ShellOption(value = "id", defaultValue = "-1") long id) {
         genreService.printById(id);
     }
 
-    @ShellMethod(key = "genre delete", value = "Delete genre: genre delete id")
+    @ShellMethod(value = "Delete genre: genre delete id", key = "genre delete")
     public void delete(@ShellOption(value = "id", defaultValue = "-1") long id) {
         genreService.deleteById(id);
     }
 
-    @ShellMethod(key = "genre count", value = "Count all genres")
+    @ShellMethod(value = "Count all genres", key = "genre count")
     public int countAll() {
         return genreService.countAll();
     }

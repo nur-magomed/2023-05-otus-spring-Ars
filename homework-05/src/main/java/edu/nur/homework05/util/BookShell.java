@@ -18,22 +18,22 @@ public class BookShell {
         this.bookService = bookService;
     }
 
-    @ShellMethod(key = "books", value = "List all books")
+    @ShellMethod(value = "List all books", key = "books")
     public void books() {
         List<Book> books = bookService.getAll();
         books.forEach(System.out::println);
     }
 
-    @ShellMethod(key = "book new",
-            value = "Add book: book new \"title\" \"authorIds separated by comma\" \"genreId\"")
+    @ShellMethod(value = "Add book: book new \"title\" \"authorIds separated by comma\" \"genreId\"",
+                 key = "book new")
     public void save(@ShellOption(value = "title", defaultValue = "") String title,
                      @ShellOption(value = "authorIds", defaultValue = "") String authorIds,
                      @ShellOption(value = "genreId", defaultValue = "") String genreId) throws ParseException {
         bookService.save(title, authorIds, genreId);
     }
 
-    @ShellMethod(key = "book update", value = "Update book: book update id \"title\" " +
-            "\"authorIds separated by comma\" \"genreId\"")
+    @ShellMethod(value = "Update book: book update id \"title\" \"authorIds separated by comma\" \"genreId\"",
+                 key = "book update")
     public void update(@ShellOption(value = "id", defaultValue = "-1") long id,
                        @ShellOption(value = "title", defaultValue = "") String title,
                        @ShellOption(value = "authorIds", defaultValue = "") String authorIds,
@@ -41,17 +41,17 @@ public class BookShell {
         bookService.update(id, title, authorIds, genreId);
     }
 
-    @ShellMethod(key = "book print", value = "Print book by Id: book print id")
+    @ShellMethod(value = "Print book by Id: book print id", key = "book print")
     public void printById(@ShellOption(value = "id", defaultValue = "-1") long id) {
         bookService.printById(id);
     }
 
-    @ShellMethod(key = "book delete", value = "Delete book: book delete id")
+    @ShellMethod(value = "Delete book: book delete id", key = "book delete")
     public void delete(@ShellOption(value = "id", defaultValue = "-1") long id) {
         bookService.deleteById(id);
     }
 
-    @ShellMethod(key = "book count", value = "Count all books")
+    @ShellMethod(value = "Count all books", key = "book count")
     public int countAll() {
         return bookService.countAll();
     }
