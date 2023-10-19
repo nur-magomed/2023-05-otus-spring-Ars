@@ -3,14 +3,16 @@ package edu.nur.io;
 import edu.nur.model.Answer;
 import edu.nur.model.Question;
 import edu.nur.service.QuestionService;
+import org.springframework.stereotype.Service;
 
+@Service
 public class QuestionPrinterImpl implements QuestionPrinter {
 
-    private final OutputService outputService;
+    private final InputOutputService outputService;
 
     private final QuestionService questionService;
 
-    public QuestionPrinterImpl(OutputService outputService, QuestionService questionService) {
+    public QuestionPrinterImpl(InputOutputService outputService, QuestionService questionService) {
         this.outputService = outputService;
         this.questionService = questionService;
     }

@@ -5,13 +5,14 @@ import edu.nur.model.Question;
 import edu.nur.model.QuizResults;
 import edu.nur.model.Student;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.*;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+@DisplayName("QuizResultsServiceImpl class")
 class QuizResultsServiceImplTest {
 
     private Question question1;
@@ -20,13 +21,17 @@ class QuizResultsServiceImplTest {
 
     private Question question3;
 
-    Student student = new Student("FirstName", "LastName");
-    private QuizResults quizResults;
-
-    Map<Long, Answer> userAnswersOneCorrect = new HashMap<>();
-    Map<Long, Answer> userAnswersTwoCorrect = new HashMap<>();
+    private Student student = new Student("FirstName", "LastName");
 
 
+    private final Map<Long, Answer> userAnswersOneCorrect = new HashMap<>();
+    private final Map<Long, Answer> userAnswersTwoCorrect = new HashMap<>();
+
+    private final QuizResults quizResultsOneCorrect = new QuizResults(student, userAnswersOneCorrect);
+
+    private final QuizResults quizResultsTwoCorrect = new QuizResults(student, userAnswersTwoCorrect);
+
+    private final QuizResultsService quizResultsService = new QuizResultsServiceImpl(2);
 
     @BeforeEach
     void setUp() {
@@ -47,7 +52,7 @@ class QuizResultsServiceImplTest {
 
         question1 = new Question(1, "Two plus two?", new HashSet<>(Arrays.asList(q1answer1, q1answer2Correct, q1answer3)));
         question2 = new Question(2, "What language uses Spring framework?", new HashSet<>(Arrays.asList(q2answer1Correct, q2answer2, q2answer3)));
-        question3 = new Question(2, "In which country is Java Island?", new HashSet<>(Arrays.asList(q3answer1, q3answer2Correct, q3answer3)));
+        question3 = new Question(3, "In which country is Java Island?", new HashSet<>(Arrays.asList(q3answer1, q3answer2Correct, q3answer3)));
 
         userAnswersOneCorrect.put(question1.getId(), q1answer2Correct);
         userAnswersOneCorrect.put(question2.getId(), q2answer2);
@@ -59,13 +64,19 @@ class QuizResultsServiceImplTest {
 
     }
 
+    @DisplayName("get correct answers count")
     @Test
     void correctAnswersCount() {
 
+        assertEquals(1, quizResultsService.correctAnswersCount(quizResultsOneCorrect), "correctAnswersCount is not correct");
+        assertEquals(2, quizResultsService.correctAnswersCount(quizResultsTwoCorrect), "correctAnswersCount is not correct");
         //assertTrue();
     }
 
+    @DisplayName("is passed")
     @Test
     void isPassed() {
+        assertFalse(quizResultsService.isPassed(quizResultsOneCorrect), "isPassed is not correct");
+        assertTrue(quizResultsService.isPassed(quizResultsTwoCorrect), "isPasssed is not correct");
     }
 }

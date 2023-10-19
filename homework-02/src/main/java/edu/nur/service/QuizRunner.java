@@ -7,12 +7,14 @@ import edu.nur.model.Question;
 import edu.nur.model.QuizResults;
 import edu.nur.model.Student;
 import edu.nur.util.InputValidator;
+import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+@Service
 public class QuizRunner {
 
     private final QuestionService questionService;
@@ -30,9 +32,19 @@ public class QuizRunner {
 
     public void runQuiz() {
         inputOutputService.outputString("Quiz started");
+        Student student = createStudentFromInput();
+        Map<Long, Answer> userAnswers = getUserAnswers();
+        QuizResults quizResults = new QuizResults(student, userAnswers);
+        printResult(quizResults);
+    }
+
+    private Student createStudentFromInput() {
         String lastName = askStudentDetails("Please enter your last name: ");
         String firstName = askStudentDetails("Please enter your first name: ");
-        Student student = new Student(firstName, lastName);
+        return new Student(firstName, lastName);
+    }
+
+    private Map<Long, Answer> getUserAnswers() {
         List<Question> questions = questionService.getQuestions();
         Map<Long, Answer> userAnswers = new HashMap<>();
         for (Question q: questions) {
@@ -49,8 +61,7 @@ public class QuizRunner {
                     + answers.size() + ": ", 1, answers.size());
             userAnswers.put(q.getId(), answerIds.get(choiceId));
         }
-        QuizResults quizResults = new QuizResults(student, userAnswers);
-        printResult(quizResults);
+        return userAnswers;
     }
 
     private void printResult(QuizResults quizResults) {
