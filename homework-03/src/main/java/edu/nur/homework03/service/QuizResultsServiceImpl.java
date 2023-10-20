@@ -3,6 +3,7 @@ package edu.nur.homework03.service;
 import edu.nur.homework03.config.AppProps;
 import edu.nur.homework03.model.Answer;
 import edu.nur.homework03.model.QuizResults;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Service;
 
@@ -10,10 +11,10 @@ import org.springframework.stereotype.Service;
 @EnableConfigurationProperties(AppProps.class)
 public class QuizResultsServiceImpl implements QuizResultsService {
 
-    private final AppProps appProps;
+    private final int minPassScore;
 
-    public QuizResultsServiceImpl(AppProps appProps) {
-        this.appProps = appProps;
+    public QuizResultsServiceImpl(@Value("${quiz-app.min-pass-score}")int minPassScore) {
+        this.minPassScore = minPassScore;
     }
 
     @Override
@@ -23,6 +24,6 @@ public class QuizResultsServiceImpl implements QuizResultsService {
 
     @Override
     public boolean isPassed(QuizResults quizResults) {
-        return correctAnswersCount(quizResults) >= appProps.getMinPassScore();
+        return correctAnswersCount(quizResults) >= minPassScore;
     }
 }

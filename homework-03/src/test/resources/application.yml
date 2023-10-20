@@ -1,0 +1,3 @@
+quiz-app:
+    file-csv-path: quiz_test.csv
+    min-pass-score: 2
