@@ -1,5 +1,6 @@
 package edu.nur.homework03.service;
 
+import edu.nur.homework03.config.AppProps;
 import edu.nur.homework03.exception.InputException;
 import edu.nur.homework03.io.InputOutputService;
 import edu.nur.homework03.model.Answer;
@@ -10,6 +11,7 @@ import edu.nur.homework03.util.InputValidator;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -31,11 +33,17 @@ public class QuizRunner implements ApplicationRunner {
 
     private final QuizResultsService quizResultsService;
 
+    private final MessageSource messageSource;
+
+    private final AppProps appProps;
+
     public QuizRunner(QuestionService questionService, InputOutputService inputOutputService,
-                      QuizResultsService quizResultsService) {
+                      QuizResultsService quizResultsService, MessageSource messageSource, AppProps appProps) {
         this.questionService = questionService;
         this.inputOutputService = inputOutputService;
         this.quizResultsService = quizResultsService;
+        this.messageSource = messageSource;
+        this.appProps = appProps;
     }
 
     public void runQuiz() {
@@ -59,9 +67,10 @@ public class QuizRunner implements ApplicationRunner {
             Set<Answer> answers = q.getAnswers();
             Map<Integer, Answer> answerIds = new HashMap<>();
             int counter = 1;
-            inputOutputService.outputString(q.getTitle());
+            inputOutputService.outputString(messageSource.getMessage(q.getTitle(), null, appProps.getLocale()));
             for (Answer a: answers) {
-                inputOutputService.outputString(counter + ". " + a.getTitle());
+                inputOutputService.outputString(counter + ". " +
+                        messageSource.getMessage(a.getTitle(), null, appProps.getLocale()));
                 answerIds.put(counter, a);
                 counter++;
             }
