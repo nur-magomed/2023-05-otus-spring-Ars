@@ -29,7 +29,4 @@ public class CsvReader implements Reader {
         }
     }
 
-    public String getFileName() {
-        return fileName;
-    }
 }
