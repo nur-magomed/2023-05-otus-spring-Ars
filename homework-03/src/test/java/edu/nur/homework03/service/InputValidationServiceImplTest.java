@@ -1,19 +1,30 @@
-package edu.nur.homework03.util;
+package edu.nur.homework03.service;
 
+import edu.nur.homework03.config.AppProps;
 import edu.nur.homework03.exception.InputException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("InputValidator class validates input ")
-class InputValidatorTest {
+@EnableConfigurationProperties(value = AppProps.class)
+@TestPropertySource("classpath:application.yml")
+@SpringBootTest(properties = {"quiz.runner.enabled=false"})
+class InputValidationServiceImplTest {
+
+    @Autowired
+    private InputValidationService inputValidationService;
 
     @DisplayName("validates that input is not null and empty")
     @Test
     void validateNotEmpty() {
-        Exception nullInputExc = assertThrows(InputException.class, () -> InputValidator.validateNotEmpty(null));
-        Exception emptyInputExc = assertThrows(InputException.class, () -> InputValidator.validateNotEmpty(""));
+        Exception nullInputExc = assertThrows(InputException.class, () -> inputValidationService.validateNotEmpty(null));
+        Exception emptyInputExc = assertThrows(InputException.class, () -> inputValidationService.validateNotEmpty(""));
 
         String actualNullInputMessage = nullInputExc.getMessage();
         String actualEmptyInputMessage = emptyInputExc.getMessage();
@@ -23,15 +34,15 @@ class InputValidatorTest {
         assertTrue(actualEmptyInputMessage.contains(expectedMessage));
 
         assertDoesNotThrow(() -> {
-            InputValidator.validateNotEmpty("some text");
-            InputValidator.validateNotEmpty("1");
+            inputValidationService.validateNotEmpty("some text");
+            inputValidationService.validateNotEmpty("1");
         });
     }
 
     @DisplayName("validates that input is integer")
     @Test
     void validateInteger() {
-        Exception exception = assertThrows(InputException.class, () -> InputValidator.validateInteger("1One"));
+        Exception exception = assertThrows(InputException.class, () -> inputValidationService.validateInteger("1One"));
 
         String actualMessage = exception.getMessage();
         String expectedMessage = "Your input is not integer";
@@ -39,9 +50,9 @@ class InputValidatorTest {
         assertTrue(actualMessage.contains(expectedMessage));
 
         assertDoesNotThrow(() -> {
-            InputValidator.validateInteger("-123");
-            InputValidator.validateInteger("0");
-            InputValidator.validateInteger("123456789");
+            inputValidationService.validateInteger("-123");
+            inputValidationService.validateInteger("0");
+            inputValidationService.validateInteger("123456789");
         });
     }
 
@@ -49,11 +60,11 @@ class InputValidatorTest {
     @Test
     void validateIntInRange() {
         Exception minMaxException = assertThrows(InputException.class,
-                () -> InputValidator.validateIntInRange(1, 21, 20));
+                () -> inputValidationService.validateIntInRange(1, 21, 20));
         Exception lessInputException = assertThrows(InputException.class,
-                () -> InputValidator.validateIntInRange(1, 10, 20));
+                () -> inputValidationService.validateIntInRange(1, 10, 20));
         Exception moreInputException = assertThrows(InputException.class,
-                () -> InputValidator.validateIntInRange(100, 10, 20));
+                () -> inputValidationService.validateIntInRange(100, 10, 20));
 
         String actualMinMaxMessage = minMaxException.getMessage();
         String actualLessInputMessage = lessInputException.getMessage();
@@ -66,11 +77,11 @@ class InputValidatorTest {
         assertTrue(actualMoreInputMessage.contains(expectedMessage));
 
         assertDoesNotThrow(() -> {
-            InputValidator.validateIntInRange(-10, -20, 0);
-            InputValidator.validateIntInRange(10, 10, 20);
-            InputValidator.validateIntInRange(15, 10, 20);
-            InputValidator.validateIntInRange(20, 10, 20);
-            InputValidator.validateIntInRange(1, 1, 1);
+            inputValidationService.validateIntInRange(-10, -20, 0);
+            inputValidationService.validateIntInRange(10, 10, 20);
+            inputValidationService.validateIntInRange(15, 10, 20);
+            inputValidationService.validateIntInRange(20, 10, 20);
+            inputValidationService.validateIntInRange(1, 1, 1);
         });
     }
 }
