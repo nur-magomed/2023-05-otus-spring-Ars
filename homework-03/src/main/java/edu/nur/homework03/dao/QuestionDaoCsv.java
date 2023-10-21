@@ -1,5 +1,6 @@
 package edu.nur.homework03.dao;
 
+import edu.nur.homework03.exception.QuestionDaoException;
 import edu.nur.homework03.io.Reader;
 import edu.nur.homework03.model.Question;
 import edu.nur.homework03.util.QuestionConverter;
@@ -21,8 +22,12 @@ public class QuestionDaoCsv implements QuestionDao {
 
     @Override
     public List<Question> getQuestions() {
-        List<String[]> lines = reader.readAllLines();
-        return converter.convertToQuestions(lines);
+        try {
+            List<String[]> lines = reader.readAllLines();
+            return converter.convertToQuestions(lines);
+        } catch (Exception e) {
+            throw new QuestionDaoException("Failed to get questions.", e);
+        }
     }
 
 }
