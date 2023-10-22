@@ -50,24 +50,8 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public void printById(long id) {
-        Author author = authorDao.getById(id);
-        // TODO  print service
-        System.out.format("Author: %s %s", author.getFirstName(), author.getLastName());
-    }
-
-    @Override
     public List<Author> getAll() {
         return authorDao.getAll();
-    }
-
-    @Override
-    public void printAll() {
-        List<Author> authors = authorDao.getAll();
-        for (Author a: authors) {
-            // TODO  print service
-            System.out.format("Author: %s %s", a.getFirstName(), a.getLastName());
-        }
     }
 
     @Override

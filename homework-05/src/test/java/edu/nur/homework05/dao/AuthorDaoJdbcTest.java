@@ -59,7 +59,8 @@ class AuthorDaoJdbcTest {
     void saveTest() {
         Author saved = authorDaoJdbc.save(new Author( "Test", "Testerov", NOW_DATE, NOW_DATE, NOW_DATE));
         Author actualAuthor = authorDaoJdbc.getById(saved.getId());
-        assertThat(actualAuthor).usingRecursiveComparison().isEqualTo(saved);
+        assertThat(actualAuthor).usingRecursiveComparison()
+                .ignoringFields("createdDate", "modifiedDate").isEqualTo(saved);
     }
 
     @DisplayName("update existing author")
@@ -69,7 +70,8 @@ class AuthorDaoJdbcTest {
         expectedAuthor.setLastName("Edited last name");
         expectedAuthor = authorDaoJdbc.save(expectedAuthor);
         Author actualAuthor = authorDaoJdbc.getById(EXISTING_AUTHOR_ID);
-        assertThat(actualAuthor).usingRecursiveComparison().ignoringFields("modifiedDate").isEqualTo(expectedAuthor);
+        assertThat(actualAuthor).usingRecursiveComparison()
+                .ignoringFields("createdDate", "modifiedDate").isEqualTo(expectedAuthor);
     }
 
     @DisplayName("get author by ID")

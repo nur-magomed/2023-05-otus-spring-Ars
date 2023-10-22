@@ -44,7 +44,7 @@ class GenreServiceImplTest {
     @DisplayName("save new genre")
     @Test
     void save() {
-        when(genreDao.save(GENRE)).thenReturn(EXPECTED_GENRE);
+        when(genreDao.save(any(Genre.class))).thenReturn(EXPECTED_GENRE);
         Genre saved = genreService.save(EXPECTED_GENRE.getTitle());
         assertThat(EXPECTED_GENRE).usingRecursiveComparison().isEqualTo(saved);
     }
@@ -52,7 +52,7 @@ class GenreServiceImplTest {
     @DisplayName("update a genre")
     @Test
     void update() {
-        when(genreDao.save(EXPECTED_GENRE)).thenReturn(EXPECTED_GENRE);
+        when(genreDao.save(any(Genre.class))).thenReturn(EXPECTED_GENRE);
         when(genreDao.getById(EXPECTED_GENRE.getId())).thenReturn(EXPECTED_GENRE);
         Genre updated = genreService.update(EXPECTED_GENRE.getId(), EXPECTED_GENRE.getTitle());
         assertThat(EXPECTED_GENRE).usingRecursiveComparison().isEqualTo(updated);

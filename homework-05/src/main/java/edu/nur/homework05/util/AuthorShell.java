@@ -7,6 +7,7 @@ import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 
 import java.text.ParseException;
+import java.util.List;
 
 @ShellComponent
 public class AuthorShell {
@@ -18,35 +19,42 @@ public class AuthorShell {
     }
 
     @ShellMethod(value = "All authors", key = "authors")
-    public void authors() {
-        authorService.printAll();
+    public String authors() {
+        List<Author> authors = authorService.getAll();
+        StringBuilder sb = new StringBuilder();
+        authors.forEach(a -> sb.append(toString(a)).append("\n"));
+        return sb.toString();
     }
 
     @ShellMethod(value = "Add author: author new \"First name\" \"Last name\" \"yyyy-MM-dd\"",
                  key = "author new")
-    public void save(@ShellOption(value = "firstName", defaultValue = "") String firstName,
+    public String save(@ShellOption(value = "firstName", defaultValue = "") String firstName,
                      @ShellOption(value = "lastName", defaultValue = "") String lastName,
                      @ShellOption(value = "birthDate", defaultValue = "") String birthDate) {
-        authorService.save(firstName, lastName, birthDate);
+        Author saved = authorService.save(firstName, lastName, birthDate);
+        return toString(saved);
     }
 
     @ShellMethod(value = "Update author: author update id \"First name\" \"Last name\" \"yyyy-MM-dd\"",
                  key = "author update")
-    public void update(@ShellOption(value = "id", defaultValue = "-1") long id,
+    public String update(@ShellOption(value = "id", defaultValue = "-1") long id,
                        @ShellOption(value = "firstName", defaultValue = "") String firstName,
                        @ShellOption(value = "lastName", defaultValue = "") String lastName,
                        @ShellOption(value = "birthDate", defaultValue = "") String birthDate) throws ParseException {
-        authorService.update(id, firstName, lastName, birthDate);
+        Author updated = authorService.update(id, firstName, lastName, birthDate);
+        return toString(updated);
     }
 
-    @ShellMethod(value = "Print author by Id: author print id", key = "author print")
-    public void printById(@ShellOption(value = "id", defaultValue = "-1") long id) {
-        authorService.printById(id);
+    @ShellMethod(value = "Get author by Id: author get id", key = "author get")
+    public String getById(@ShellOption(value = "id", defaultValue = "-1") long id) {
+        Author author = authorService.getById(id);
+        return toString(author);
     }
 
     @ShellMethod(value = "Delete author: author delete id", key = "author delete")
-    public void delete(@ShellOption(value = "id", defaultValue = "-1") long id) {
+    public String delete(@ShellOption(value = "id", defaultValue = "-1") long id) {
         authorService.deleteById(id);
+        return String.format("Author deleted successfully id:%d", id);
     }
 
     @ShellMethod(value = "Count all authors", key = "author count")
@@ -54,4 +62,8 @@ public class AuthorShell {
         return authorService.countAll();
     }
 
+    private String toString(Author author) {
+        return String.format("Author id:%d, lastName:%s, firstName:%s",
+                author.getId(), author.getLastName(), author.getFirstName());
+    }
 }

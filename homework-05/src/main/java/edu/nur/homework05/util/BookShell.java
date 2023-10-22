@@ -19,40 +19,54 @@ public class BookShell {
     }
 
     @ShellMethod(value = "List all books", key = "books")
-    public void books() {
+    public String books() {
         List<Book> books = bookService.getAll();
-        books.forEach(System.out::println);
+        StringBuilder sb = new StringBuilder();
+        books.forEach(b -> sb.append(toString(b)).append("\n"));
+        return sb.toString();
     }
 
     @ShellMethod(value = "Add book: book new \"title\" \"authorIds separated by comma\" \"genreId\"",
                  key = "book new")
-    public void save(@ShellOption(value = "title", defaultValue = "") String title,
+    public String save(@ShellOption(value = "title", defaultValue = "") String title,
                      @ShellOption(value = "authorIds", defaultValue = "") String authorIds,
                      @ShellOption(value = "genreId", defaultValue = "") String genreId) throws ParseException {
-        bookService.save(title, authorIds, genreId);
+        Book saved = bookService.save(title, authorIds, genreId);
+        return "Book saved successfully." + toString(saved);
     }
 
     @ShellMethod(value = "Update book: book update id \"title\" \"authorIds separated by comma\" \"genreId\"",
                  key = "book update")
-    public void update(@ShellOption(value = "id", defaultValue = "-1") long id,
+    public String update(@ShellOption(value = "id", defaultValue = "-1") long id,
                        @ShellOption(value = "title", defaultValue = "") String title,
                        @ShellOption(value = "authorIds", defaultValue = "") String authorIds,
                        @ShellOption(value = "genreId", defaultValue = "") String genreId) throws ParseException  {
-        bookService.update(id, title, authorIds, genreId);
+        Book updated = bookService.update(id, title, authorIds, genreId);
+        return "Book updated successfully. " + toString(updated);
     }
 
-    @ShellMethod(value = "Print book by Id: book print id", key = "book print")
-    public void printById(@ShellOption(value = "id", defaultValue = "-1") long id) {
-        bookService.printById(id);
+    @ShellMethod(value = "Get book by Id: book get id", key = "book get")
+    public String getById(@ShellOption(value = "id", defaultValue = "-1") long id) {
+        Book book = bookService.getById(id);
+        return toString(book);
     }
 
     @ShellMethod(value = "Delete book: book delete id", key = "book delete")
-    public void delete(@ShellOption(value = "id", defaultValue = "-1") long id) {
+    public String delete(@ShellOption(value = "id", defaultValue = "-1") long id) {
         bookService.deleteById(id);
+        return String.format("Book deleted successfully id:%d", id);
     }
 
     @ShellMethod(value = "Count all books", key = "book count")
     public int countAll() {
         return bookService.countAll();
+    }
+
+    private String toString(Book book) {
+        StringBuilder sb = new StringBuilder();
+        book.getAuthors().forEach(a -> sb.append(a.getLastName()).append(" ").append(a.getFirstName()).append(", "));
+        String authors = sb.toString();
+        return String.format("Book id:%d, title:%s, genre:%s, authors:%s",
+                book.getId(), book.getTitle(), book.getGenre().getTitle(), authors);
     }
 }

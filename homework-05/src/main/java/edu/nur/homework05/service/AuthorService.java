@@ -14,10 +14,6 @@ public interface AuthorService {
 
     List<Author> getAll();
 
-    void printById(long id);
-
-    void printAll();
-
     void deleteById(long id);
 
     int countAll();

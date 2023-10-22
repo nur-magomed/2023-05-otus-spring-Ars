@@ -14,10 +14,6 @@ public interface GenreService {
 
     List<Genre> getAll();
 
-    void printById(long id);
-
-    void printAll();
-
     void deleteById(long id);
 
     int countAll();

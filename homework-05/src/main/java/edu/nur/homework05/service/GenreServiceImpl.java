@@ -39,22 +39,8 @@ public class GenreServiceImpl implements GenreService {
     }
 
     @Override
-    public void printById(long id) {
-        Genre genre = genreDao.getById(id);
-        System.out.println("Title: " + genre.getTitle());
-    }
-
-    @Override
     public List<Genre> getAll() {
         return genreDao.getAll();
-    }
-
-    @Override
-    public void printAll() {
-        List<Genre> genres = genreDao.getAll();
-        for (Genre g: genres) {
-            System.out.println("Title: " + g.getTitle());
-        }
     }
 
     @Override

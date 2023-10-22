@@ -51,7 +51,7 @@ class AuthorServiceImplTest {
     @DisplayName("save a new author")
     @Test
     void save() {
-        when(authorDao.save(AUTHOR)).thenReturn(EXP_AUTHOR);
+        when(authorDao.save(any(Author.class))).thenReturn(EXP_AUTHOR);
         Author saved = authorService.save(EXP_AUTHOR.getFirstName(), EXP_AUTHOR.getLastName(), EXPECTED_BDATE);
         assertThat(EXP_AUTHOR).usingRecursiveComparison().isEqualTo(saved);
     }
@@ -59,7 +59,7 @@ class AuthorServiceImplTest {
     @DisplayName("update an author")
     @Test
     void update() {
-        when(authorDao.save(EXP_AUTHOR)).thenReturn(EXP_AUTHOR);
+        when(authorDao.save(any(Author.class))).thenReturn(EXP_AUTHOR);
         when(authorDao.getById(EXP_AUTHOR.getId())).thenReturn(EXP_AUTHOR);
         Author updated = authorService.update(EXP_AUTHOR.getId(), EXP_AUTHOR.getFirstName(), EXP_AUTHOR.getLastName(), EXPECTED_BDATE);
         assertThat(EXP_AUTHOR).usingRecursiveComparison().isEqualTo(updated);
