@@ -162,11 +162,8 @@ public class BookDaoJdbc implements BookDao {
     private void updateBookAuthors(Book updatedBook) {
         Book existingBook = getById(updatedBook.getId());
         Set<Author> existingAuthors = existingBook.getAuthors();
-
         for (Author author: updatedBook.getAuthors()) {
-            if (existingAuthors.contains(author)) {
-                existingAuthors.remove(author);
-            } else {
+            if (!existingAuthors.remove(author)) {
                 namedParamJdbcOps.update(
                         "INSERT INTO t_book_author(book_id, author_id, created_date, modified_date) " +
                                 "VALUES (:book_id, :author_id,  :created_date, :modified_date)",
@@ -175,13 +172,16 @@ public class BookDaoJdbc implements BookDao {
                 );
             }
         }
-
+        Map<String, Object>[] parameters = new Map[existingAuthors.size()];
+        int index = 0;
         for (Author author: existingAuthors) {
-            namedParamJdbcOps.update(
-                    "DELETE FROM t_book WHERE book_id=:book_id AND author_id=:author_id",
-                    Map.of("book_id", updatedBook.getId(),"author_id", author.getId())
-            );
+            parameters[index] = new HashMap<>();
+            parameters[index].put("book_id", updatedBook.getId());
+            parameters[index].put("author_id", author.getId());
+            index++;
         }
+        namedParamJdbcOps.batchUpdate("DELETE FROM t_book_author WHERE book_id=:book_id AND author_id=:author_id",
+                parameters);
     }
 
 }
