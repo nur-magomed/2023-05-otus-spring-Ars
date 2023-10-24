@@ -10,15 +10,12 @@ import java.util.Locale;
 @ConfigurationProperties(prefix = "quiz-app")
 public class AppProps {
 
-    private final String fileCsvPath;
-
     private final int minPassScore;
 
     private final Locale locale;
 
     @ConstructorBinding
-    public AppProps(String fileCsvPath, int minPassScore, Locale locale) {
-        this.fileCsvPath = fileCsvPath;
+    public AppProps(int minPassScore, Locale locale) {
         this.minPassScore = minPassScore;
         this.locale = locale;
     }

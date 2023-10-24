@@ -9,7 +9,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
@@ -41,9 +40,6 @@ class QuizResultsServiceImplTest {
     private final QuizResults quizResultsOneCorrect = new QuizResults(student, userAnswersOneCorrect);
 
     private final QuizResults quizResultsTwoCorrect = new QuizResults(student, userAnswersTwoCorrect);
-
-    @Value("${quiz-app.min-pass-score}")
-    private int minPassScore;
 
     @Autowired
     private QuizResultsService quizResultsService;
@@ -85,7 +81,6 @@ class QuizResultsServiceImplTest {
 
         assertEquals(1, quizResultsService.correctAnswersCount(quizResultsOneCorrect), "correctAnswersCount is not correct");
         assertEquals(2, quizResultsService.correctAnswersCount(quizResultsTwoCorrect), "correctAnswersCount is not correct");
-        //assertTrue();
     }
 
     @DisplayName("is passed")

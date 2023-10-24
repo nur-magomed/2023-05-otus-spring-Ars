@@ -5,12 +5,15 @@ import edu.nur.homework03.model.Question;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DisplayName("QuestionConverterCsv class")
+@SpringBootTest(properties = {"quiz.runner.enabled=false"})
 class QuestionConverterCsvTest {
 
     private final List<String[]> lines = new ArrayList<>();
@@ -20,6 +23,8 @@ class QuestionConverterCsvTest {
 
     private Question question2;
 
+    @Autowired
+    private QuestionConverterCsv questionConverterCsv;
 
     @BeforeEach
     void setUp() {
@@ -63,8 +68,7 @@ class QuestionConverterCsvTest {
     @Test
     void convertToQuestionsTest() {
 
-        QuestionConverterCsv converter = new QuestionConverterCsv();
-        List<Question> questions = converter.convertToQuestions(lines);
+        List<Question> questions = questionConverterCsv.convertToQuestions(lines);
         Question questionOne = questions.get(0);
         assertEquals(questionOne.getId(), question1.getId(), "converter questions id is incorrect");
         assertEquals(questionOne.getTitle(), question1.getTitle(), "converter questions title is incorrect");
