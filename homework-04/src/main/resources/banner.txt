@@ -1,0 +1,9 @@
+${AnsiColor.YELLOW}
+${AnsiBackground.BRIGHT_BLACK}
+   ___  _   _ ___ _____
+  / _ \| | | |_ _|__  /
+ | | | | | | || |  / / 
+ | |_| | |_| || | / /_ 
+  \__\_\\___/|___/____|
+${AnsiBackground.DEFAULT}
+${AnsiColor.DEFAULT}
