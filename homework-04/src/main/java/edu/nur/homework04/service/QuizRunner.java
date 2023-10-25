@@ -6,8 +6,6 @@ import edu.nur.homework04.model.Answer;
 import edu.nur.homework04.model.Question;
 import edu.nur.homework04.model.QuizResults;
 import edu.nur.homework04.model.Student;
-import org.springframework.boot.ApplicationArguments;
-import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
@@ -22,7 +20,7 @@ import java.util.Set;
         havingValue = "true",
         matchIfMissing = true)
 @Component
-public class QuizRunner implements ApplicationRunner {
+public class QuizRunner {
 
     private final QuestionService questionService;
 
@@ -44,18 +42,12 @@ public class QuizRunner implements ApplicationRunner {
         this.localizationService = localizationService;
     }
 
-    public void runQuiz() {
+    public void runQuiz(String firstName, String lastName) {
         inputOutputService.outputString(localizationService.getMessage("quiz-started"));
-        Student student = createStudentFromInput();
+        Student student = new Student(firstName, lastName);
         Map<Long, Answer> userAnswers = getUserAnswers();
         QuizResults quizResults = new QuizResults(student, userAnswers);
         printResult(quizResults);
-    }
-
-    private Student createStudentFromInput() {
-        String lastName = askStudentDetails(localizationService.getMessage("enter-last-name"));
-        String firstName = askStudentDetails(localizationService.getMessage("enter-first-name"));
-        return new Student(firstName, lastName);
     }
 
     private Map<Long, Answer> getUserAnswers() {
@@ -86,20 +78,6 @@ public class QuizRunner implements ApplicationRunner {
                 new Integer[]{quizResultsService.correctAnswersCount(quizResults)}));
     }
 
-    private String askStudentDetails(String outputMessage) {
-        inputOutputService.outputString(outputMessage);
-        while (true) {
-            try {
-                String input = inputOutputService.inputString();
-                inputValidationService.validateNotEmpty(input);
-                return input;
-            } catch (InputException e) {
-                inputOutputService.outputString(e.getMessage());
-                inputOutputService.outputString(localizationService.getMessage("try-again"));
-            }
-        }
-    }
-
     private int askAnswerNumber(String outputMessage, int min, int max) {
         inputOutputService.outputString(outputMessage);
         while (true) {
@@ -117,8 +95,4 @@ public class QuizRunner implements ApplicationRunner {
         }
     }
 
-    @Override
-    public void run(ApplicationArguments args) throws Exception {
-        runQuiz();
-    }
 }

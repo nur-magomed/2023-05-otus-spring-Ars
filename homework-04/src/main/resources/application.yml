@@ -6,4 +6,4 @@ spring:
 quiz-app:
     file-csv-path: quiz.csv
     min-pass-score: 3
-    locale: ru_RU
+    locale: en_EN

@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @DisplayName("QuizResultsServiceImpl class")
 @EnableConfigurationProperties(value = AppProps.class)
 @TestPropertySource("classpath:application.yml")
-@SpringBootTest(properties = {"quiz.runner.enabled=false"})
+@SpringBootTest(properties = {"spring.shell.interactive.enabled=false"})
 class QuizResultsServiceImplTest {
 
     private Question question1;

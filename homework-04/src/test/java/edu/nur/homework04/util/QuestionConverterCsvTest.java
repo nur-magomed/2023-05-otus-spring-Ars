@@ -13,7 +13,7 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DisplayName("QuestionConverterCsv class")
-@SpringBootTest(properties = {"quiz.runner.enabled=false"})
+@SpringBootTest(properties = {"spring.shell.interactive.enabled=false"})
 class QuestionConverterCsvTest {
 
     private final List<String[]> lines = new ArrayList<>();

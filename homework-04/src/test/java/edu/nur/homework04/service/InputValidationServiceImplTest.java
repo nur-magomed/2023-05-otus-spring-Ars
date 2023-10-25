@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @DisplayName("InputValidator class validates input ")
 @EnableConfigurationProperties(value = AppProps.class)
 @TestPropertySource("classpath:application.yml")
-@SpringBootTest(properties = {"quiz.runner.enabled=false"})
+@SpringBootTest(properties = {"spring.shell.interactive.enabled=false"})
 class InputValidationServiceImplTest {
 
     @Autowired

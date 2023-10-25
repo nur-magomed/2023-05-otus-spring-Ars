@@ -1,12 +1,9 @@
 package edu.nur.homework04.io;
 
-import edu.nur.homework04.config.AppProps;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
 
 import java.util.List;
 
@@ -14,13 +11,11 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DisplayName("CsvReader class")
-@EnableConfigurationProperties(value = AppProps.class)
-@TestPropertySource("classpath:application.yml")
-@SpringBootTest(properties = {"quiz.runner.enabled=false"})
+@SpringBootTest(properties = {"spring.shell.interactive.enabled=false"})
 class CsvReaderTest {
 
-    @Value("${quiz-app.file-csv-path}")
-    private String FILE_NAME;
+    @Autowired
+    private CsvReader reader;
 
     @DisplayName("readAllLines method works as expected")
     @Test
@@ -32,7 +27,6 @@ class CsvReaderTest {
         String[] line5 = {"2","What language uses Spring framework?","5","JavaScript","false"};
         String[] line6 = {"2","What language uses Spring framework?","6","Python","false"};
 
-        CsvReader reader = new CsvReader(FILE_NAME);
         List<String[]> lines = reader.readAllLines();
         assertEquals(6, lines.size(), "");
 

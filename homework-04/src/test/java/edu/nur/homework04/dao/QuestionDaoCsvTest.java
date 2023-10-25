@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.mockito.Mockito.when;
 
 @DisplayName("QuestionDaoCsvImpl class")
-@SpringBootTest(properties = {"quiz.runner.enabled=false"})
+@SpringBootTest(properties = {"spring.shell.interactive.enabled=false"})
 class QuestionDaoCsvTest {
 
     private final List<Question> questions = new ArrayList<>();
