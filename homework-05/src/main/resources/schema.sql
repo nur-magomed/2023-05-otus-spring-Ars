@@ -12,16 +12,6 @@ CREATE TABLE t_author (
     modified_date TIMESTAMP
 );
 
-
-CREATE TABLE t_book (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(255),
-    created_date TIMESTAMP,
-    modified_date TIMESTAMP,
-    genre_id BIGINT
-);
-
-
 CREATE TABLE t_genre (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(255),
@@ -29,6 +19,14 @@ CREATE TABLE t_genre (
     modified_date TIMESTAMP
 );
 
+CREATE TABLE t_book (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255),
+    created_date TIMESTAMP,
+    modified_date TIMESTAMP,
+    genre_id BIGINT,
+    FOREIGN KEY (genre_id) REFERENCES t_genre(id) ON DELETE SET NULL
+);
 
 CREATE TABLE t_book_author (
     book_id BIGINT,

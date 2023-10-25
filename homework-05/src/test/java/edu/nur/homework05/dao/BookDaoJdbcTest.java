@@ -7,10 +7,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.test.annotation.DirtiesContext;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -19,9 +18,8 @@ import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DisplayName("Book dao should ")
-@SpringBootTest(properties = "spring.shell.interactive.enabled=false")
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
+@JdbcTest
+@Import({AuthorDaoJdbc.class, BookDaoJdbc.class})
 public class BookDaoJdbcTest {
 
     @Autowired
@@ -34,9 +32,8 @@ public class BookDaoJdbcTest {
     private final List<Long> EXISTING_BOOK_IDS = new ArrayList<>(Arrays.asList(1L, 2L, 3L, 4L, 5L));
     private final int EXPECTED_BOOK_ID = 1;
     private final int EXPECTED_BOOK_COUNT = 5;
-    private Date NOW_DATE;
+    private Date nowDate;
     private final Set<Author> authors = new HashSet<>();
-
     private Genre genre;
 
     @BeforeEach
@@ -56,23 +53,23 @@ public class BookDaoJdbcTest {
         nowCalendar.set(Calendar.MINUTE, 0);
         nowCalendar.set(Calendar.SECOND, 0);
         nowCalendar.set(Calendar.MILLISECOND, 0);
-        NOW_DATE = nowCalendar.getTime();
+        nowDate = nowCalendar.getTime();
 
         String EXISTING_AUTHOR_NAME = "Aleksandr";
         String EXISTING_AUTHOR_SURNAME = "Pushkin";
         Author expectingAuthor = new Author(EXISTING_AUTHOR_ID, EXISTING_AUTHOR_NAME, EXISTING_AUTHOR_SURNAME,
-                EXISTING_BIRTHDATE, NOW_DATE, NOW_DATE);
+                EXISTING_BIRTHDATE, nowDate, nowDate);
         authors.add(expectingAuthor);
 
         int EXPECTED_GENRE_ID = 1;
         String EXPECTED_GENRE_TITLE = "Prose";
-        genre = new Genre(EXPECTED_GENRE_ID, EXPECTED_GENRE_TITLE, NOW_DATE, NOW_DATE);
+        genre = new Genre(EXPECTED_GENRE_ID, EXPECTED_GENRE_TITLE, nowDate, nowDate);
     }
 
     @DisplayName("save a new book")
     @Test
     void saveTest() {
-        Book saved = bookDaoJdbc.save(new Book(0, "Testing book", authors, genre, NOW_DATE, NOW_DATE));
+        Book saved = bookDaoJdbc.save(new Book(0, "Testing book", authors, genre, nowDate, nowDate));
         Book actualBook = bookDaoJdbc.getById(saved.getId());
         assertThat(actualBook).usingRecursiveComparison().isEqualTo(saved);
     }
@@ -93,7 +90,7 @@ public class BookDaoJdbcTest {
     @Test
     void getByIdTest() {
         String EXPECTED_BOOK_TITLE = "A hero of our time";
-        Book expectedBook = new Book(EXPECTED_BOOK_ID, EXPECTED_BOOK_TITLE, authors, genre, NOW_DATE, NOW_DATE);
+        Book expectedBook = new Book(EXPECTED_BOOK_ID, EXPECTED_BOOK_TITLE, authors, genre, nowDate, nowDate);
         Book book = bookDaoJdbc.getById(EXISTING_AUTHOR_ID);
         assertEquals(expectedBook.getId(), book.getId());
         assertEquals(expectedBook.getTitle(), book.getTitle());

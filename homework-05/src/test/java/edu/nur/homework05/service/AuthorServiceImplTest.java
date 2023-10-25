@@ -5,9 +5,9 @@ import edu.nur.homework05.model.Author;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -21,18 +21,18 @@ import static org.mockito.Mockito.*;
 @SpringBootTest(properties = "spring.shell.interactive.enabled=false")
 class AuthorServiceImplTest {
 
-    @Mock
+    @MockBean
     private AuthorDao authorDao;
-    @InjectMocks
+
+    @Autowired
     private AuthorServiceImpl authorService;
 
-    private final Author EXP_AUTHOR = new Author(1L, "Test", "Testerov",
+    private static final Author EXP_AUTHOR = new Author(1L, "Test", "Testerov",
             new Date(), new Date(), new Date());
 
-    private final Author AUTHOR = new Author(0L, "Test", "Testerov",
-            new Date(), new Date(), new Date());
-    private final String EXPECTED_BDATE = "1980-10-30";
-    private final List<Author> EXPECTED_AUTHOR_LIST = new ArrayList<>();
+    private static final String EXPECTED_BDATE = "1980-10-30";
+
+    private static final List<Author> EXPECTED_AUTHOR_LIST = new ArrayList<>();
 
     @BeforeEach
     void setUp() {

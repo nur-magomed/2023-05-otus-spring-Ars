@@ -14,7 +14,7 @@ import java.util.List;
 @Service
 public class AuthorServiceImpl implements AuthorService {
 
-    private final String format = "yyyy-MM-dd";
+    private static final String FORMAT = "yyyy-MM-dd";
 
     private final AuthorDao authorDao;
 
@@ -66,7 +66,7 @@ public class AuthorServiceImpl implements AuthorService {
 
     private Date parseBirthDate(String birthDate) {
         try {
-            return new SimpleDateFormat(format).parse(birthDate);
+            return new SimpleDateFormat(FORMAT).parse(birthDate);
         } catch (ParseException ignore) {
             throw new AuthorInputException("Wrong birthdate input format");
         }
