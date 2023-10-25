@@ -25,6 +25,7 @@ import java.util.Date;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.Objects;
+import java.util.ArrayList;
 
 @Repository
 public class BookDaoJdbc implements BookDao {
@@ -59,13 +60,16 @@ public class BookDaoJdbc implements BookDao {
                         "VALUES (:title, :created_date, :modified_date, :genre_id)", params, keyHolder);
         book.setId(Objects.requireNonNull(keyHolder.getKey()).longValue());
 
+        Map<String, Object>[] parameters = new Map[book.getAuthors().size()];
+        int index = 0;
         for (Author author: book.getAuthors()) {
-            namedParamJdbcOps.update("INSERT INTO t_book_author(book_id, author_id, created_date, modified_date) " +
-                            "VALUES (:book_id, :author_id,  :created_date, :modified_date)",
-                    Map.of("book_id", book.getId(), "author_id", author.getId(),
-                            "created_date", new Date(), "modified_date", new Date()));
+            parameters[index] = Map.of("book_id", book.getId(), "author_id", author.getId(),
+                    "created_date", new Date(), "modified_date", new Date());
+            index++;
         }
 
+        namedParamJdbcOps.batchUpdate("INSERT INTO t_book_author(book_id, author_id, created_date, modified_date)" +
+                        "VALUES (:book_id, :author_id,  :created_date, :modified_date)", parameters);
         return book;
     }
 
@@ -162,23 +166,21 @@ public class BookDaoJdbc implements BookDao {
     private void updateBookAuthors(Book updatedBook) {
         Book existingBook = getById(updatedBook.getId());
         Set<Author> existingAuthors = existingBook.getAuthors();
+        List<Object> insertParamMaps = new ArrayList<>();
         for (Author author: updatedBook.getAuthors()) {
             if (!existingAuthors.remove(author)) {
-                namedParamJdbcOps.update(
-                        "INSERT INTO t_book_author(book_id, author_id, created_date, modified_date) " +
-                                "VALUES (:book_id, :author_id,  :created_date, :modified_date)",
-                        Map.of("book_id", updatedBook.getId(), "author_id", author.getId(),
-                                "created_date", new Date(), "modified_date", new Date())
-                );
+                insertParamMaps.add(Map.of("book_id", updatedBook.getId(), "author_id",
+                        author.getId(), "created_date", new Date(), "modified_date", new Date()));
             }
         }
+        Map<String, Object>[] insertParameters = new Map[insertParamMaps.size()];
+        insertParamMaps.toArray(insertParameters);
+        namedParamJdbcOps.batchUpdate("INSERT INTO t_book_author(book_id, author_id, created_date, modified_date)" +
+                        "VALUES (:book_id, :author_id,  :created_date, :modified_date)", insertParameters);
         Map<String, Object>[] parameters = new Map[existingAuthors.size()];
         int index = 0;
         for (Author author: existingAuthors) {
-            parameters[index] = new HashMap<>();
-            parameters[index].put("book_id", updatedBook.getId());
-            parameters[index].put("author_id", author.getId());
-            index++;
+            parameters[index++] = Map.of("book_id", updatedBook.getId(), "author_id", author.getId());
         }
         namedParamJdbcOps.batchUpdate("DELETE FROM t_book_author WHERE book_id=:book_id AND author_id=:author_id",
                 parameters);
