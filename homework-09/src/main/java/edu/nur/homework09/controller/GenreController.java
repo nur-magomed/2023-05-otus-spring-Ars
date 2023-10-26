@@ -28,23 +28,22 @@ public class GenreController {
     public String listGenres(Model model) {
         List<Genre> genres = repository.findAll();
         model.addAttribute("genres", genres);
-        return "genres";
+        return "genre_list";
     }
 
-    @GetMapping("/genres/edit")
+    @GetMapping("/genre/edit")
     public String editPage(@RequestParam("id") long id, Model model) {
         Genre genre = new Genre();
-        if (id != 0){
+        if (id != 0) {
             genre = repository.findById(id).orElseThrow(NotFoundException::new);
         }
         model.addAttribute("genre", genre);
         return "genre_edit";
     }
 
-    @PostMapping("/genres/edit")
-    public String saveGenre(@Valid @ModelAttribute("genre") GenreDto genreDto,
-                             BindingResult bindingResult, Model model) {
-        if (bindingResult.hasErrors()) {
+    @PostMapping("/genre/edit")
+    public String saveGenre(@Valid @ModelAttribute("genre") GenreDto genreDto, BindingResult br, Model model) {
+        if (br.hasErrors()) {
             return "edit";
         }
         repository.save(genreDto.toModelObject());

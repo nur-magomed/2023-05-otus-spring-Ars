@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <title>Edit genre</title>
+</head>
+<body>
+
+<div class="container-md">
+    <!-- Genre edition -->
+    <form id="edit-form" action="genre_edit.html" th:action="@{/genre/edit(id=${genre.id})}" th:method="post" th:object="${genre}">
+        <fieldset>
+            <legend th:text = "#{genre-form-header}">Genre Info:</legend>
+            <div class="mb-3 row">
+                <label class="col-sm-2 col-form-label" for="id-input" th:text="#{genre-field-id} + ':'">ID:</label>
+                <div class="col-sm-10">
+                    <input class="form-control-plaintext"  id="id-input" type="text" readonly="readonly" name="id" th:value="*{id}" value="1"/>
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <label class="col-sm-2 col-form-label" for="genre-title-input" th:text="#{genre-field-title} + ':'">Title:</label>
+                <div class="col-sm-10">
+                    <input class="form-control" id="genre-title-input" name="title" type="text" th:value="*{title}" value="Computer Science"/>
+                </div>
+                <div class="errors" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Wrong genre title error</div>
+            </div>
+
+            <button class="btn btn-primary" type="submit" th:text="#{save-button-caption}">Save</button>
+            <a class="btn btn-secondary" role="button" href="genre_list.html" th:href="@{/genres}" th:text="#{cancel-button-caption}">Cancel</a>
+        </fieldset>
+    </form>
+</div>
+
+</body>
+</html>
