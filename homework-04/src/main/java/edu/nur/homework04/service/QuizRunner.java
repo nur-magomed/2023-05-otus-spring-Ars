@@ -6,7 +6,6 @@ import edu.nur.homework04.model.Answer;
 import edu.nur.homework04.model.Question;
 import edu.nur.homework04.model.QuizResults;
 import edu.nur.homework04.model.Student;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -14,11 +13,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-@ConditionalOnProperty(
-        prefix = "quiz.runner",
-        value = "enabled",
-        havingValue = "true",
-        matchIfMissing = true)
 @Component
 public class QuizRunner {
 
