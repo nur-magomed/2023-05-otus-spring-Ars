@@ -100,6 +100,14 @@ public class AuthorDaoJdbc implements AuthorDao {
         return count == null ? 0 : count;
     }
 
+    @Override
+    public List<Author> getAllUsed() {
+         return jdbc.query("SELECT a.id as id, a.first_name as first_name, a.last_name as last_name, " +
+                        "a.birth_date as birth_date, a.created_date as created_date, a.modified_date as modified_date " +
+                        "FROM t_author a INNER JOIN t_book_author ba ON a.id = ba.author_id " +
+                        "GROUP BY a.id, a.first_name ORDER BY a.first_name", new AuthorMapper());
+    }
+
     private static class AuthorMapper implements RowMapper<Author> {
         @Override
         public Author mapRow(ResultSet resultSet, int i) throws SQLException {

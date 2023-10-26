@@ -16,4 +16,6 @@ public interface AuthorDao {
 
     int countAll();
 
+    List<Author> getAllUsed();
+
 }
