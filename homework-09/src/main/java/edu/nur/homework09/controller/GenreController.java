@@ -44,7 +44,7 @@ public class GenreController {
     @PostMapping("/genre/edit")
     public String saveGenre(@Valid @ModelAttribute("genre") GenreDto genreDto, BindingResult br, Model model) {
         if (br.hasErrors()) {
-            return "edit";
+            return "genre_edit";
         }
         repository.save(genreDto.toModelObject());
         return "redirect:/genres";
