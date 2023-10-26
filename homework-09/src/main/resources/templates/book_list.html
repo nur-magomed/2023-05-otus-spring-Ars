@@ -8,7 +8,7 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
-    <title>Genres</title>
+    <title>Books</title>
 </head>
 <body>
 
@@ -20,20 +20,24 @@
     </div>
 
     <table class="table table-striped table-hover caption-top">
-        <caption th:text="#{genres-table-header}">Genres:</caption>
+        <caption th:text="#{books-table-header}">Books:</caption>
         <thead class="table-light">
         <tr>
-            <th scope="col" th:text="#{genre-field-id}">ID</th>
-            <th scope="col" th:text="#{genre-field-title}">Title</th>
+            <th scope="col" th:text="#{book-field-id}">ID</th>
+            <th scope="col" th:text="#{book-field-title}">Title</th>
+            <th scope="col" th:text="#{book-field-genre}">Genre</th>
+            <th scope="col" th:text="#{book-field-authors}">Authors</th>
             <th scope="col" th:text="#{table-column-action}">Action</th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="genre : ${genres}">
-            <td th:text="${genre.id}">1</td>
-            <td th:text="${genre.title}">Computer Science</td>
+        <tr th:each="book : ${books}">
+            <td th:text="${book.id}">1</td>
+            <td th:text="${book.title}">Java</td>
+            <td th:text="${book.genre.title}">Computer Science</td>
+            <td><ul th:each="author : ${book.authors}"><li th:text="${author.firstName + ' ' + author.lastName}"></li></ul></td>
             <td>
-                <a th:href="@{/genre/edit(id=${genre.id})}" href="genre_edit.html" th:text="#{edit-button-caption}">Edit</a>
+                <a th:href="@{/genre/edit(id=${book.id})}" href="genre_edit.html" th:text="#{edit-button-caption}">Edit</a>
             </td>
         </tr>
         </tbody>
