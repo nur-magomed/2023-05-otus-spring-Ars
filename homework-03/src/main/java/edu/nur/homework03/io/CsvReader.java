@@ -1,19 +1,16 @@
 package edu.nur.homework03.io;
 
 import com.opencsv.CSVReader;
-import edu.nur.homework03.config.AppProps;
 import edu.nur.homework03.exception.CsvReaderException;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
 import java.util.Objects;
 
-@Service
-@EnableConfigurationProperties(AppProps.class)
+@Component
 public class CsvReader implements Reader {
 
     private final String fileName;
