@@ -1,25 +1,28 @@
 package edu.nur.homework04.io;
 
 import com.opencsv.CSVReader;
-import edu.nur.homework04.config.AppProps;
 import edu.nur.homework04.exception.CsvReaderException;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
-@Service
-@EnableConfigurationProperties(AppProps.class)
+@Component
 public class CsvReader implements Reader {
 
     private final String fileName;
 
-    public CsvReader(@Value("${quiz-app.file-csv-path}")String fileName) {
-        this.fileName = fileName;
+    public CsvReader(@Value("${quiz-app.csv-file-name-template}")String fileNameTemplate,
+                     @Value("${quiz-app.locale}")Locale locale) {
+        this.fileName = getLocalizedFileName(fileNameTemplate, locale);
+    }
+
+    private String getLocalizedFileName(String fileNameTemplate, Locale locale) {
+        return fileNameTemplate.replace("xx", locale.getLanguage());
     }
 
     @Override

@@ -32,7 +32,7 @@ class QuestionDaoCsvTest {
     private QuestionConverter converterMock;
 
     @Autowired
-    private QuestionDaoCsv questionConverterCsv;
+    private QuestionDaoCsv questionDaoCsv;
 
     @BeforeEach
     void setUp() {
@@ -63,7 +63,7 @@ class QuestionDaoCsvTest {
     void getQuestionsTest() {
         when(readerMock.readAllLines()).thenReturn(lines);
         when(converterMock.convertToQuestions(readerMock.readAllLines())).thenReturn(questions);
-        List<Question> questionsResult = questionConverterCsv.getQuestions();
+        List<Question> questionsResult = questionDaoCsv.getQuestions();
         assertArrayEquals(questions.toArray(), questionsResult.toArray(), "getQuestions method is incorrect");
     }
 }

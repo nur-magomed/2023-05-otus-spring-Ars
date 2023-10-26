@@ -57,9 +57,9 @@ public class QuizRunner {
             Set<Answer> answers = q.getAnswers();
             Map<Integer, Answer> answerIds = new HashMap<>();
             int counter = 1;
-            inputOutputService.outputString(localizationService.getMessage(q.getTitle()));
+            inputOutputService.outputString(q.getTitle());
             for (Answer a: answers) {
-                inputOutputService.outputString(counter + ". " + localizationService.getMessage(a.getTitle()));
+                inputOutputService.outputString(counter + ". " + a.getTitle());
                 answerIds.put(counter, a);
                 counter++;
             }

@@ -4,6 +4,6 @@ spring:
         encoding: "UTF-8"
 
 quiz-app:
-    file-csv-path: quiz.csv
+    csv-file-name-template: quiz_xx.csv
     min-pass-score: 3
     locale: en_EN
