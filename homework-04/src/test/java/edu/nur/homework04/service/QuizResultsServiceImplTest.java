@@ -1,6 +1,5 @@
 package edu.nur.homework04.service;
 
-import edu.nur.homework04.config.AppProps;
 import edu.nur.homework04.model.Answer;
 import edu.nur.homework04.model.Question;
 import edu.nur.homework04.model.QuizResults;
@@ -9,9 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
 
 import java.util.Arrays;
 import java.util.HashMap;
