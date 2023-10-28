@@ -13,12 +13,11 @@
 <body>
 
 <div class="container-md">
-    <!-- Genre edition -->
     <form id="edit-form" action="genre_edit.html" th:action="@{/genre/edit(id=${genre.id})}" th:method="post" th:object="${genre}">
         <fieldset>
             <legend th:text = "#{genre-form-header}">Genre Info:</legend>
             <div class="mb-3 row">
-                <label class="col-sm-2 col-form-label" for="id-input" th:text="#{genre-field-id} + ':'">ID:</label>
+                <label class="col-sm-2 col-form-label" for="id-input" th:text="#{field-id} + ':'">ID:</label>
                 <div class="col-sm-10">
                     <input class="form-control-plaintext"  id="id-input" type="text" readonly="readonly" name="id" th:value="*{id}" value="1"/>
                 </div>

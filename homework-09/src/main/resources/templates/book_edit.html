@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <title>Edit book</title>
+</head>
+<body>
+
+<div class="container-md">
+    <form id="edit-form" action="book_edit.html" th:action="@{/book/edit(id=${book.id})}" th:method="post" th:object="${book}">
+        <fieldset>
+            <legend th:text = "#{book-form-header}">Book Info:</legend>
+            <div class="mb-3 row">
+                <label class="col-sm-2 col-form-label" for="id-input" th:text="#{field-id} + ':'">ID:</label>
+                <div class="col-sm-10">
+                    <input class="form-control-plaintext"  id="id-input" type="text" readonly="readonly" name="id" th:value="*{id}" value="1"/>
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <label class="col-sm-2 col-form-label" for="book-title-input" th:text="#{book-field-title} + ':'">Title:</label>
+                <div class="col-sm-10">
+                    <input class="form-control" id="book-title-input" name="title" type="text" th:value="*{title}" value="Computer Science"/>
+                </div>
+                <div class="errors" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Wrong book title error</div>
+            </div>
+
+            <div class="mb-3 row">
+                <label class="col-sm-2 col-form-label" for="book-genre-input" th:text="#{book-field-genre} + ':'">Genre:</label>
+                <div class="col-sm-10">
+                    <select class="form-select" id="book-genre-input" name="genre_id">
+                        <option th:each="g: ${genres}" th:value="${g.id}" th:text="${g.title}" th:selected="${g.id} == *{genre.id}"></option>
+                    </select>
+                </div>
+                <div class="errors" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Wrong book title error</div>
+            </div>
+
+            <button class="btn btn-primary" type="submit" th:text="#{save-button-caption}">Save</button>
+            <a class="btn btn-secondary" role="button" href="book_list.html" th:href="@{/books}" th:text="#{cancel-button-caption}">Cancel</a>
+        </fieldset>
+    </form>
+</div>
+
+</body>
+</html>

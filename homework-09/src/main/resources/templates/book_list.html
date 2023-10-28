@@ -23,7 +23,7 @@
         <caption th:text="#{books-table-header}">Books:</caption>
         <thead class="table-light">
         <tr>
-            <th scope="col" th:text="#{book-field-id}">ID</th>
+            <th scope="col" th:text="#{field-id}">ID</th>
             <th scope="col" th:text="#{book-field-title}">Title</th>
             <th scope="col" th:text="#{book-field-genre}">Genre</th>
             <th scope="col" th:text="#{book-field-authors}">Authors</th>
@@ -37,7 +37,7 @@
             <td th:text="${book.genre.title}">Computer Science</td>
             <td><ul th:each="author : ${book.authors}"><li th:text="${author.firstName + ' ' + author.lastName}"></li></ul></td>
             <td>
-                <a th:href="@{/genre/edit(id=${book.id})}" href="genre_edit.html" th:text="#{edit-button-caption}">Edit</a>
+                <a th:href="@{/book/edit(id=${book.id})}" href="book_edit.html" th:text="#{edit-button-caption}">Edit</a>
             </td>
         </tr>
         </tbody>
