@@ -1,0 +1,9 @@
+spring:
+    messages:
+        basename: "i18n/Language"
+        encoding: "UTF-8"
+
+quiz-app:
+    csv-file-name-template: quiz_test_xx.csv
+    min-pass-score: 2
+    locale: en_EN
