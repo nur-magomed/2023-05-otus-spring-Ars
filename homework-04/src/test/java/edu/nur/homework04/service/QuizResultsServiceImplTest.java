@@ -21,8 +21,6 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("QuizResultsServiceImpl class")
-@EnableConfigurationProperties(value = AppProps.class)
-@TestPropertySource("classpath:application.yml")
 @SpringBootTest(properties = {"spring.shell.interactive.enabled=false"})
 class QuizResultsServiceImplTest {
 

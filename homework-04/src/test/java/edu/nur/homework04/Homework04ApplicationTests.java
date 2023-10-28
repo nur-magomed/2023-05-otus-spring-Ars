@@ -8,8 +8,6 @@ import org.springframework.test.context.TestPropertySource;
 
 
 @SpringBootTest(properties = {"spring.shell.interactive.enabled=false"})
-@EnableConfigurationProperties(value = AppProps.class)
-@TestPropertySource("classpath:application.yml")
 class Homework04ApplicationTests {
 
 	@Test
