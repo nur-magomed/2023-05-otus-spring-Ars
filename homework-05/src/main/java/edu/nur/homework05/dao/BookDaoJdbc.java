@@ -65,16 +65,7 @@ public class BookDaoJdbc implements BookDao {
                         "VALUES (:title, :created_date, :modified_date, :genre_id)", params, keyHolder);
         book.setId(Objects.requireNonNull(keyHolder.getKey()).longValue());
 
-        Map<String, Object>[] parameters = new Map[book.getAuthors().size()];
-        int index = 0;
-        for (Author author: book.getAuthors()) {
-            parameters[index] = Map.of("book_id", book.getId(), "author_id", author.getId(),
-                    "created_date", new Date(), "modified_date", new Date());
-            index++;
-        }
-
-        namedParamJdbcOps.batchUpdate("INSERT INTO t_book_author(book_id, author_id, created_date, modified_date)" +
-                        "VALUES (:book_id, :author_id,  :created_date, :modified_date)", parameters);
+        insertBookAuthors(book.getId(), book.getAuthors());
         return book;
     }
 
@@ -105,7 +96,7 @@ public class BookDaoJdbc implements BookDao {
                     "LEFT JOIN t_genre g ON b.genre_id = g.id " +
                     "WHERE b.id = :id ",
                 params,
-                new OneBookExtractor()
+                new SingleBookExtractor()
         );
         if (books == null || books.isEmpty()) {
             throw new EmptyResultDataAccessException(1);
@@ -137,7 +128,6 @@ public class BookDaoJdbc implements BookDao {
                 books.get(r.getBookId()).getAuthors().add(authorsMap.get(r.getAuthorId()));
             }
         });
-
     }
 
     private List<BookAuthorRelation> getAllBookAuthorRelations() {
@@ -180,28 +170,36 @@ public class BookDaoJdbc implements BookDao {
 
     private void updateBookAuthors(Book updatedBook) {
         Book existingBook = getById(updatedBook.getId());
-        Set<Author> existingAuthors = existingBook.getAuthors();
-        List<Object> insertParamMaps = new ArrayList<>();
-        for (Author author: updatedBook.getAuthors()) {
-            if (!existingAuthors.remove(author)) {
-                insertParamMaps.add(Map.of("book_id", updatedBook.getId(), "author_id",
-                        author.getId(), "created_date", new Date(), "modified_date", new Date()));
-            }
-        }
-        Map<String, Object>[] insertParameters = new Map[insertParamMaps.size()];
-        insertParamMaps.toArray(insertParameters);
-        namedParamJdbcOps.batchUpdate("INSERT INTO t_book_author(book_id, author_id, created_date, modified_date)" +
-                        "VALUES (:book_id, :author_id,  :created_date, :modified_date)", insertParameters);
-        Map<String, Object>[] parameters = new Map[existingAuthors.size()];
-        int index = 0;
-        for (Author author: existingAuthors) {
-            parameters[index++] = Map.of("book_id", updatedBook.getId(), "author_id", author.getId());
-        }
+        Set<Author> toBeDeleted = new HashSet<>(existingBook.getAuthors());
+        Set<Author> toBeInserted = new HashSet<>(updatedBook.getAuthors());
+        toBeDeleted.removeAll(updatedBook.getAuthors());
+        toBeInserted.removeAll(existingBook.getAuthors());
+
+        insertBookAuthors(updatedBook.getId(), toBeInserted);
+
+        Map<String, Object>[] parameters = generateBookAuthorParams(updatedBook.getId(), toBeDeleted);
         namedParamJdbcOps.batchUpdate("DELETE FROM t_book_author WHERE book_id=:book_id AND author_id=:author_id",
                 parameters);
     }
 
-    private static class OneBookExtractor implements ResultSetExtractor<List<Book>> {
+    private void insertBookAuthors(long bookId, Set<Author> authors) {
+        Map<String, Object>[] insertParameters = generateBookAuthorParams(bookId, authors);
+        namedParamJdbcOps.batchUpdate("INSERT INTO t_book_author(book_id, author_id, created_date, modified_date)" +
+                "VALUES (:book_id, :author_id,  :created_date, :modified_date)", insertParameters);
+    }
+
+    private Map<String, Object>[] generateBookAuthorParams(long bookId, Set<Author> authors) {
+        Map<String, Object>[] parameters = new Map[authors.size()];
+        int index = 0;
+        for (Author author: authors) {
+            parameters[index] = Map.of("book_id", bookId, "author_id", author.getId(),
+                    "created_date", new Date(), "modified_date", new Date());
+            index++;
+        }
+        return parameters;
+    }
+
+    private static class SingleBookExtractor implements ResultSetExtractor<List<Book>> {
         @Override
         public List<Book> extractData(ResultSet rs) throws SQLException, DataAccessException {
             Map<Long, Book> bookMap = new HashMap<>();
@@ -226,6 +224,4 @@ public class BookDaoJdbc implements BookDao {
             return bookMap.values().stream().toList();
         }
     }
-
-
 }

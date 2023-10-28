@@ -22,7 +22,7 @@ public class BookShell {
     public String books() {
         List<Book> books = bookService.getAll();
         StringBuilder sb = new StringBuilder();
-        books.forEach(b -> sb.append(toString(b)).append("\n"));
+        books.forEach(b -> sb.append(prepareView(b)).append("\n"));
         return sb.toString();
     }
 
@@ -32,7 +32,7 @@ public class BookShell {
                      @ShellOption(value = "authorIds", defaultValue = "") String authorIds,
                      @ShellOption(value = "genreId", defaultValue = "") String genreId) throws ParseException {
         Book saved = bookService.save(title, authorIds, genreId);
-        return "Book saved successfully." + toString(saved);
+        return "Book saved successfully." + prepareView(saved);
     }
 
     @ShellMethod(value = "Update book: book update id \"title\" \"authorIds separated by comma\" \"genreId\"",
@@ -42,13 +42,13 @@ public class BookShell {
                        @ShellOption(value = "authorIds", defaultValue = "") String authorIds,
                        @ShellOption(value = "genreId", defaultValue = "") String genreId) throws ParseException  {
         Book updated = bookService.update(id, title, authorIds, genreId);
-        return "Book updated successfully. " + toString(updated);
+        return "Book updated successfully. " + prepareView(updated);
     }
 
     @ShellMethod(value = "Get book by Id: book get id", key = "book get")
     public String getById(@ShellOption(value = "id", defaultValue = "-1") long id) {
         Book book = bookService.getById(id);
-        return toString(book);
+        return prepareView(book);
     }
 
     @ShellMethod(value = "Delete book: book delete id", key = "book delete")
@@ -62,7 +62,7 @@ public class BookShell {
         return bookService.countAll();
     }
 
-    private String toString(Book book) {
+    private String prepareView(Book book) {
         StringBuilder sb = new StringBuilder();
         book.getAuthors().forEach(a -> sb.append(a.getLastName()).append(" ").append(a.getFirstName()).append(", "));
         String authors = sb.toString();

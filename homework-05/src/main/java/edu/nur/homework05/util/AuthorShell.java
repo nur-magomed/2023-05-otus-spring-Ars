@@ -22,7 +22,7 @@ public class AuthorShell {
     public String authors() {
         List<Author> authors = authorService.getAll();
         StringBuilder sb = new StringBuilder();
-        authors.forEach(a -> sb.append(toString(a)).append("\n"));
+        authors.forEach(a -> sb.append(prepareView(a)).append("\n"));
         return sb.toString();
     }
 
@@ -32,7 +32,7 @@ public class AuthorShell {
                      @ShellOption(value = "lastName", defaultValue = "") String lastName,
                      @ShellOption(value = "birthDate", defaultValue = "") String birthDate) {
         Author saved = authorService.save(firstName, lastName, birthDate);
-        return toString(saved);
+        return prepareView(saved);
     }
 
     @ShellMethod(value = "Update author: author update id \"First name\" \"Last name\" \"yyyy-MM-dd\"",
@@ -42,13 +42,13 @@ public class AuthorShell {
                        @ShellOption(value = "lastName", defaultValue = "") String lastName,
                        @ShellOption(value = "birthDate", defaultValue = "") String birthDate) throws ParseException {
         Author updated = authorService.update(id, firstName, lastName, birthDate);
-        return toString(updated);
+        return prepareView(updated);
     }
 
     @ShellMethod(value = "Get author by Id: author get id", key = "author get")
     public String getById(@ShellOption(value = "id", defaultValue = "-1") long id) {
         Author author = authorService.getById(id);
-        return toString(author);
+        return prepareView(author);
     }
 
     @ShellMethod(value = "Delete author: author delete id", key = "author delete")
@@ -62,7 +62,7 @@ public class AuthorShell {
         return authorService.countAll();
     }
 
-    private String toString(Author author) {
+    private String prepareView(Author author) {
         return String.format("Author id:%d, lastName:%s, firstName:%s",
                 author.getId(), author.getLastName(), author.getFirstName());
     }
