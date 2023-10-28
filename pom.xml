@@ -13,12 +13,16 @@
         <module>homework-02</module>
         <module>homework-03</module>
         <module>homework-04</module>
+        <module>homework-05</module>
     </modules>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <checkstyle-plugin.version>3.1.2</checkstyle-plugin.version>
+        <checkstyle.version>10.9.1</checkstyle.version>
+        <checkstyle.config.url>https://raw.githubusercontent.com/OtusTeam/Spring/master/checkstyle.xml</checkstyle.config.url>
     </properties>
 
 </project>
