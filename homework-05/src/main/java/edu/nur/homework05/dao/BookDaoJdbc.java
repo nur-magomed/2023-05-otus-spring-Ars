@@ -7,6 +7,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -25,7 +26,6 @@ import java.util.Date;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.Objects;
-import java.util.ArrayList;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -96,7 +96,7 @@ public class BookDaoJdbc implements BookDao {
                     "LEFT JOIN t_genre g ON b.genre_id = g.id " +
                     "WHERE b.id = :id ",
                 params,
-                new SingleBookExtractor()
+                new BookExtractor()
         );
         if (books == null || books.isEmpty()) {
             throw new EmptyResultDataAccessException(1);
@@ -108,31 +108,16 @@ public class BookDaoJdbc implements BookDao {
     public List<Book> getAll() {
         List<Author> authors = authorDao.getAllUsed();
         List<BookAuthorRelation> relations = getAllBookAuthorRelations();
-        Map<Long, Book> books = jdbc.query(
+        List<Book> books = jdbc.query(
                 "SELECT b.id AS b_id, b.title AS b_title, b.created_date AS b_created_date, " +
                     "b.modified_date AS b_modified_date, g.id AS g_id, g.title AS g_title, " +
                     "g.created_date AS g_created_date, g.modified_date AS g_modified_date " +
                     "FROM t_book b " +
                     "LEFT JOIN t_genre g ON b.genre_id = g.id ",
-                new BookExtractor()
+                    new BookMapper()
         );
-
         mergeBookAuthors(books, authors, relations);
-        return new ArrayList<>(Objects.requireNonNull(books).values());
-    }
-
-    private void mergeBookAuthors(Map<Long, Book> books, List<Author> authors, List<BookAuthorRelation> relations) {
-        Map<Long, Author> authorsMap = authors.stream().collect(Collectors.toMap(Author::getId, Function.identity()));
-        relations.forEach(r -> {
-            if (books.containsKey(r.getBookId()) && authorsMap.containsKey(r.getAuthorId())) {
-                books.get(r.getBookId()).getAuthors().add(authorsMap.get(r.getAuthorId()));
-            }
-        });
-    }
-
-    private List<BookAuthorRelation> getAllBookAuthorRelations() {
-        return jdbc.query("SELECT book_id, author_id from t_book_author ORDER BY book_id",
-                (rs, i) -> new BookAuthorRelation(rs.getLong(1), rs.getLong(2)));
+        return Objects.requireNonNull(books);
     }
 
     @Override
@@ -145,27 +130,6 @@ public class BookDaoJdbc implements BookDao {
     public int countAll() {
         Integer count = jdbc.queryForObject("SELECT count(*) FROM t_book", Integer.class);
         return count == null ? 0 : count;
-    }
-
-    private static class BookExtractor implements ResultSetExtractor<Map<Long, Book>> {
-
-        @Override
-        public Map<Long, Book> extractData(ResultSet rs) throws SQLException, DataAccessException {
-            Map<Long, Book> bookMap = new HashMap<>();
-            while (rs.next()) {
-                long bookId = rs.getLong("b_id");
-
-                if (!bookMap.containsKey(bookId)) {
-                    Genre genre = new Genre(rs.getLong("g_id"), rs.getString("g_title"),
-                            rs.getDate("g_created_date"), rs.getDate("g_modified_date"));
-
-                    bookMap.put(bookId, new Book(bookId, rs.getString("b_title"), new HashSet<>(),
-                            genre, rs.getDate("b_created_date"),
-                            rs.getDate("b_modified_date")));
-                }
-            }
-            return bookMap;
-        }
     }
 
     private void updateBookAuthors(Book updatedBook) {
@@ -199,7 +163,33 @@ public class BookDaoJdbc implements BookDao {
         return parameters;
     }
 
-    private static class SingleBookExtractor implements ResultSetExtractor<List<Book>> {
+    private List<BookAuthorRelation> getAllBookAuthorRelations() {
+        return jdbc.query("SELECT book_id, author_id from t_book_author ORDER BY book_id",
+                (rs, i) -> new BookAuthorRelation(rs.getLong(1), rs.getLong(2)));
+    }
+
+    private void mergeBookAuthors(List<Book> books, List<Author> authors, List<BookAuthorRelation> relations) {
+        Map<Long, Author> authorsMap = authors.stream().collect(Collectors.toMap(Author::getId, Function.identity()));
+        Map<Long, Book> booksMap = books.stream().collect(Collectors.toMap(Book::getId, Function.identity()));
+        relations.forEach(r -> {
+            if (booksMap.containsKey(r.getBookId()) && authorsMap.containsKey(r.getAuthorId())) {
+                booksMap.get(r.getBookId()).getAuthors().add(authorsMap.get(r.getAuthorId()));
+            }
+        });
+    }
+
+    private static class BookMapper implements RowMapper<Book> {
+        @Override
+        public Book mapRow(ResultSet rs, int i) throws SQLException {
+            long bookId = rs.getLong("b_id");
+            Genre genre = new Genre(rs.getLong("g_id"), rs.getString("g_title"),
+                    rs.getDate("g_created_date"), rs.getDate("g_modified_date"));
+            return new Book(bookId, rs.getString("b_title"), new HashSet<>(), genre,
+                    rs.getDate("b_created_date"), rs.getDate("b_modified_date"));
+        }
+    }
+
+    private static class BookExtractor implements ResultSetExtractor<List<Book>> {
         @Override
         public List<Book> extractData(ResultSet rs) throws SQLException, DataAccessException {
             Map<Long, Book> bookMap = new HashMap<>();
