@@ -1,11 +1,13 @@
 package edu.nur.homework06.service;
 
-import edu.nur.homework06.dao.BookDao;
+import edu.nur.homework06.exception.BookInputException;
+import edu.nur.homework06.repository.BookRepository;
 import edu.nur.homework06.model.Author;
 import edu.nur.homework06.model.Book;
 import edu.nur.homework06.model.Genre;
 import edu.nur.homework06.service.validator.BookInputValidator;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
 import java.util.HashSet;
@@ -16,28 +18,31 @@ import java.util.List;
 @Service
 public class BookServiceImpl implements BookService {
 
-    private final BookDao bookDao;
+    private final BookRepository bookRepository;
 
     private final AuthorService authorService;
 
     private final GenreService genreService;
 
-    public BookServiceImpl(BookDao bookDao, AuthorService authorService, GenreService genreService) {
-        this.bookDao = bookDao;
+    public BookServiceImpl(BookRepository bookRepository, AuthorService authorService, GenreService genreService) {
+        this.bookRepository = bookRepository;
         this.authorService = authorService;
         this.genreService = genreService;
     }
 
+    @Transactional
     @Override
     public Book save(String title, String authorIds, String genreId) {
         BookInputValidator.validateSaveInput(title, authorIds, genreId);
         Book book = new Book(0, title, retrieveAuthors(authorIds), retrieveGenre(genreId), new Date(), new Date());
-        return bookDao.save(book);
+        return bookRepository.save(book);
     }
 
+    @Transactional
     @Override
     public Book update(long id, String title, String authorIds, String genreId) {
-        Book book = bookDao.getById(id);
+        Book book = bookRepository.findById(id)
+                .orElseThrow(() -> new BookInputException("Book not found with id: " + id));
         if (!title.isEmpty()) {
             book.setTitle(title);
         }
@@ -47,42 +52,28 @@ public class BookServiceImpl implements BookService {
         if (!genreId.isEmpty()) {
             book.setGenre(retrieveGenre(genreId));
         }
-        return bookDao.save(book);
+        return bookRepository.save(book);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Book getById(long id) {
-        return bookDao.getById(id);
+        return bookRepository.findById(id)
+                .orElseThrow(() -> new BookInputException("Book not found with id: " + id));
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<Book> getAll() {
-        return bookDao.getAll();
+        return bookRepository.findAll();
     }
 
-    @Override
-    public void printById(long id) {
-        Book book = bookDao.getById(id);
-        System.out.println("Book title: " + book.getTitle());
-    }
-
-    @Override
-    public void printAll() {
-        List<Book> books = bookDao.getAll();
-        for (Book b: books) {
-            System.out.println("Book title: " + b.getTitle());
-        }
-    }
-
+    @Transactional
     @Override
     public void deleteById(long id) {
-        bookDao.deleteById(id);
+        bookRepository.deleteById(id);
     }
 
-    @Override
-    public int countAll() {
-        return bookDao.countAll();
-    }
 
     private Set<Author> retrieveAuthors(String ids) {
         Set<Author> authorList = new HashSet<>();

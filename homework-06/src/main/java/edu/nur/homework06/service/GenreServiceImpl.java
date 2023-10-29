@@ -1,9 +1,11 @@
 package edu.nur.homework06.service;
 
-import edu.nur.homework06.dao.GenreDao;
+import edu.nur.homework06.exception.GenreInputException;
 import edu.nur.homework06.model.Genre;
+import edu.nur.homework06.repository.GenreRepository;
 import edu.nur.homework06.service.validator.GenreInputValidator;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -11,45 +13,46 @@ import java.util.List;
 @Service
 public class GenreServiceImpl implements GenreService {
 
-    private final GenreDao genreDao;
+    private final GenreRepository genreRepository;
 
-    public GenreServiceImpl(GenreDao genreDao) {
-        this.genreDao = genreDao;
+    public GenreServiceImpl(GenreRepository genreRepository) {
+        this.genreRepository = genreRepository;
     }
 
+    @Transactional
     @Override
     public Genre save(String title) {
         GenreInputValidator.validateSaveInput(title);
         Genre genre = new Genre(title, new Date(), new Date());
-        return genreDao.save(genre);
+        return genreRepository.save(genre);
     }
 
+    @Transactional
     @Override
     public Genre update(long id, String title) {
-        Genre genre = genreDao.getById(id);
-        if (genre != null) {
-            genre.setTitle(title);
-        }
-        return genreDao.save(genre);
+        Genre genre = genreRepository.findById(id)
+                .orElseThrow(() -> new GenreInputException("Genre not found with id: " + id));
+        genre.setTitle(title);
+        return genreRepository.save(genre);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Genre getById(long id) {
-        return genreDao.getById(id);
+        return genreRepository.findById(id)
+                .orElseThrow(() -> new GenreInputException("Genre not found with id: " + id));
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<Genre> getAll() {
-        return genreDao.getAll();
+        return genreRepository.findAll();
     }
 
+    @Transactional
     @Override
     public void deleteById(long id) {
-        genreDao.deleteById(id);
+        genreRepository.deleteById(id);
     }
 
-    @Override
-    public int countAll() {
-        return genreDao.countAll();
-    }
 }

@@ -50,11 +50,6 @@ public class GenreShell {
         return String.format("Genre deleted successfully id:%d", id);
     }
 
-    @ShellMethod(value = "Count all genres", key = "genre count")
-    public int countAll() {
-        return genreService.countAll();
-    }
-
     private String prepareView(Genre genre) {
         return String.format("Genre id: %d title: %s", genre.getId(), genre.getTitle());
     }

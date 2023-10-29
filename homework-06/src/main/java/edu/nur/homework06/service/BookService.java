@@ -14,12 +14,6 @@ public interface BookService {
 
     List<Book> getAll();
 
-    void printById(long id);
-
-    void printAll();
-
     void deleteById(long id);
-
-    int countAll();
 
 }

@@ -57,11 +57,6 @@ public class AuthorShell {
         return String.format("Author deleted successfully id:%d", id);
     }
 
-    @ShellMethod(value = "Count all authors", key = "author count")
-    public int countAll() {
-        return authorService.countAll();
-    }
-
     private String prepareView(Author author) {
         return String.format("Author id:%d, lastName:%s, firstName:%s",
                 author.getId(), author.getLastName(), author.getFirstName());

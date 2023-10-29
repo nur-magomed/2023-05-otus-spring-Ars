@@ -1,17 +1,18 @@
 package edu.nur.homework06.service;
 
-import edu.nur.homework06.dao.GenreDao;
 import edu.nur.homework06.model.Genre;
+import edu.nur.homework06.repository.GenreRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -21,9 +22,10 @@ import static org.mockito.Mockito.*;
 @SpringBootTest(properties = "spring.shell.interactive.enabled=false")
 class GenreServiceImplTest {
 
-    @Mock
-    private GenreDao genreDao;
-    @InjectMocks
+    @MockBean
+    private GenreRepository genreRepository;
+
+    @Autowired
     private GenreServiceImpl genreService;
 
     private final Genre GENRE = new Genre(0L, "Test genre", new Date(), new Date());
@@ -44,7 +46,7 @@ class GenreServiceImplTest {
     @DisplayName("save new genre")
     @Test
     void save() {
-        when(genreDao.save(any(Genre.class))).thenReturn(EXPECTED_GENRE);
+        when(genreRepository.save(any(Genre.class))).thenReturn(EXPECTED_GENRE);
         Genre saved = genreService.save(EXPECTED_GENRE.getTitle());
         assertThat(EXPECTED_GENRE).usingRecursiveComparison().isEqualTo(saved);
     }
@@ -52,8 +54,8 @@ class GenreServiceImplTest {
     @DisplayName("update a genre")
     @Test
     void update() {
-        when(genreDao.save(any(Genre.class))).thenReturn(EXPECTED_GENRE);
-        when(genreDao.getById(EXPECTED_GENRE.getId())).thenReturn(EXPECTED_GENRE);
+        when(genreRepository.save(any(Genre.class))).thenReturn(EXPECTED_GENRE);
+        when(genreRepository.findById(EXPECTED_GENRE.getId())).thenReturn(Optional.of(EXPECTED_GENRE));
         Genre updated = genreService.update(EXPECTED_GENRE.getId(), EXPECTED_GENRE.getTitle());
         assertThat(EXPECTED_GENRE).usingRecursiveComparison().isEqualTo(updated);
     }
@@ -61,14 +63,14 @@ class GenreServiceImplTest {
     @DisplayName("get a genre by ID")
     @Test
     void getById() {
-        when(genreDao.getById(EXPECTED_GENRE.getId())).thenReturn(EXPECTED_GENRE);
+        when(genreRepository.findById(EXPECTED_GENRE.getId())).thenReturn(Optional.of(EXPECTED_GENRE));
         assertEquals(EXPECTED_GENRE, genreService.getById(EXPECTED_GENRE.getId()));
     }
 
     @DisplayName("get list of all genres")
     @Test
     void getAll() {
-        when(genreDao.getAll()).thenReturn(EXPECTED_GENRE_LIST);
+        when(genreRepository.findAll()).thenReturn(EXPECTED_GENRE_LIST);
         assertThat(EXPECTED_GENRE_LIST).containsExactlyElementsOf(genreService.getAll());
     }
 
@@ -76,13 +78,7 @@ class GenreServiceImplTest {
     @Test
     void deleteById() {
         genreService.deleteById(EXPECTED_GENRE.getId());
-        verify(genreDao, times(1)).deleteById(EXPECTED_GENRE.getId());
+        verify(genreRepository, times(1)).deleteById(EXPECTED_GENRE.getId());
     }
 
-    @DisplayName("get count of all genres")
-    @Test
-    void countAll() {
-        when(genreDao.countAll()).thenReturn(3);
-        assertEquals(3, genreService.countAll());
-    }
 }

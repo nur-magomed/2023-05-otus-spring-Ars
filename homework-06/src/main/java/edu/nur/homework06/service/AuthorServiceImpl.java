@@ -1,10 +1,11 @@
 package edu.nur.homework06.service;
 
-import edu.nur.homework06.dao.AuthorDao;
 import edu.nur.homework06.exception.AuthorInputException;
 import edu.nur.homework06.model.Author;
+import edu.nur.homework06.repository.AuthorRepository;
 import edu.nur.homework06.service.validator.AuthorInputValidator;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -16,22 +17,26 @@ public class AuthorServiceImpl implements AuthorService {
 
     private static final String FORMAT = "yyyy-MM-dd";
 
-    private final AuthorDao authorDao;
+    private final AuthorRepository authorRepository;
 
-    public AuthorServiceImpl(AuthorDao authorDao) {
-        this.authorDao = authorDao;
+    public AuthorServiceImpl(AuthorRepository authorRepository) {
+        this.authorRepository = authorRepository;
     }
 
+    @Transactional
     @Override
     public Author save(String firstName, String lastName, String birthDate) {
         AuthorInputValidator.validateSaveInput(firstName, lastName, birthDate);
         Author author = new Author(0, firstName, lastName, parseBirthDate(birthDate), new Date(), new Date());
-        return authorDao.save(author);
+        return authorRepository.save(author);
     }
 
+    @Transactional
     @Override
     public Author update(long id, String firstName, String lastName, String birthDate) {
-        Author author = authorDao.getById(id);
+        Author author = authorRepository.findById(id)
+                .orElseThrow(() -> new AuthorInputException("Author not found with id: " + id));
+
         if (!firstName.isEmpty()) {
             author.setFirstName(firstName);
         }
@@ -41,27 +46,27 @@ public class AuthorServiceImpl implements AuthorService {
         if (!birthDate.isEmpty()) {
             author.setBirthDate(parseBirthDate(birthDate));
         }
-        return authorDao.save(author);
+        return authorRepository.save(author);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Author getById(long id) {
-        return authorDao.getById(id);
+        return authorRepository.findById(id)
+                .orElseThrow(() -> new AuthorInputException("Author not found with id: " + id));
     }
 
+
+    @Transactional(readOnly = true)
     @Override
     public List<Author> getAll() {
-        return authorDao.getAll();
+        return authorRepository.findAll();
     }
 
+    @Transactional
     @Override
     public void deleteById(long id) {
-        authorDao.deleteById(id);
-    }
-
-    @Override
-    public int countAll() {
-        return authorDao.countAll();
+        authorRepository.deleteById(id);
     }
 
     private Date parseBirthDate(String birthDate) {

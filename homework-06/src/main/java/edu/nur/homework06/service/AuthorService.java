@@ -16,6 +16,4 @@ public interface AuthorService {
 
     void deleteById(long id);
 
-    int countAll();
-
 }

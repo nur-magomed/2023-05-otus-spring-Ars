@@ -1,7 +1,7 @@
 package edu.nur.homework06.service;
 
-import edu.nur.homework06.dao.AuthorDao;
 import edu.nur.homework06.model.Author;
+import edu.nur.homework06.repository.AuthorRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,6 +12,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -22,7 +23,7 @@ import static org.mockito.Mockito.*;
 class AuthorServiceImplTest {
 
     @MockBean
-    private AuthorDao authorDao;
+    private AuthorRepository authorRepository;
 
     @Autowired
     private AuthorServiceImpl authorService;
@@ -51,7 +52,7 @@ class AuthorServiceImplTest {
     @DisplayName("save a new author")
     @Test
     void save() {
-        when(authorDao.save(any(Author.class))).thenReturn(EXP_AUTHOR);
+        when(authorRepository.save(any(Author.class))).thenReturn(EXP_AUTHOR);
         Author saved = authorService.save(EXP_AUTHOR.getFirstName(), EXP_AUTHOR.getLastName(), EXPECTED_BDATE);
         assertThat(EXP_AUTHOR).usingRecursiveComparison().isEqualTo(saved);
     }
@@ -59,8 +60,8 @@ class AuthorServiceImplTest {
     @DisplayName("update an author")
     @Test
     void update() {
-        when(authorDao.save(any(Author.class))).thenReturn(EXP_AUTHOR);
-        when(authorDao.getById(EXP_AUTHOR.getId())).thenReturn(EXP_AUTHOR);
+        when(authorRepository.save(any(Author.class))).thenReturn(EXP_AUTHOR);
+        when(authorRepository.findById(EXP_AUTHOR.getId())).thenReturn(Optional.of(EXP_AUTHOR));
         Author updated = authorService.update(EXP_AUTHOR.getId(), EXP_AUTHOR.getFirstName(), EXP_AUTHOR.getLastName(), EXPECTED_BDATE);
         assertThat(EXP_AUTHOR).usingRecursiveComparison().isEqualTo(updated);
     }
@@ -68,14 +69,14 @@ class AuthorServiceImplTest {
     @DisplayName("get an author by ID")
     @Test
     void getById() {
-        when(authorDao.getById(EXP_AUTHOR.getId())).thenReturn(EXP_AUTHOR);
+        when(authorRepository.findById(EXP_AUTHOR.getId())).thenReturn(Optional.of(EXP_AUTHOR));
         assertEquals(EXP_AUTHOR, authorService.getById(EXP_AUTHOR.getId()));
     }
 
     @DisplayName("get a list of all authors")
     @Test
     void getAll() {
-        when(authorDao.getAll()).thenReturn(EXPECTED_AUTHOR_LIST);
+        when(authorRepository.findAll()).thenReturn(EXPECTED_AUTHOR_LIST);
         assertThat(EXPECTED_AUTHOR_LIST).containsExactlyElementsOf(authorService.getAll());
     }
 
@@ -83,13 +84,7 @@ class AuthorServiceImplTest {
     @Test
     void deleteById() {
         authorService.deleteById(EXP_AUTHOR.getId());
-        verify(authorDao, times(1)).deleteById(EXP_AUTHOR.getId());
+        verify(authorRepository, times(1)).deleteById(EXP_AUTHOR.getId());
     }
 
-    @DisplayName("get count of all authors")
-    @Test
-    void countAll() {
-        when(authorDao.countAll()).thenReturn(3);
-        assertEquals(3, authorService.countAll());
-    }
 }

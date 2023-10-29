@@ -16,6 +16,4 @@ public interface GenreService {
 
     void deleteById(long id);
 
-    int countAll();
-
 }

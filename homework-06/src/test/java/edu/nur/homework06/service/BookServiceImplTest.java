@@ -1,15 +1,17 @@
 package edu.nur.homework06.service;
 
-import edu.nur.homework06.dao.BookDao;
 import edu.nur.homework06.model.Author;
 import edu.nur.homework06.model.Book;
 import edu.nur.homework06.model.Genre;
+import edu.nur.homework06.repository.BookRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.*;
 
@@ -21,14 +23,16 @@ import static org.mockito.Mockito.*;
 @SpringBootTest(properties = "spring.shell.interactive.enabled=false")
 class BookServiceImplTest {
 
-    @Mock
-    private BookDao bookDao;
-    @Mock
+    @MockBean
+    private BookRepository bookRepository;
+
+    @MockBean
     private AuthorService authorService;
-    @Mock
+
+    @MockBean
     private GenreService genreService;
 
-    @InjectMocks
+    @Autowired
     private BookServiceImpl bookService;
 
     private final Set<Author> EXPECTED_AUTHOR_LIST = new HashSet<>();
@@ -63,7 +67,7 @@ class BookServiceImplTest {
     @DisplayName("save a new book")
     @Test
     void save() {
-        when(bookDao.save(any(Book.class))).thenReturn(EXPECTED_BOOK);
+        when(bookRepository.save(any(Book.class))).thenReturn(EXPECTED_BOOK);
         Book saved = bookService.save(EXPECTED_BOOK.getTitle(), "1", "1");
         assertThat(EXPECTED_BOOK).usingRecursiveComparison().isEqualTo(saved);
     }
@@ -71,8 +75,8 @@ class BookServiceImplTest {
     @DisplayName("update a book")
     @Test
     void update() {
-        when(bookDao.save(any(Book.class))).thenReturn(EXPECTED_BOOK);
-        when(bookDao.getById(EXPECTED_BOOK.getId())).thenReturn(EXPECTED_BOOK);
+        when(bookRepository.save(any(Book.class))).thenReturn(EXPECTED_BOOK);
+        when(bookRepository.findById(EXPECTED_BOOK.getId())).thenReturn(Optional.of(EXPECTED_BOOK));
         Book saved = bookService.update(EXPECTED_BOOK.getId(), EXPECTED_BOOK.getTitle(), "1", "1");
         assertThat(EXPECTED_BOOK).usingRecursiveComparison().isEqualTo(saved);
     }
@@ -80,14 +84,14 @@ class BookServiceImplTest {
     @DisplayName("get a book by ID")
     @Test
     void getById() {
-        when(bookDao.getById(EXPECTED_BOOK.getId())).thenReturn(EXPECTED_BOOK);
+        when(bookRepository.findById(EXPECTED_BOOK.getId())).thenReturn(Optional.of(EXPECTED_BOOK));
         assertEquals(EXPECTED_BOOK, bookService.getById(EXPECTED_BOOK.getId()));
     }
 
     @DisplayName("get a list of all books")
     @Test
     void getAll() {
-        when(bookDao.getAll()).thenReturn(EXPECTED_BOOK_LIST);
+        when(bookRepository.findAll()).thenReturn(EXPECTED_BOOK_LIST);
         assertThat(EXPECTED_BOOK_LIST).containsExactlyElementsOf(bookService.getAll());
     }
 
@@ -95,13 +99,7 @@ class BookServiceImplTest {
     @Test
     void deleteById() {
         bookService.deleteById(EXPECTED_BOOK.getId());
-        verify(bookDao, times(1)).deleteById(EXPECTED_BOOK.getId());
+        verify(bookRepository, times(1)).deleteById(EXPECTED_BOOK.getId());
     }
 
-    @DisplayName("get count of all books")
-    @Test
-    void countAll() {
-        when(bookDao.countAll()).thenReturn(3);
-        assertEquals(3, bookService.countAll());
-    }
 }
