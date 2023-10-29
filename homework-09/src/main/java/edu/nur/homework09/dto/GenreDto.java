@@ -5,8 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
@@ -16,16 +14,12 @@ public class GenreDto {
 
     private String title;
 
-    private LocalDateTime createdDate;
-
-    private LocalDateTime modifiedDate;
-
     public Genre toModelObject() {
-        return new Genre(id, title, createdDate, modifiedDate);
+        return new Genre(id, title);
     }
 
     public static GenreDto fromModelObject(Genre genre) {
-        return new GenreDto(genre.getId(), genre.getTitle(), genre.getCreatedDate(), genre.getModifiedDate());
+        return new GenreDto(genre.getId(), genre.getTitle());
     }
 
 }

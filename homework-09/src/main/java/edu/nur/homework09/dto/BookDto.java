@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -23,20 +22,15 @@ public class BookDto {
 
     private GenreDto genre;
 
-    private LocalDateTime createdDate;
-
-    private LocalDateTime modifiedDate;
-
     public Book toModelObject() {
         Set<Author> authorModels = authors.stream().map(AuthorDto::toModelObject).collect(Collectors.toSet());
-        return new Book(id, title, authorModels, genre.toModelObject(), createdDate, modifiedDate);
+        return new Book(id, title, authorModels, genre.toModelObject());
     }
 
     public static BookDto fromModelObject(Book book) {
         Set<AuthorDto> authorDtos = book.getAuthors().stream()
                 .map(AuthorDto::fromModelObject).collect(Collectors.toSet());
-        return new BookDto(book.getId(), book.getTitle(), authorDtos, GenreDto.fromModelObject(book.getGenre()),
-                book.getCreatedDate(), book.getModifiedDate());
+        return new BookDto(book.getId(), book.getTitle(), authorDtos, GenreDto.fromModelObject(book.getGenre()));
     }
 
 }

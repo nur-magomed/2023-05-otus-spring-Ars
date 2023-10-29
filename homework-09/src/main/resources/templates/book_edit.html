@@ -13,6 +13,34 @@
 <body>
 
 <div class="container-md">
+
+    <nav class="navbar navbar-expand-sm navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Library</a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="/books">Books</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/authors">Authors</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/genres">Genres</a>
+                    </li>
+                </ul>
+            </div>
+            <ul class="nav justify-content-end">
+                <li class="nav-item">
+                    <a class="nav-link" href="#" th:href="@{/(lang=en)}" th:text="#{en-lang-switch-button-caption}">Language - EN</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" th:href="@{/(lang=ru)}" th:text="#{ru-lang-switch-button-caption}">Language - RU</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
     <form id="edit-form" action="book_edit.html" th:action="@{/book/edit(id=${book.id})}" th:method="post" th:object="${book}">
         <fieldset>
             <legend th:text = "#{book-form-header}">Book Info:</legend>
@@ -38,8 +66,17 @@
                         <option th:each="g: ${genres}" th:value="${g.id}" th:text="${g.title}" th:selected="${g.id} == *{genre.id}"></option>
                     </select>
                 </div>
-                <div class="errors" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Wrong book title error</div>
             </div>
+
+            <div class="mb-3 row">
+                <label class="col-sm-2 col-form-label" for="book-author-input" th:text="#{book-field-authors} + ':'">Authors</label>
+                <div class="col-sm-10">
+                    <select class="form-select" id="book-author-input" name="genre_id">
+                        <option th:each="g: ${genres}" th:value="${g.id}" th:text="${g.title}" th:selected="${g.id} == *{genre.id}"></option>
+                    </select>
+                </div>
+            </div>
+
 
             <button class="btn btn-primary" type="submit" th:text="#{save-button-caption}">Save</button>
             <a class="btn btn-secondary" role="button" href="book_list.html" th:href="@{/books}" th:text="#{cancel-button-caption}">Cancel</a>
