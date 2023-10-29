@@ -32,10 +32,4 @@ public class Genre {
     @Column(name = "modified_date")
     private Date modifiedDate;
 
-    public Genre(String title, Date createdDate, Date modifiedDate) {
-        this.title = title;
-        this.createdDate = createdDate;
-        this.modifiedDate = modifiedDate;
-    }
-
 }

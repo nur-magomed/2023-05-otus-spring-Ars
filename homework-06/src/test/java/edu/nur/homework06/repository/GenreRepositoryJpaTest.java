@@ -31,7 +31,7 @@ class GenreRepositoryJpaTest {
     @DisplayName("save new genre")
     @Test
     void saveTest() {
-        Genre genre = new Genre("Test genre", new Date(), new Date());
+        Genre genre = new Genre(0, "Test genre", new Date(), new Date());
         repositoryJpa.save(genre);
         assertThat(genre.getId()).isGreaterThan(0);
 

@@ -23,7 +23,7 @@ public class GenreServiceImpl implements GenreService {
     @Override
     public Genre save(String title) {
         GenreInputValidator.validateSaveInput(title);
-        Genre genre = new Genre(title, new Date(), new Date());
+        Genre genre = new Genre(0, title, new Date(), new Date());
         return genreRepository.save(genre);
     }
 

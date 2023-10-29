@@ -32,7 +32,7 @@ class AuthorRepositoryJpaTest {
     @DisplayName("save new author")
     @Test
     void saveTest() {
-        Author author = new Author("FirstName", "LastName", new Date(), new Date(), new Date());
+        Author author = new Author(0, "FirstName", "LastName", new Date(), new Date(), new Date());
         repositoryJpa.save(author);
         assertThat(author.getId()).isGreaterThan(0);
 

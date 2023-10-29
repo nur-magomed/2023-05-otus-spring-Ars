@@ -38,12 +38,4 @@ public class Author {
     @Column(name = "modified_date")
     private Date modifiedDate;
 
-    public Author(String firstName, String lastName, Date birthDate, Date createdDate, Date modifiedDate) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.birthDate = birthDate;
-        this.createdDate = createdDate;
-        this.modifiedDate = modifiedDate;
-    }
-
 }
