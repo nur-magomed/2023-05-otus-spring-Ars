@@ -63,3 +63,43 @@ values (5, 5, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
 
 insert into t_book_author (book_id, author_id,  created_date, modified_date)
 values (5, 6, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
+
+
+-- adding comments ---------------------------------------------------------------------------------------------------
+
+
+insert into t_comment (book_id, message)
+values (1, 'This book is relevant in all times');
+
+insert into t_comment (book_id, message)
+values (1, 'The most favorite book that written by Lermontov');
+
+insert into t_comment (book_id, message)
+values (2, 'What a great book Tolstoy wrote');
+
+insert into t_comment (book_id, message)
+values (2, 'Probably the most famous books of Tolstoy');
+
+insert into t_comment (book_id, message)
+values (3, 'I have read this hundred times');
+
+insert into t_comment (book_id, message)
+values (3, 'Pushkin was a genius');
+
+insert into t_comment (book_id, message)
+values (3, 'Evgeniy broke Tatianas heart');
+
+insert into t_comment (book_id, message)
+values (4, 'Must read for any Java developer');
+
+insert into t_comment (book_id, message)
+values (4, 'The best book about Java');
+
+insert into t_comment (book_id, message)
+values (4, 'This book is huge');
+
+insert into t_comment (book_id, message)
+values (5, 'The most funny book I have ever read');
+
+insert into t_comment (book_id, message)
+values (5, 'I have watched movie based on this book');

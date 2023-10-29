@@ -36,3 +36,10 @@ CREATE TABLE t_book_author (
     FOREIGN KEY (book_id) REFERENCES t_book(id) ON DELETE CASCADE,
     FOREIGN KEY (author_id) REFERENCES t_author(id) ON DELETE CASCADE
 );
+
+CREATE TABLE t_comment (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    book_id BIGINT,
+    message VARCHAR(1000),
+    FOREIGN KEY (book_id) REFERENCES t_book(id) ON DELETE CASCADE
+);

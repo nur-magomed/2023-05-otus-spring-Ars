@@ -64,7 +64,10 @@ public class BookShell {
         StringBuilder sb = new StringBuilder();
         book.getAuthors().forEach(a -> sb.append(a.getLastName()).append(" ").append(a.getFirstName()).append(", "));
         String authors = sb.toString();
-        return String.format("Book id:%d, title:%s, genre:%s, authors:%s",
-                book.getId(), book.getTitle(), book.getGenre().getTitle(), authors);
+        StringBuilder sb2 = new StringBuilder();
+        book.getComments().forEach(c -> sb2.append(c.getMessage()).append(", "));
+        String comments = sb2.toString();
+        return String.format("Book id:%d, title:%s, genre:%s, authors:%s, comments:%s",
+                book.getId(), book.getTitle(), book.getGenre().getTitle(), authors, comments);
     }
 }

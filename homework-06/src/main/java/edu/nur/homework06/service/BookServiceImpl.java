@@ -14,6 +14,7 @@ import java.util.HashSet;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Collections;
 
 @Service
 public class BookServiceImpl implements BookService {
@@ -34,7 +35,8 @@ public class BookServiceImpl implements BookService {
     @Override
     public Book save(String title, String authorIds, String genreId) {
         BookInputValidator.validateSaveInput(title, authorIds, genreId);
-        Book book = new Book(0, title, retrieveAuthors(authorIds), retrieveGenre(genreId), new Date(), new Date());
+        Book book = new Book(0, title, retrieveGenre(genreId), retrieveAuthors(authorIds), Collections.emptyList(),
+                new Date(), new Date());
         return bookRepository.save(book);
     }
 

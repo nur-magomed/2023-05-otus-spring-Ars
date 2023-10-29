@@ -2,13 +2,12 @@ package edu.nur.homework06.service;
 
 import edu.nur.homework06.model.Author;
 import edu.nur.homework06.model.Book;
+import edu.nur.homework06.model.Comment;
 import edu.nur.homework06.model.Genre;
 import edu.nur.homework06.repository.BookRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -35,29 +34,35 @@ class BookServiceImplTest {
     @Autowired
     private BookServiceImpl bookService;
 
-    private final Set<Author> EXPECTED_AUTHOR_LIST = new HashSet<>();
+    private static final Set<Author> EXPECTED_AUTHOR_SET = new HashSet<>();
 
-    private final Genre GENRE = new Genre(1L, "Test genre", new Date(), new Date());
-
-    private final Author AUTHOR = new Author(1L, "Test", "Testerov",
+    private static final Author AUTHOR = new Author(1L, "Test", "Testerov",
             new Date(), new Date(), new Date());
 
-    private final Book EXPECTED_BOOK = new Book(1L, "Test genre", EXPECTED_AUTHOR_LIST,
-            GENRE, new Date(), new Date());
+    private static final List<Comment> EXPECTED_COMMENT_LIST = new ArrayList<>();
 
-    private final List<Book> EXPECTED_BOOK_LIST = new ArrayList<>();
+    private static final Comment COMMENT = new Comment(1, 1, "Test comment");
+
+    private static final Genre GENRE = new Genre(1L, "Test genre", new Date(), new Date());
+
+    private static final Book EXPECTED_BOOK = new Book(1L, "Test genre", GENRE, EXPECTED_AUTHOR_SET,
+            EXPECTED_COMMENT_LIST, new Date(), new Date());
+
+    private static final List<Book> EXPECTED_BOOK_LIST = new ArrayList<>();
 
     @BeforeEach
     void setUp() {
 
-        EXPECTED_AUTHOR_LIST.add(AUTHOR);
+        EXPECTED_AUTHOR_SET.add(AUTHOR);
 
-        Book book2 = new Book(2L, "Test book2", EXPECTED_AUTHOR_LIST,
-                GENRE, new Date(), new Date());
-        Book book3 = new Book(3L, "Test book3", EXPECTED_AUTHOR_LIST,
-                GENRE, new Date(), new Date());
-        Book book4 = new Book(4L, "Test book4", EXPECTED_AUTHOR_LIST,
-                GENRE, new Date(), new Date());
+        EXPECTED_COMMENT_LIST.add(COMMENT);
+
+        Book book2 = new Book(2L, "Test book2", GENRE, EXPECTED_AUTHOR_SET,
+                EXPECTED_COMMENT_LIST, new Date(), new Date());
+        Book book3 = new Book(3L, "Test book3", GENRE, EXPECTED_AUTHOR_SET,
+                EXPECTED_COMMENT_LIST, new Date(), new Date());
+        Book book4 = new Book(4L, "Test book4", GENRE, EXPECTED_AUTHOR_SET,
+                EXPECTED_COMMENT_LIST, new Date(), new Date());
 
         EXPECTED_BOOK_LIST.add(book2);
         EXPECTED_BOOK_LIST.add(book3);

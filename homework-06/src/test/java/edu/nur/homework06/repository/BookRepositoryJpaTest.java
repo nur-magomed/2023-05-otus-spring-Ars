@@ -2,6 +2,7 @@ package edu.nur.homework06.repository;
 
 import edu.nur.homework06.model.Author;
 import edu.nur.homework06.model.Book;
+import edu.nur.homework06.model.Comment;
 import edu.nur.homework06.model.Genre;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -11,7 +12,13 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
 
-import java.util.*;
+import java.util.Date;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -28,13 +35,14 @@ class BookRepositoryJpaTest {
     @Autowired
     private TestEntityManager em;
 
-    private final int EXISTING_AUTHOR_ID = 1;
-    private final int EXISTING_BOOK_ID = 1;
-    private final List<Long> EXISTING_BOOK_IDS = new ArrayList<>(Arrays.asList(1L, 2L, 3L, 4L, 5L));
-    private final int EXPECTED_BOOK_ID = 1;
-    private final int EXPECTED_BOOK_COUNT = 5;
+    private static final int EXISTING_AUTHOR_ID = 1;
+    private static final int EXISTING_BOOK_ID = 1;
+    private static final int BOOK_ID_WITH_MOST_COMMENTS = 4;
+    private static final int EXPECTED_BOOK_COUNT = 5;
     private Date nowDate;
     private final Set<Author> authors = new HashSet<>();
+
+    private final List<Comment> comments = new ArrayList<>();
     private Genre genre;
 
     @BeforeEach
@@ -56,11 +64,16 @@ class BookRepositoryJpaTest {
         nowCalendar.set(Calendar.MILLISECOND, 0);
         nowDate = nowCalendar.getTime();
 
-        String EXISTING_AUTHOR_NAME = "Aleksandr";
-        String EXISTING_AUTHOR_SURNAME = "Pushkin";
-        Author expectingAuthor = new Author(EXISTING_AUTHOR_ID, EXISTING_AUTHOR_NAME, EXISTING_AUTHOR_SURNAME,
+        String existingAuthorName = "Aleksandr";
+        String existingAuthorSurname = "Pushkin";
+        Author expectingAuthor = new Author(EXISTING_AUTHOR_ID, existingAuthorName, existingAuthorSurname,
                 EXISTING_BIRTHDATE, nowDate, nowDate);
         authors.add(expectingAuthor);
+
+        Comment existingComment1 = new Comment(1, 1, "This book is relevant in all times");
+        Comment existingComment2 = new Comment(2, 1, "The most favorite book that written by Lermontov");
+        comments.add(existingComment1);
+        comments.add(existingComment2);
 
         int expectedGenreId = 1;
         String expectedGenreTitle = "Prose";
@@ -71,7 +84,7 @@ class BookRepositoryJpaTest {
     @DisplayName("save new book")
     @Test
     void saveTest() {
-        Book book = new Book(0, "Testing book", authors, genre, nowDate, nowDate);
+        Book book = new Book(0, "Testing book", genre, authors, comments , nowDate, nowDate);
         repositoryJpa.save(book);
         assertThat(book.getId()).isGreaterThan(0);
 
@@ -105,8 +118,9 @@ class BookRepositoryJpaTest {
     @Test
     void findAllTest() {
         List<Book> books = repositoryJpa.findAll();
-        books.get(4).getGenre().getTitle();
-        books.get(4).getAuthors().size();
+        books.get(BOOK_ID_WITH_MOST_COMMENTS).getGenre().getTitle();
+        assertThat(books.get(BOOK_ID_WITH_MOST_COMMENTS).getAuthors().size()).isGreaterThan(0);;
+        assertThat(books.get(BOOK_ID_WITH_MOST_COMMENTS).getComments().size()).isGreaterThan(0);;
         assertThat(books.size()).isEqualTo(EXPECTED_BOOK_COUNT);
     }
 
