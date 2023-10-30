@@ -44,11 +44,7 @@ public class CommentRepositoryJpa implements CommentRepository {
 
     @Override
     public void deleteById(long id) {
-        Optional<Comment> optionalComment = findById(id);
-        if (optionalComment.isPresent()) {
-            Comment comment = optionalComment.get();
-            em.remove(comment);
-        }
+        findById(id).ifPresent(em::remove);
     }
 
 }

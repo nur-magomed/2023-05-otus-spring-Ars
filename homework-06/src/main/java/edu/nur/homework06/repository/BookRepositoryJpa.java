@@ -48,11 +48,7 @@ public class BookRepositoryJpa implements BookRepository {
 
     @Override
     public void deleteById(long id) {
-        Optional<Book> optionalBook = findById(id);
-        if (optionalBook.isPresent()) {
-            Book book = optionalBook.get();
-            em.remove(book);
-        }
+        findById(id).ifPresent(em::remove);
     }
 
 }

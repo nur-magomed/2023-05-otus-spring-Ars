@@ -5,7 +5,6 @@ import edu.nur.homework06.service.BookService;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
 import java.util.List;
@@ -19,7 +18,6 @@ public class BookShell {
         this.bookService = bookService;
     }
 
-    @Transactional(readOnly = true)
     @ShellMethod(value = "List all books", key = "books")
     public String books() {
         List<Book> books = bookService.getAll();
@@ -47,7 +45,6 @@ public class BookShell {
         return "Book updated successfully. " + prepareView(updated);
     }
 
-    @Transactional(readOnly = true)
     @ShellMethod(value = "Get book by Id: book get id", key = "book get")
     public String getById(@ShellOption(value = "id", defaultValue = "-1") long id) {
         Book book = bookService.getById(id);
@@ -64,10 +61,7 @@ public class BookShell {
         StringBuilder sb = new StringBuilder();
         book.getAuthors().forEach(a -> sb.append(a.getLastName()).append(" ").append(a.getFirstName()).append(", "));
         String authors = sb.toString();
-        StringBuilder sb2 = new StringBuilder();
-        book.getComments().forEach(c -> sb2.append(c.getMessage()).append(", "));
-        String comments = sb2.toString();
-        return String.format("Book id:%d, title:%s, genre:%s, authors:%s, comments:%s",
-                book.getId(), book.getTitle(), book.getGenre().getTitle(), authors, comments);
+        return String.format("Book id:%d, title:%s, genre:%s, authors:%s",
+                book.getId(), book.getTitle(), book.getGenre().getTitle(), authors);
     }
 }
