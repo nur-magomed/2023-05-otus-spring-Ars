@@ -70,8 +70,10 @@ class BookRepositoryJpaTest {
                 EXISTING_BIRTHDATE, nowDate, nowDate);
         authors.add(expectingAuthor);
 
-        Comment existingComment1 = new Comment(1, 1, "This book is relevant in all times");
-        Comment existingComment2 = new Comment(2, 1, "The most favorite book that written by Lermontov");
+        Book actualBook = em.find(Book.class, EXISTING_BOOK_ID);
+
+        Comment existingComment1 = new Comment(1, actualBook, "This book is relevant in all times");
+        Comment existingComment2 = new Comment(2, actualBook, "The most favorite book that written by Lermontov");
         comments.add(existingComment1);
         comments.add(existingComment2);
 
