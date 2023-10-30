@@ -23,7 +23,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
-@DisplayName("Genre JPA repository should ")
+@DisplayName("Book JPA repository should ")
 @DataJpaTest
 @Import(BookRepositoryJpa.class)
 class BookRepositoryJpaTest {
