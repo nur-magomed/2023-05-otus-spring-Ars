@@ -43,12 +43,6 @@ public class GenreController {
         return "genre_edit";
     }
 
-    @GetMapping("/genre/delete")
-    public String deleteGenre(@RequestParam("id") long id) {
-        repository.deleteById(id);
-        return "redirect:/genres";
-    }
-
     @PostMapping("/genre/edit")
     public String saveGenre(@Valid @ModelAttribute("genre") GenreDto genreDto, BindingResult br, Model model) {
         if (br.hasErrors()) {
@@ -57,4 +51,11 @@ public class GenreController {
         repository.save(genreDto.toModelObject());
         return "redirect:/genres";
     }
+
+    @GetMapping("/genre/delete")
+    public String deleteGenre(@RequestParam("id") long id) {
+        repository.deleteById(id);
+        return "redirect:/genres";
+    }
+
 }

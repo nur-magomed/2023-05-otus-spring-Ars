@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.HashSet;
 import java.util.List;
 
 @Controller
@@ -44,6 +45,7 @@ public class BookController {
     @GetMapping("/book/edit")
     public String editPage(@RequestParam("id") long id, Model model) {
         Book book = new Book();
+        book.setAuthors(new HashSet<>());
         if (id != 0) {
             book = bookRepository.findById(id).orElseThrow(NotFoundException::new);
         }
@@ -61,6 +63,12 @@ public class BookController {
             return "book_edit";
         }
         bookRepository.save(bookDto.toModelObject());
+        return "redirect:/books";
+    }
+
+    @GetMapping("/book/delete")
+    public String deleteBook(@RequestParam("id") long id) {
+        bookRepository.deleteById(id);
         return "redirect:/books";
     }
 

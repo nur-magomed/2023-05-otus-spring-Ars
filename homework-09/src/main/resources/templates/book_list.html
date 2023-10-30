@@ -57,18 +57,21 @@
         <tr th:each="book : ${books}">
             <td th:text="${book.id}">1</td>
             <td th:text="${book.title}">Java</td>
-            <td th:text="${book.genre.title}">Computer Science</td>
+            <td th:text="${book.genre != null ? book.genre.title : ''}">Computer Science</td>
             <td>
                 <ul>
                     <li th:each="author : ${book.authors}" th:text="${author.firstName + ' ' + author.lastName}"></li>
                 </ul>
             </td>
             <td>
-                <a th:href="@{/book/edit(id=${book.id})}" href="book_edit.html" th:text="#{edit-button-caption}">Edit</a>
+                <a class="btn btn-secondary" th:href="@{/book/edit(id=${book.id})}" href="book_edit.html" th:text="#{edit-button-caption}">Edit</a>
+                <a class="btn btn-danger" th:href="@{/book/delete(id=${book.id})}" href="#" th:text="#{delete-button-caption}">Delete</a>
             </td>
         </tr>
         </tbody>
     </table>
+    <a class="btn btn-success" role="button" href="book_list.html" th:href="@{/book/edit(id=0)}" th:text="#{new-button-caption}">Add new</a>
+
 </div>
 
 </body>

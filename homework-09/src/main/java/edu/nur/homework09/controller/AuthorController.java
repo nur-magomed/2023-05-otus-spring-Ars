@@ -49,4 +49,11 @@ public class AuthorController {
         repository.save(authorDto.toModelObject());
         return "redirect:/authors";
     }
+
+    @GetMapping("/author/delete")
+    public String deleteAuthor(@RequestParam("id") long id) {
+        repository.deleteById(id);
+        return "redirect:/authors";
+    }
+
 }

@@ -64,7 +64,7 @@
                 <label class="col-sm-2 col-form-label" for="book-genre-input" th:text="#{book-field-genre} + ':'">Genre:</label>
                 <div class="col-sm-10">
                     <select class="form-select" id="book-genre-input" name="genre">
-                        <option th:each="g: ${genres}" th:value="${g.id}" th:text="${g.title}" name="genre" id="genre" th:selected="${g.id} == *{genre.id}"></option>
+                        <option th:each="g: ${genres}" th:value="${g.id}" th:text="${g.title}" name="genre" id="genre" th:selected="${g.id} == ${book.genre != null ? book.genre.id : 0}"></option>
                     </select>
                 </div>
             </div>
@@ -73,22 +73,14 @@
                 <label class="col-sm-2 col-form-label" for="book-author-input" th:text="#{book-field-authors} + ':'">Authors</label>
                 <div class="col-sm-10">
                     <div id="book-author-input">
-<!--                        <ul class="list-group">-->
-<!--                            <li class="list-group-item" th:each="author : ${book.authors}">-->
-<!--                                <span th:text="${author.firstName + ' ' + author.lastName}"></span>-->
-<!--                                <button class="btn btn-danger btn-sm" type="button" onclick="console.log('hi')">Delete</button>-->
-<!--                            </li>-->
-<!--                        </ul>-->
                         <div class="form-check"  th:each="author, itemStat : ${authors}">
                             <input class="form-check-input" type="checkbox" th:value="${author.id}" name="authors" id="authors" th:checked="${book.getAuthors().contains(author)}">
-                            <label class="form-check-label" for="authorIds" th:text="${author.firstName + ' ' + author.lastName}">
+                            <label class="form-check-label" for="authors" th:text="${author.firstName + ' ' + author.lastName}">
                             </label>
                         </div>
                     </div>
                 </div>
             </div>
-
-
             <button class="btn btn-primary" type="submit" th:text="#{save-button-caption}">Save</button>
             <a class="btn btn-secondary" role="button" href="book_list.html" th:href="@{/books}" th:text="#{cancel-button-caption}">Cancel</a>
         </fieldset>
