@@ -2,8 +2,10 @@ package edu.nur.homework09.controller;
 
 import edu.nur.homework09.dto.BookDto;
 import edu.nur.homework09.exception.NotFoundException;
+import edu.nur.homework09.model.Author;
 import edu.nur.homework09.model.Book;
 import edu.nur.homework09.model.Genre;
+import edu.nur.homework09.repository.AuthorRepository;
 import edu.nur.homework09.repository.BookRepository;
 import edu.nur.homework09.repository.GenreRepository;
 import jakarta.validation.Valid;
@@ -23,9 +25,13 @@ public class BookController {
     private final BookRepository bookRepository;
     private final GenreRepository genreRepository;
 
-    public BookController(BookRepository bookRepository, GenreRepository genreRepository) {
+    private final AuthorRepository authorRepository;
+
+    public BookController(BookRepository bookRepository, GenreRepository genreRepository,
+                          AuthorRepository authorRepository) {
         this.bookRepository = bookRepository;
         this.genreRepository = genreRepository;
+        this.authorRepository = authorRepository;
     }
 
     @GetMapping("books")
@@ -42,8 +48,10 @@ public class BookController {
             book = bookRepository.findById(id).orElseThrow(NotFoundException::new);
         }
         List<Genre> genres = genreRepository.findAll();
+        List<Author> authors = authorRepository.findAll();
         model.addAttribute("book", book);
         model.addAttribute("genres", genres);
+        model.addAttribute("authors", authors);
         return "book_edit";
     }
 

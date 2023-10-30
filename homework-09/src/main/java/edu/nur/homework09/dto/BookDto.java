@@ -2,12 +2,12 @@ package edu.nur.homework09.dto;
 
 import edu.nur.homework09.model.Author;
 import edu.nur.homework09.model.Book;
+import edu.nur.homework09.model.Genre;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,19 +18,16 @@ public class BookDto {
 
     private String title;
 
-    private Set<AuthorDto> authors;
+    private Set<Author> authors;
 
-    private GenreDto genre;
+    private Genre genre;
 
     public Book toModelObject() {
-        Set<Author> authorModels = authors.stream().map(AuthorDto::toModelObject).collect(Collectors.toSet());
-        return new Book(id, title, authorModels, genre.toModelObject());
+        return new Book(id, title, authors, genre);
     }
 
     public static BookDto fromModelObject(Book book) {
-        Set<AuthorDto> authorDtos = book.getAuthors().stream()
-                .map(AuthorDto::fromModelObject).collect(Collectors.toSet());
-        return new BookDto(book.getId(), book.getTitle(), authorDtos, GenreDto.fromModelObject(book.getGenre()));
+        return new BookDto(book.getId(), book.getTitle(), book.getAuthors(), book.getGenre());
     }
 
 }

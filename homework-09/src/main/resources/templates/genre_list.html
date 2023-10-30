@@ -7,6 +7,7 @@
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
     <title>Genres</title>
 </head>
@@ -55,11 +56,15 @@
             <td th:text="${genre.id}">1</td>
             <td th:text="${genre.title}">Computer Science</td>
             <td>
-                <a th:href="@{/genre/edit(id=${genre.id})}" href="genre_edit.html" th:text="#{edit-button-caption}">Edit</a>
+                <a class="btn btn-secondary"  th:href="@{/genre/edit(id=${genre.id})}" href="genre_edit.html" th:text="#{edit-button-caption}">Edit</a>
+                <a class="btn btn-danger" th:href="@{/genre/delete(id=${genre.id})}" href="#" th:text="#{delete-button-caption}">Delete</a>
             </td>
         </tr>
         </tbody>
     </table>
+
+    <a class="btn btn-success" role="button" href="genre_list.html" th:href="@{/genre/edit(id=0)}" th:text="#{new-button-caption}">Add new</a>
+
 </div>
 
 </body>
