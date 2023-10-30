@@ -7,6 +7,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Column;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.FetchType;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -26,7 +27,7 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @ManyToOne(targetEntity = Book.class)
+    @ManyToOne(targetEntity = Book.class, fetch = FetchType.EAGER)
     private Book book;
 
     @Column(name = "message")

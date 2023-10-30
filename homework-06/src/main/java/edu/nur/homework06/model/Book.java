@@ -44,7 +44,7 @@ public class Book {
     @Column(name = "title")
     private String title;
 
-    @ManyToOne(targetEntity = Genre.class, fetch = FetchType.LAZY)
+    @ManyToOne(targetEntity = Genre.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "genre_id")
     private Genre genre;
 
