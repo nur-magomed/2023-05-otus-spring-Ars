@@ -6,16 +6,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.context.annotation.Import;
 
 import java.util.Date;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DisplayName("Genre JPA repository should ")
+@DisplayName("Book JPA repository should ")
 @DataJpaTest
-@Import(AuthorRepositoryJpa.class)
 class AuthorRepositoryJpaTest {
 
     private static final int EXPECTED_NUMBER_OF_AUTHORS = 6;
@@ -24,7 +22,7 @@ class AuthorRepositoryJpaTest {
 
 
     @Autowired
-    private AuthorRepositoryJpa repositoryJpa;
+    private AuthorRepository repositoryJpa;
 
     @Autowired
     private TestEntityManager em;
@@ -44,7 +42,7 @@ class AuthorRepositoryJpaTest {
     @DisplayName("update existing author")
     @Test
     void updateTest() {
-        Optional<Author> optionalAuthor = repositoryJpa.findById(1);
+        Optional<Author> optionalAuthor = repositoryJpa.findById(EXISTING_AUTHOR_ID);
         Author author = optionalAuthor.get();
         author.setFirstName("updatedFName");
         author.setFirstName("updatedLName");

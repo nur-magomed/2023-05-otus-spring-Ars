@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.context.annotation.Import;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,17 +15,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("Comment JPA repository should ")
 @DataJpaTest
-@Import(CommentRepositoryJpa.class)
 public class CommentRepositoryJpaTest {
 
-    private static final int EXISTING_COMMENT_ID = 1;
+    private static final long EXISTING_COMMENT_ID = 1L;
 
-    private static final int EXISTING_BOOK_ID = 1;
+    private static final long EXISTING_BOOK_ID = 1L;
 
     private static final int EXPECTED_BOOK_1_COMMENTS_COUNT = 2;
 
     @Autowired
-    private CommentRepositoryJpa repositoryJpa;
+    private CommentRepository repositoryJpa;
 
     @Autowired
     private TestEntityManager em;

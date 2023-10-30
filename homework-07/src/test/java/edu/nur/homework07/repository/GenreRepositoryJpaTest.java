@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.context.annotation.Import;
 
 import java.util.Date;
 import java.util.Optional;
@@ -15,7 +14,6 @@ import static org.assertj.core.api.Assertions.*;
 
 @DisplayName("Genre JPA repository should ")
 @DataJpaTest
-@Import(GenreRepositoryJpa.class)
 class GenreRepositoryJpaTest {
 
     private static final int EXPECTED_NUMBER_OF_GENRES = 3;
@@ -23,7 +21,7 @@ class GenreRepositoryJpaTest {
     private static final long EXISTING_GENRE_ID = 1L;
 
     @Autowired
-    private GenreRepositoryJpa repositoryJpa;
+    private GenreRepository repositoryJpa;
 
     @Autowired
     private TestEntityManager em;
@@ -43,7 +41,7 @@ class GenreRepositoryJpaTest {
     @DisplayName("update existing genre")
     @Test
     void updateTest() {
-        Optional<Genre> optionalGenre = repositoryJpa.findById(1);
+        Optional<Genre> optionalGenre = repositoryJpa.findById(EXISTING_GENRE_ID);
         Genre genre = optionalGenre.get();
         genre.setTitle("updated title");
         repositoryJpa.save(genre);

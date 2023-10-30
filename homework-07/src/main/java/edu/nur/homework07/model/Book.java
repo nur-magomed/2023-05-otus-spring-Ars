@@ -3,8 +3,6 @@ package edu.nur.homework07.model;
 import jakarta.persistence.Id;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-import jakarta.persistence.NamedAttributeNode;
-import jakarta.persistence.NamedEntityGraph;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Column;
@@ -30,8 +28,6 @@ import java.util.Set;
 @Data
 @Entity
 @Table(name = "t_book")
-@NamedEntityGraph(name = "book-genre-entity-graph",
-        attributeNodes = {@NamedAttributeNode("genre")})
 public class Book {
 
     @Id

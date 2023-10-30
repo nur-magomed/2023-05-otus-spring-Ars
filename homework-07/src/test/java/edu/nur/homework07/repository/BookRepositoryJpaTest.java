@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.context.annotation.Import;
 
 import java.util.Date;
 import java.util.Set;
@@ -23,20 +22,19 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
-@DisplayName("Genre JPA repository should ")
+@DisplayName("Book JPA repository should ")
 @DataJpaTest
-@Import(BookRepositoryJpa.class)
 class BookRepositoryJpaTest {
 
 
     @Autowired
-    private BookRepositoryJpa repositoryJpa;
+    private BookRepository repositoryJpa;
 
     @Autowired
     private TestEntityManager em;
 
-    private static final int EXISTING_AUTHOR_ID = 1;
-    private static final int EXISTING_BOOK_ID = 1;
+    private static final long EXISTING_AUTHOR_ID = 1L;
+    private static final long EXISTING_BOOK_ID = 1L;
     private static final int BOOK_ID_WITH_MOST_COMMENTS = 4;
     private static final int EXPECTED_BOOK_COUNT = 5;
     private Date nowDate;
@@ -95,7 +93,7 @@ class BookRepositoryJpaTest {
     @DisplayName("update existing book")
     @Test
     void updateTest() {
-        Optional<Book> optionalAuthor = repositoryJpa.findById(1);
+        Optional<Book> optionalAuthor = repositoryJpa.findById(EXISTING_BOOK_ID);
         Book book = optionalAuthor.get();
         book.setTitle("updatedTitle");
         repositoryJpa.save(book);
