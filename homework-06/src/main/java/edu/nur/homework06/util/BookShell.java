@@ -58,10 +58,6 @@ public class BookShell {
     }
 
     private String prepareView(Book book) {
-        StringBuilder sb = new StringBuilder();
-        book.getAuthors().forEach(a -> sb.append(a.getLastName()).append(" ").append(a.getFirstName()).append(", "));
-        String authors = sb.toString();
-        return String.format("Book id:%d, title:%s, genre:%s, authors:%s",
-                book.getId(), book.getTitle(), book.getGenre().getTitle(), authors);
+        return String.format("Book id:%d, title:%s", book.getId(), book.getTitle());
     }
 }
