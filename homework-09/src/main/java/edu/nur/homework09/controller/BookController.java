@@ -5,9 +5,9 @@ import edu.nur.homework09.exception.NotFoundException;
 import edu.nur.homework09.model.Author;
 import edu.nur.homework09.model.Book;
 import edu.nur.homework09.model.Genre;
-import edu.nur.homework09.repository.AuthorRepository;
-import edu.nur.homework09.repository.BookRepository;
-import edu.nur.homework09.repository.GenreRepository;
+import edu.nur.homework09.service.AuthorService;
+import edu.nur.homework09.service.BookService;
+import edu.nur.homework09.service.GenreService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -25,15 +25,15 @@ import java.util.List;
 @Controller
 public class BookController {
 
-    private final BookRepository bookRepository;
+    private final BookService bookService;
 
-    private final GenreRepository genreRepository;
+    private final GenreService genreService;
 
-    private final AuthorRepository authorRepository;
+    private final AuthorService authorService;
 
     @GetMapping("books")
     public String listGenres(Model model) {
-        List<Book> books = bookRepository.findAll();
+        List<Book> books = bookService.findAll();
         model.addAttribute("books", books);
         return "book_list";
     }
@@ -43,10 +43,10 @@ public class BookController {
         Book book = new Book();
         book.setAuthors(new HashSet<>());
         if (id != 0) {
-            book = bookRepository.findById(id).orElseThrow(NotFoundException::new);
+            book = bookService.findById(id).orElseThrow(NotFoundException::new);
         }
-        List<Genre> genres = genreRepository.findAll();
-        List<Author> authors = authorRepository.findAll();
+        List<Genre> genres = genreService.findAll();
+        List<Author> authors = authorService.findAll();
         model.addAttribute("book", book);
         model.addAttribute("allGenres", genres);
         model.addAttribute("allAuthors", authors);
@@ -59,25 +59,25 @@ public class BookController {
             if (bookDto.getAuthors() == null) {
                 bookDto.setAuthors(new HashSet<>());
             }
-            List<Genre> genres = genreRepository.findAll();
-            List<Author> authors = authorRepository.findAll();
+            List<Genre> genres = genreService.findAll();
+            List<Author> authors = authorService.findAll();
             model.addAttribute("allGenres", genres);
             model.addAttribute("allAuthors", authors);
             return "book_edit";
         }
-        bookRepository.save(bookDto.toModelObject());
+        bookService.save(bookDto.toModelObject());
         return "redirect:/books";
     }
 
     @PostMapping("/book/delete")
     public String deleteBook(@RequestParam("id") long id) {
-        bookRepository.deleteById(id);
+        bookService.deleteById(id);
         return "redirect:/books";
     }
 
     private void prepareModel(Model model) {
-        List<Genre> genres = genreRepository.findAll();
-        List<Author> authors = authorRepository.findAll();
+        List<Genre> genres = genreService.findAll();
+        List<Author> authors = authorService.findAll();
         model.addAttribute("genres", genres);
         model.addAttribute("authors", authors);
     }

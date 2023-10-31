@@ -3,7 +3,7 @@ package edu.nur.homework09.controller;
 import edu.nur.homework09.dto.AuthorDto;
 import edu.nur.homework09.exception.NotFoundException;
 import edu.nur.homework09.model.Author;
-import edu.nur.homework09.repository.AuthorRepository;
+import edu.nur.homework09.service.AuthorService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -20,11 +20,11 @@ import java.util.List;
 @Controller
 public class AuthorController {
 
-    private final AuthorRepository repository;
+    private final AuthorService authorService;
 
     @GetMapping("authors")
     public String listAuthors(Model model) {
-        List<Author> authors = repository.findAll();
+        List<Author> authors = authorService.findAll();
         model.addAttribute("authors", authors);
         return "author_list";
     }
@@ -33,7 +33,7 @@ public class AuthorController {
     public String editPage(@RequestParam("id") long id, Model model) {
         Author author = new Author();
         if (id != 0) {
-            author = repository.findById(id).orElseThrow(NotFoundException::new);
+            author = authorService.findById(id).orElseThrow(NotFoundException::new);
         }
         model.addAttribute("author", author);
         return "author_edit";
@@ -44,13 +44,13 @@ public class AuthorController {
         if (br.hasErrors()) {
             return "author_edit";
         }
-        repository.save(authorDto.toModelObject());
+        authorService.save(authorDto.toModelObject());
         return "redirect:/authors";
     }
 
     @PostMapping("/author/delete")
     public String deleteAuthor(@RequestParam("id") long id) {
-        repository.deleteById(id);
+        authorService.deleteById(id);
         return "redirect:/authors";
     }
 

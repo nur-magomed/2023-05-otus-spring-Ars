@@ -3,7 +3,7 @@ package edu.nur.homework09.controller;
 import edu.nur.homework09.dto.GenreDto;
 import edu.nur.homework09.exception.NotFoundException;
 import edu.nur.homework09.model.Genre;
-import edu.nur.homework09.repository.GenreRepository;
+import edu.nur.homework09.service.GenreService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -20,11 +20,11 @@ import java.util.List;
 @Controller
 public class GenreController {
 
-    private final GenreRepository repository;
+    private final GenreService genreService;
 
     @GetMapping("genres")
     public String listGenres(Model model) {
-        List<Genre> genres = repository.findAll();
+        List<Genre> genres = genreService.findAll();
         model.addAttribute("genres", genres);
         return "genre_list";
     }
@@ -33,7 +33,7 @@ public class GenreController {
     public String editPage(@RequestParam("id") long id, Model model) {
         Genre genre = new Genre();
         if (id != 0) {
-            genre = repository.findById(id).orElseThrow(NotFoundException::new);
+            genre = genreService.findById(id).orElseThrow(NotFoundException::new);
         }
         model.addAttribute("genre", genre);
         return "genre_edit";
@@ -44,13 +44,13 @@ public class GenreController {
         if (br.hasErrors()) {
             return "genre_edit";
         }
-        repository.save(genreDto.toModelObject());
+        genreService.save(genreDto.toModelObject());
         return "redirect:/genres";
     }
 
     @PostMapping("/genre/delete")
     public String deleteGenre(@RequestParam("id") long id) {
-        repository.deleteById(id);
+        genreService.deleteById(id);
         return "redirect:/genres";
     }
 
