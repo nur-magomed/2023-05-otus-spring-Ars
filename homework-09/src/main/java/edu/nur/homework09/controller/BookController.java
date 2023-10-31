@@ -48,14 +48,21 @@ public class BookController {
         List<Genre> genres = genreRepository.findAll();
         List<Author> authors = authorRepository.findAll();
         model.addAttribute("book", book);
-        model.addAttribute("genres", genres);
-        model.addAttribute("authors", authors);
+        model.addAttribute("allGenres", genres);
+        model.addAttribute("allAuthors", authors);
         return "book_edit";
     }
 
     @PostMapping("/book/edit")
-    public String saveGenre(@Valid @ModelAttribute("book") BookDto bookDto, BindingResult br, Model model) {
+    public String saveBook(@Valid @ModelAttribute("book") BookDto bookDto, BindingResult br, Model model) {
         if (br.hasErrors()) {
+            if (bookDto.getAuthors() == null) {
+                bookDto.setAuthors(new HashSet<>());
+            }
+            List<Genre> genres = genreRepository.findAll();
+            List<Author> authors = authorRepository.findAll();
+            model.addAttribute("allGenres", genres);
+            model.addAttribute("allAuthors", authors);
             return "book_edit";
         }
         bookRepository.save(bookDto.toModelObject());
@@ -66,6 +73,13 @@ public class BookController {
     public String deleteBook(@RequestParam("id") long id) {
         bookRepository.deleteById(id);
         return "redirect:/books";
+    }
+
+    private void prepareModel(Model model) {
+        List<Genre> genres = genreRepository.findAll();
+        List<Author> authors = authorRepository.findAll();
+        model.addAttribute("genres", genres);
+        model.addAttribute("authors", authors);
     }
 
 }

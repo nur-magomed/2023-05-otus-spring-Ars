@@ -47,39 +47,41 @@
             <legend th:text = "#{book-form-header}">Book Info:</legend>
             <div class="mb-3 row">
                 <label class="col-sm-2 col-form-label" for="id-input" th:text="#{field-id} + ':'">ID:</label>
-                <div class="col-sm-10">
+                <div class="col-sm-5">
                     <input class="form-control-plaintext"  id="id-input" type="text" readonly="readonly" name="id" th:value="*{id}" value="1"/>
                 </div>
             </div>
 
             <div class="mb-3 row">
                 <label class="col-sm-2 col-form-label" for="book-title-input" th:text="#{book-field-title} + ':'">Title:</label>
-                <div class="col-sm-10">
+                <div class="col-sm-5">
                     <input class="form-control" id="book-title-input" name="title" type="text" th:value="*{title}" value="Computer Science"/>
                 </div>
-                <div class="errors" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Wrong book title error</div>
+                <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Wrong book title error</div>
             </div>
 
             <div class="mb-3 row">
                 <label class="col-sm-2 col-form-label" for="book-genre-input" th:text="#{book-field-genre} + ':'">Genre:</label>
-                <div class="col-sm-10">
+                <div class="col-sm-5">
                     <select class="form-select" id="book-genre-input" name="genre">
-                        <option th:each="g: ${genres}" th:value="${g.id}" th:text="${g.title}" name="genre" id="genre" th:selected="${g.id} == ${book.genre != null ? book.genre.id : 0}"></option>
+                        <option th:each="g: ${allGenres}" th:value="${g.id}" th:text="${g.title}" name="genre" id="genre" th:selected="${g.id} == ${book.genre != null ? book.genre.id : 0}"></option>
                     </select>
                 </div>
+                <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('genre')}" th:errors="*{genre}">Wrong book title error</div>
             </div>
 
             <div class="mb-3 row">
                 <label class="col-sm-2 col-form-label" for="book-author-input" th:text="#{book-field-authors} + ':'">Authors</label>
-                <div class="col-sm-10">
+                <div class="col-sm-5">
                     <div id="book-author-input">
-                        <div class="form-check"  th:each="author, itemStat : ${authors}">
+                        <div class="form-check"  th:each="author : ${allAuthors}">
                             <input class="form-check-input" type="checkbox" th:value="${author.id}" name="authors" id="authors" th:checked="${book.getAuthors().contains(author)}">
                             <label class="form-check-label" for="authors" th:text="${author.firstName + ' ' + author.lastName}">
                             </label>
                         </div>
                     </div>
                 </div>
+                <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('authors')}" th:errors="*{authors}">Wrong book title error</div>
             </div>
             <button class="btn btn-primary" type="submit" th:text="#{save-button-caption}">Save</button>
             <a class="btn btn-secondary" role="button" href="book_list.html" th:href="@{/books}" th:text="#{cancel-button-caption}">Cancel</a>

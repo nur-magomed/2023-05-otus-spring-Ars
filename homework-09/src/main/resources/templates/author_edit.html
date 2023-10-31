@@ -48,25 +48,25 @@
             <legend th:text = "#{author-form-header}">Author Info:</legend>
             <div class="mb-3 row">
                 <label class="col-sm-2 col-form-label" for="id-input" th:text="#{field-id} + ':'">ID:</label>
-                <div class="col-sm-10">
+                <div class="col-sm-5">
                     <input class="form-control-plaintext"  id="id-input" type="text" readonly="readonly" name="id" th:value="*{id}" value="1"/>
                 </div>
             </div>
 
             <div class="mb-3 row">
                 <label class="col-sm-2 col-form-label" for="author-firstName-input" th:text="#{author-field-first-name} + ':'">First name:</label>
-                <div class="col-sm-10">
+                <div class="col-sm-5">
                     <input class="form-control" id="author-firstName-input" name="firstName" type="text" th:value="*{firstName}" value="First name"/>
                 </div>
-                <div class="errors" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">Wrong author firstName error</div>
+                <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">Wrong author firstName error</div>
             </div>
 
             <div class="mb-3 row">
                 <label class="col-sm-2 col-form-label" for="author-lastName-input" th:text="#{author-field-last-name} + ':'">Last name:</label>
-                <div class="col-sm-10">
+                <div class="col-sm-5">
                     <input class="form-control" id="author-lastName-input" name="lastName" type="text" th:value="*{lastName}" value="Last name"/>
                 </div>
-                <div class="errors" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Wrong author lastName error</div>
+                <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Wrong author lastName error</div>
             </div>
 
             <button class="btn btn-primary" type="submit" th:text="#{save-button-caption}">Save</button>

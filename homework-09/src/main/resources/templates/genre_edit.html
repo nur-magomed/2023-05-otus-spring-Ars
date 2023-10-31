@@ -48,17 +48,17 @@
             <legend th:text = "#{genre-form-header}">Genre Info:</legend>
             <div class="mb-3 row">
                 <label class="col-sm-2 col-form-label" for="id-input" th:text="#{field-id} + ':'">ID:</label>
-                <div class="col-sm-10">
+                <div class="col-sm-5">
                     <input class="form-control-plaintext"  id="id-input" type="text" readonly="readonly" name="id" th:value="*{id}" value="1"/>
                 </div>
             </div>
 
             <div class="mb-3 row">
                 <label class="col-sm-2 col-form-label" for="genre-title-input" th:text="#{genre-field-title} + ':'">Title:</label>
-                <div class="col-sm-10">
+                <div class="col-sm-5">
                     <input class="form-control" id="genre-title-input" name="title" type="text" th:value="*{title}" value="Computer Science"/>
                 </div>
-                <div class="errors" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Wrong genre title error</div>
+                <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Wrong genre title error</div>
             </div>
 
             <button class="btn btn-primary" type="submit" th:text="#{save-button-caption}">Save</button>
