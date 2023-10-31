@@ -5,6 +5,7 @@ import edu.nur.homework09.exception.NotFoundException;
 import edu.nur.homework09.model.Author;
 import edu.nur.homework09.repository.AuthorRepository;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,14 +16,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @Controller
 public class AuthorController {
 
     private final AuthorRepository repository;
-
-    public AuthorController(AuthorRepository repository) {
-        this.repository = repository;
-    }
 
     @GetMapping("authors")
     public String listAuthors(Model model) {

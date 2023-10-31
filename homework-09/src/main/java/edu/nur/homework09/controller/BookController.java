@@ -9,6 +9,7 @@ import edu.nur.homework09.repository.AuthorRepository;
 import edu.nur.homework09.repository.BookRepository;
 import edu.nur.homework09.repository.GenreRepository;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,20 +21,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.HashSet;
 import java.util.List;
 
+@RequiredArgsConstructor
 @Controller
 public class BookController {
 
     private final BookRepository bookRepository;
+
     private final GenreRepository genreRepository;
 
     private final AuthorRepository authorRepository;
-
-    public BookController(BookRepository bookRepository, GenreRepository genreRepository,
-                          AuthorRepository authorRepository) {
-        this.bookRepository = bookRepository;
-        this.genreRepository = genreRepository;
-        this.authorRepository = authorRepository;
-    }
 
     @GetMapping("books")
     public String listGenres(Model model) {
