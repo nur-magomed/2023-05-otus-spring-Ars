@@ -65,7 +65,9 @@
             </td>
             <td>
                 <a class="btn btn-secondary" th:href="@{/book/edit(id=${book.id})}" href="book_edit.html" th:text="#{edit-button-caption}">Edit</a>
-                <a class="btn btn-danger" th:href="@{/book/delete(id=${book.id})}" href="#" th:text="#{delete-button-caption}">Delete</a>
+                <form th:action="@{/book/delete(id=${book.id})}" th:method="post">
+                    <button class="btn btn-danger" type="submit" th:text="#{delete-button-caption}">Delete</button>
+                </form>
             </td>
         </tr>
         </tbody>

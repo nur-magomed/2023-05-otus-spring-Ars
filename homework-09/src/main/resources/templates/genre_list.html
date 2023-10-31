@@ -57,7 +57,9 @@
             <td th:text="${genre.title}">Computer Science</td>
             <td>
                 <a class="btn btn-secondary"  th:href="@{/genre/edit(id=${genre.id})}" href="genre_edit.html" th:text="#{edit-button-caption}">Edit</a>
-                <a class="btn btn-danger" th:href="@{/genre/delete(id=${genre.id})}" href="#" th:text="#{delete-button-caption}">Delete</a>
+                <form th:action="@{/genre/delete(id=${genre.id})}" th:method="post">
+                    <button class="btn btn-danger" th:type="submit" th:text="#{delete-button-caption}">Delete</button>
+                </form>
             </td>
         </tr>
         </tbody>

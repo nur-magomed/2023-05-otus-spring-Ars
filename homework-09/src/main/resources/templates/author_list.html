@@ -59,7 +59,9 @@
             <td th:text="${author.lastName}"></td>
             <td>
                 <a class="btn btn-secondary"  th:href="@{/author/edit(id=${author.id})}" href="author_edit.html" th:text="#{edit-button-caption}">Edit</a>
-                <a class="btn btn-danger" th:href="@{/author/delete(id=${author.id})}" href="#" th:text="#{delete-button-caption}">Delete</a>
+                <form th:action="@{/author/delete(id=${author.id})}" th:method="post">
+                    <button class="btn btn-danger" th:type="submit" th:text="#{delete-button-caption}">Delete</button>
+                </form>
             </td>
         </tr>
         </tbody>

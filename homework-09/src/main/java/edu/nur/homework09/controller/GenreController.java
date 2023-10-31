@@ -48,7 +48,7 @@ public class GenreController {
         return "redirect:/genres";
     }
 
-    @GetMapping("/genre/delete")
+    @PostMapping("/genre/delete")
     public String deleteGenre(@RequestParam("id") long id) {
         repository.deleteById(id);
         return "redirect:/genres";
