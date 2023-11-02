@@ -55,8 +55,7 @@ public class Book {
     private Set<Author> authors;
 
     @BatchSize(size = 3)
-    @OneToMany(targetEntity = Comment.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = "book_id")
+    @OneToMany(targetEntity = Comment.class, fetch = FetchType.LAZY, mappedBy = "book")
     private List<Comment> comments;
 
     @Column(name = "created_date")

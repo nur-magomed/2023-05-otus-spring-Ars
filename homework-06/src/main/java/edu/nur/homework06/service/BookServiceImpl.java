@@ -70,6 +70,14 @@ public class BookServiceImpl implements BookService {
         return bookRepository.findAll();
     }
 
+    @Transactional(readOnly = true)
+    @Override
+    public List<Book> getAllWithAuthors() {
+        List<Book> books = bookRepository.findAll();
+        books.forEach(book -> book.getAuthors().size());
+        return books;
+    }
+
     @Transactional
     @Override
     public void deleteById(long id) {

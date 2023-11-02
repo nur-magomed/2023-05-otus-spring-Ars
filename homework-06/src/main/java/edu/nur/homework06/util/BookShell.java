@@ -20,7 +20,7 @@ public class BookShell {
 
     @ShellMethod(value = "List all books", key = "books")
     public String books() {
-        List<Book> books = bookService.getAll();
+        List<Book> books = bookService.getAllWithAuthors();
         StringBuilder sb = new StringBuilder();
         books.forEach(b -> sb.append(prepareView(b)).append("\n"));
         return sb.toString();
@@ -58,6 +58,9 @@ public class BookShell {
     }
 
     private String prepareView(Book book) {
-        return String.format("Book id:%d, title:%s", book.getId(), book.getTitle());
+        StringBuilder sb = new StringBuilder();
+        book.getAuthors().forEach(a -> sb.append(a.getLastName()).append(" ").append(a.getFirstName()).append(", "));
+        return String.format("Book id:%d, title:%s, genre:%s, authors:%s",
+                book.getId(), book.getTitle(), book.getGenre().getTitle(), sb.toString());
     }
 }
