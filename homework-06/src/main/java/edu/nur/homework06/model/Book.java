@@ -64,6 +64,14 @@ public class Book {
     @Column(name = "modified_date")
     private Date modifiedDate;
 
+    public Book(long id, String title, Genre genre, Set<Author> authors, List<Comment> comments) {
+        this.id = id;
+        this.title = title;
+        this.genre = genre;
+        this.authors = authors;
+        this.comments = comments;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

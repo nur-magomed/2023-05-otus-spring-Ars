@@ -41,6 +41,13 @@ public class Author {
     @Column(name = "modified_date")
     private Date modifiedDate;
 
+    public Author(long id, String firstName, String lastName, Date birthDate) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.birthDate = birthDate;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

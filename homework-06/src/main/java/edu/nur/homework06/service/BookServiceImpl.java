@@ -1,10 +1,12 @@
 package edu.nur.homework06.service;
 
+import edu.nur.homework06.dto.BookDto;
 import edu.nur.homework06.exception.BookInputException;
 import edu.nur.homework06.repository.BookRepository;
 import edu.nur.homework06.model.Author;
 import edu.nur.homework06.model.Book;
 import edu.nur.homework06.model.Genre;
+import edu.nur.homework06.service.converter.BookConverter;
 import edu.nur.homework06.service.validator.BookInputValidator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -72,10 +74,9 @@ public class BookServiceImpl implements BookService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<Book> getAllWithAuthors() {
+    public List<BookDto> getAllWithAuthors() {
         List<Book> books = bookRepository.findAll();
-        books.forEach(book -> book.getAuthors().size());
-        return books;
+        return BookConverter.toBookDtoListNoComments(books);
     }
 
     @Transactional

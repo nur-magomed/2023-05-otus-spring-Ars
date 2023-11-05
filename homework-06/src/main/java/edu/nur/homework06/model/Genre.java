@@ -35,6 +35,11 @@ public class Genre {
     @Column(name = "modified_date")
     private Date modifiedDate;
 
+    public Genre(long id, String title) {
+        this.id = id;
+        this.title = title;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

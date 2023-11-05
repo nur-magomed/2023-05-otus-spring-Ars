@@ -1,5 +1,6 @@
 package edu.nur.homework06.service;
 
+import edu.nur.homework06.dto.BookDto;
 import edu.nur.homework06.model.Book;
 
 import java.util.List;
@@ -14,7 +15,7 @@ public interface BookService {
 
     List<Book> getAll();
 
-    List<Book> getAllWithAuthors();
+    List<BookDto> getAllWithAuthors();
 
     void deleteById(long id);
 

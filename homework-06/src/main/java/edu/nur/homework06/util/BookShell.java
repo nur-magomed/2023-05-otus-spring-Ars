@@ -1,5 +1,6 @@
 package edu.nur.homework06.util;
 
+import edu.nur.homework06.dto.BookDto;
 import edu.nur.homework06.model.Book;
 import edu.nur.homework06.service.BookService;
 import org.springframework.shell.standard.ShellComponent;
@@ -20,9 +21,9 @@ public class BookShell {
 
     @ShellMethod(value = "List all books", key = "books")
     public String books() {
-        List<Book> books = bookService.getAllWithAuthors();
+        List<BookDto> booksDtos = bookService.getAllWithAuthors();
         StringBuilder sb = new StringBuilder();
-        books.forEach(b -> sb.append(prepareView(b)).append("\n"));
+        booksDtos.forEach(b -> sb.append(b.toString()).append("\n"));
         return sb.toString();
     }
 
@@ -63,4 +64,5 @@ public class BookShell {
         return String.format("Book id:%d, title:%s, genre:%s, authors:%s",
                 book.getId(), book.getTitle(), book.getGenre().getTitle(), sb.toString());
     }
+
 }
