@@ -112,7 +112,7 @@ class BookControllerTest {
 
     @Test
     void deleteBook() throws Exception {
-        mvc.perform(post("/book/delete").param("id", "1"))
+        mvc.perform(post("/book/delete/1"))
                 .andExpect(status().is3xxRedirection());
         verify(bookService, times(1)).deleteById(1L);
     }

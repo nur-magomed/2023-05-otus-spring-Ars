@@ -75,7 +75,7 @@ class AuthorControllerTest {
 
     @Test
     void deleteAuthor() throws Exception {
-        mvc.perform(post("/author/delete").param("id", "1"))
+        mvc.perform(post("/author/delete/1"))
                 .andExpect(status().is3xxRedirection());
         verify(authorService, times(1)).deleteById(1L);
     }

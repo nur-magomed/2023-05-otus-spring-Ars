@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -48,8 +49,8 @@ public class GenreController {
         return "redirect:/genres";
     }
 
-    @PostMapping("/genre/delete")
-    public String deleteGenre(@RequestParam("id") long id) {
+    @PostMapping("/genre/delete/{id}")
+    public String deleteGenre(@PathVariable("id") long id) {
         genreService.deleteById(id);
         return "redirect:/genres";
     }

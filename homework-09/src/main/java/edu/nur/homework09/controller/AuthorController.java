@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -48,8 +49,8 @@ public class AuthorController {
         return "redirect:/authors";
     }
 
-    @PostMapping("/author/delete")
-    public String deleteAuthor(@RequestParam("id") long id) {
+    @PostMapping("/author/delete/{id}")
+    public String deleteAuthor(@PathVariable("id") long id) {
         authorService.deleteById(id);
         return "redirect:/authors";
     }

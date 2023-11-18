@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.HashSet;
 import java.util.List;
@@ -69,17 +70,10 @@ public class BookController {
         return "redirect:/books";
     }
 
-    @PostMapping("/book/delete")
-    public String deleteBook(@RequestParam("id") long id) {
+    @PostMapping("/book/delete/{id}")
+    public String deleteBook(@PathVariable("id") long id) {
         bookService.deleteById(id);
         return "redirect:/books";
-    }
-
-    private void prepareModel(Model model) {
-        List<Genre> genres = genreService.findAll();
-        List<Author> authors = authorService.findAll();
-        model.addAttribute("genres", genres);
-        model.addAttribute("authors", authors);
     }
 
 }
