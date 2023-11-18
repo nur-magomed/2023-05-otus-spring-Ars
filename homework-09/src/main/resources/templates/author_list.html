@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+    <title>Authors</title>
+</head>
+<body>
+
+<div class="container-md">
+
+    <nav class="navbar navbar-expand-sm navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Library</a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/books">Books</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/authors">Authors</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/genres">Genres</a>
+                    </li>
+                </ul>
+            </div>
+            <ul class="nav justify-content-end">
+                <li class="nav-item">
+                    <a class="nav-link" href="#" th:href="@{/(lang=en)}" th:text="#{en-lang-switch-button-caption}">Language - EN</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" th:href="@{/(lang=ru)}" th:text="#{ru-lang-switch-button-caption}">Language - RU</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <table class="table table-striped table-hover caption-top">
+        <caption th:text="#{authors-table-header}">Authors:</caption>
+        <thead class="table-light">
+        <tr>
+            <th scope="col" th:text="#{field-id}">ID</th>
+            <th scope="col" th:text="#{author-field-first-name}">First name</th>
+            <th scope="col" th:text="#{author-field-last-name}">Last name</th>
+            <th scope="col" th:text="#{table-column-action}">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="author : ${authors}">
+            <td th:text="${author.id}">1</td>
+            <td th:text="${author.firstName}"></td>
+            <td th:text="${author.lastName}"></td>
+            <td>
+                <a class="btn btn-secondary"  th:href="@{/author/edit(id=${author.id})}" href="author_edit.html" th:text="#{edit-button-caption}">Edit</a>
+                <form th:action="@{/author/delete/{id}(id= ${author.id})}" th:method="post">
+                    <button class="btn btn-danger" th:type="submit" th:text="#{delete-button-caption}">Delete</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <a class="btn btn-success" role="button" href="author_list.html" th:href="@{/author/edit(id=0)}" th:text="#{new-button-caption}">Add new</a>
+
+</div>
+
+</body>
+</html>
