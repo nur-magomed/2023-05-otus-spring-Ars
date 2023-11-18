@@ -13,7 +13,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DisplayName("Genre JPA repository should ")
+@DisplayName("Author JPA repository should ")
 @DataJpaTest
 @Import(AuthorRepositoryJpa.class)
 class AuthorRepositoryJpaTest {

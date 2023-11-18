@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+    <title>Edit genre</title>
+</head>
+<body>
+
+<div class="container-md">
+
+    <nav class="navbar navbar-expand-sm navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Library</a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="/books">Books</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/authors">Authors</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/genres">Genres</a>
+                    </li>
+                </ul>
+            </div>
+            <ul class="nav justify-content-end">
+                <li class="nav-item">
+                    <a class="nav-link" href="#" th:href="@{/(lang=en)}" th:text="#{en-lang-switch-button-caption}">Language - EN</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" th:href="@{/(lang=ru)}" th:text="#{ru-lang-switch-button-caption}">Language - RU</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+
+    <form id="edit-form" action="genre_edit.html" th:action="@{/genre/edit(id=${genre.id})}" th:method="post" th:object="${genre}">
+        <fieldset>
+            <legend th:text = "#{genre-form-header}">Genre Info:</legend>
+            <div class="mb-3 row">
+                <label class="col-sm-2 col-form-label" for="id-input" th:text="#{field-id} + ':'">ID:</label>
+                <div class="col-sm-5">
+                    <input class="form-control-plaintext"  id="id-input" type="text" readonly="readonly" name="id" th:value="*{id}" value="1"/>
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <label class="col-sm-2 col-form-label" for="genre-title-input" th:text="#{genre-field-title} + ':'">Title:</label>
+                <div class="col-sm-5">
+                    <input class="form-control" id="genre-title-input" name="title" type="text" th:value="*{title}" value="Computer Science"/>
+                </div>
+                <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Wrong genre title error</div>
+            </div>
+
+            <button class="btn btn-primary" type="submit" th:text="#{save-button-caption}">Save</button>
+            <a class="btn btn-secondary" role="button" href="genre_list.html" th:href="@{/genres}" th:text="#{cancel-button-caption}">Cancel</a>
+        </fieldset>
+    </form>
+</div>
+
+</body>
+</html>

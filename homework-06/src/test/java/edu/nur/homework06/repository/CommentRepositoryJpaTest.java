@@ -1,6 +1,7 @@
 package edu.nur.homework06.repository;
 
 
+import edu.nur.homework06.model.Book;
 import edu.nur.homework06.model.Comment;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -34,7 +35,8 @@ public class CommentRepositoryJpaTest {
     @DisplayName("save new comment")
     @Test
     void saveTest() {
-        Comment comment = new Comment(0, 1, "Test comment");
+        Book book = em.find(Book.class, EXISTING_COMMENT_ID);
+        Comment comment = new Comment(0, book, "Test comment");
         repositoryJpa.save(comment);
         assertThat(comment.getId()).isGreaterThan(0);
 

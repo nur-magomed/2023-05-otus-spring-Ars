@@ -37,18 +37,14 @@ public class CommentRepositoryJpa implements CommentRepository {
 
     @Override
     public List<Comment> findAllByBookId(long bookId) {
-        TypedQuery<Comment> query = em.createQuery("SELECT c FROM Comment c where c.bookId=:bookId", Comment.class);
+        TypedQuery<Comment> query = em.createQuery("SELECT c FROM Comment c where c.book.id=:bookId", Comment.class);
         query.setParameter("bookId", bookId);
         return query.getResultList();
     }
 
     @Override
     public void deleteById(long id) {
-        Optional<Comment> optionalComment = findById(id);
-        if (optionalComment.isPresent()) {
-            Comment comment = optionalComment.get();
-            em.remove(comment);
-        }
+        findById(id).ifPresent(em::remove);
     }
 
 }

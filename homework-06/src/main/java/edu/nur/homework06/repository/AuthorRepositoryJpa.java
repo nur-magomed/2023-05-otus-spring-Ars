@@ -42,11 +42,7 @@ public class AuthorRepositoryJpa implements AuthorRepository {
 
     @Override
     public void deleteById(long id) {
-        Optional<Author> optionalAuthor = findById(id);
-        if (optionalAuthor.isPresent()) {
-            Author author = optionalAuthor.get();
-            em.remove(author);
-        }
+        findById(id).ifPresent(em::remove);
     }
 
 }
