@@ -7,12 +7,15 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.Date;
+import java.util.Objects;
 
-@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -31,5 +34,32 @@ public class Genre {
 
     @Column(name = "modified_date")
     private Date modifiedDate;
+
+    public Genre(long id, String title) {
+        this.id = id;
+        this.title = title;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Genre genre)) {
+            return false;
+        }
+
+        if (id != genre.id) {
+            return false;
+        }
+        return Objects.equals(title, genre.title);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (id ^ (id >>> 32));
+        result = 31 * result + (title != null ? title.hashCode() : 0);
+        return result;
+    }
 
 }

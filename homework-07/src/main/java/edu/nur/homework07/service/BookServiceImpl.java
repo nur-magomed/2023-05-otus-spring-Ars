@@ -1,5 +1,7 @@
 package edu.nur.homework07.service;
 
+import edu.nur.homework07.converter.BookConverter;
+import edu.nur.homework07.dto.BookDto;
 import edu.nur.homework07.exception.BookInputException;
 import edu.nur.homework07.repository.BookRepository;
 import edu.nur.homework07.model.Author;
@@ -68,6 +70,13 @@ public class BookServiceImpl implements BookService {
     @Override
     public List<Book> getAll() {
         return bookRepository.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<BookDto> getAllWithAuthors() {
+        List<Book> books = bookRepository.findAll();
+        return BookConverter.toBookDtoListNoComments(books);
     }
 
     @Transactional

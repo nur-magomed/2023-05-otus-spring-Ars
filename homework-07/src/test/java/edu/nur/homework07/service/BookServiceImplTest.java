@@ -42,12 +42,12 @@ class BookServiceImplTest {
 
     private static final List<Comment> EXPECTED_COMMENT_LIST = new ArrayList<>();
 
-    private static final Comment COMMENT = new Comment(1, 1, "Test comment");
-
     private static final Genre GENRE = new Genre(1L, "Test genre", new Date(), new Date());
 
     private static final Book EXPECTED_BOOK = new Book(1L, "Test genre", GENRE, EXPECTED_AUTHOR_SET,
             EXPECTED_COMMENT_LIST, new Date(), new Date());
+
+    private static final Comment COMMENT = new Comment(1, EXPECTED_BOOK, "Test comment");
 
     private static final List<Book> EXPECTED_BOOK_LIST = new ArrayList<>();
 
@@ -91,7 +91,7 @@ class BookServiceImplTest {
     @Test
     void getById() {
         when(bookRepository.findById(EXPECTED_BOOK.getId())).thenReturn(Optional.of(EXPECTED_BOOK));
-        Assertions.assertEquals(EXPECTED_BOOK, bookService.getById(EXPECTED_BOOK.getId()));
+        assertEquals(EXPECTED_BOOK, bookService.getById(EXPECTED_BOOK.getId()));
     }
 
     @DisplayName("get a list of all books")

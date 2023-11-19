@@ -6,11 +6,17 @@ import jakarta.persistence.Id;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Column;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.FetchType;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+import java.util.Objects;
+
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -21,10 +27,32 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "book_id")
-    private long bookId;
+    @ManyToOne(targetEntity = Book.class, fetch = FetchType.LAZY)
+    private Book book;
 
     @Column(name = "message")
     private String message;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Comment comment)) {
+            return false;
+        }
+
+        if (id != comment.id) {
+            return false;
+        }
+        return Objects.equals(message, comment.message);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (id ^ (id >>> 32));
+        result = 31 * result + (message != null ? message.hashCode() : 0);
+        return result;
+    }
 
 }

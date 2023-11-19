@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.context.annotation.Import;
 
 import java.util.Date;
 import java.util.Set;
@@ -68,8 +69,11 @@ class BookRepositoryJpaTest {
                 EXISTING_BIRTHDATE, nowDate, nowDate);
         authors.add(expectingAuthor);
 
-        Comment existingComment1 = new Comment(1, 1, "This book is relevant in all times");
-        Comment existingComment2 = new Comment(2, 1, "The most favorite book that written by Lermontov");
+        Book actualBook = em.find(Book.class, EXISTING_BOOK_ID);
+
+
+        Comment existingComment1 = new Comment(1, actualBook, "This book is relevant in all times");
+        Comment existingComment2 = new Comment(2, actualBook, "The most favorite book that written by Lermontov");
         comments.add(existingComment1);
         comments.add(existingComment2);
 
